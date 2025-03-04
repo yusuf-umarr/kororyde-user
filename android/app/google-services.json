@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "139626065830",
+    "project_id": "kororyde-mobile",
+    "storage_bucket": "kororyde-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139626065830:android:0298191b6d516db1a72967",
+        "android_client_info": {
+          "package_name": "com.kororyde.user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC--FqK0kh-R-r_ky6BYeEq1eX4_EJhSQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
