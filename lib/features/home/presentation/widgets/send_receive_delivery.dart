@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 
 import '../../../../common/common.dart';
-import '../../../../core/utils/custom_button.dart';
 import '../../../../core/utils/custom_text.dart';
 import '../../application/home_bloc.dart';
 import '../pages/destination_page.dart';

@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../common/common.dart';
 import '../../../../core/network/network.dart';
@@ -351,7 +351,7 @@ class BookingApi {
             });
           }
         }
-        printWrapped(ApiEndpoints.getPolyline
+        log(ApiEndpoints.getPolyline
                 .replaceAll('pickLat', '$pickLat')
                 .replaceAll('pickLng', '$pickLng')
                 .replaceAll('dropLat', '$dropLat')

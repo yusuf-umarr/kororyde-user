@@ -262,7 +262,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get service => 'Service';
 
   @override
-  String get taxi => 'Taxi';
+  String get taxi => 'Ride';
 
   @override
   String get commercial => 'Commercial';

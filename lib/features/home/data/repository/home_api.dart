@@ -8,6 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../../../common/common.dart';
 import '../../../../core/network/network.dart';
 import '../../domain/models/stop_address_model.dart';
+import 'dart:developer' as dev;
 
 class HomeApi {
   Future getUserDetailsApi({String? requestId}) async {
@@ -120,11 +121,13 @@ class HomeApi {
               ? {'X-Android-Package': packageName, 'X-Android-Cert': signKey}
               : {'X-IOS-Bundle-Identifier': packageName},
         );
+        // dev.log("getAddressFromLatLng 222${response}");
         return response;
       } else {
         Response response = await DioProviderImpl().get(
           'https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=json',
         );
+        dev.log("getAddressFromLatLng 3333${response}");
         return response;
       }
     } catch (e) {
@@ -171,13 +174,22 @@ class HomeApi {
   }) async {
     try {
       final token = await AppSharedPreference.getToken();
+
+      dev.log("token:$token");
+      dev.log("rideType:$rideType");
+      dev.log("address:$address");
       Response response =
           await DioProviderImpl().post(ApiEndpoints.serviceVerify, headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }, body: {
         'ride_type': rideType,
-        'address': address,
+        'address': [
+          {
+            "latitude": address[0].lat,
+            "longitude": address[0].lng,
+          }
+        ],
       });
       return response;
     } catch (e) {

@@ -6,7 +6,7 @@ import '../../domain/models/recent_routes_model.dart';
 import '../../domain/models/stop_address_model.dart';
 import '../../domain/models/user_details_model.dart';
 import '../../domain/repositories/home_repo.dart';
-
+import 'dart:developer' as dev;
 class HomeUsecase {
   final HomeRepository _homeRepository;
 
@@ -42,8 +42,10 @@ class HomeUsecase {
     required double lng,
     required String mapType,
   }) async {
-    return _homeRepository.getAddressFromLatLng(
+    var res =_homeRepository.getAddressFromLatLng(
         lat: lat, lng: lng, mapType: mapType);
+        dev.log(" getAddressFromLatLng:$res");
+    return res;
   }
 
   Future<Either<Failure, HistoryResponseModel>> getOnGoingRides(

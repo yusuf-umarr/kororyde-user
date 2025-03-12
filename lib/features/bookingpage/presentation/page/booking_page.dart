@@ -43,6 +43,7 @@ import '../widgets/select_preference.dart';
 import '../widgets/sos_notify.dart';
 import '../widgets/waiting_for_driver.dart';
 import 'trip_summary_page.dart';
+import 'dart:developer';
 
 class BookingPage extends StatefulWidget {
   static const String routeName = '/booking';
@@ -103,10 +104,15 @@ class _BookingPageState extends State<BookingPage>
       child: BlocListener<BookingBloc, BookingState>(
         listener: (context, state) async {
           if (state is BookingLoadingStartState) {
+            log("BookingLoadingStartState 1   now====");
+
             CustomLoader.loader(context);
           } else if (state is BookingLoadingStopState) {
+            log("BookingLoadingStopState  2  now====");
             CustomLoader.dismiss(context);
           } else if (state is BookingSuccessState) {
+            log("BookingSuccessState  3  now====");
+
             context.read<BookingBloc>().nearByVechileCheckStream(
                 context,
                 this,
@@ -452,6 +458,7 @@ class _BookingPageState extends State<BookingPage>
         child: BlocBuilder<BookingBloc, BookingState>(
           builder: (context, state) {
             final size = MediaQuery.sizeOf(context);
+            log("widget.arg.mapTyp:${widget.arg.mapType}");
             if (widget.arg.mapType == 'google_map') {
               if (Theme.of(context).brightness == Brightness.dark) {
                 if (context.read<BookingBloc>().googleMapController != null) {
@@ -625,7 +632,9 @@ class _BookingPageState extends State<BookingPage>
                   )
 
                 // OPEN STREET
-                : Stack(
+                : 
+                
+                Stack(
                     alignment: Alignment.center,
                     children: [
                       SizedBox(
@@ -780,6 +789,7 @@ class _BookingPageState extends State<BookingPage>
                   ),
             if (!context.read<BookingBloc>().isNormalRideSearching &&
                 !context.read<BookingBloc>().isBiddingRideSearching)
+                ///arrow back button
               SafeArea(
                 child: Padding(
                   padding: EdgeInsets.all(size.width * 0.05),
@@ -928,7 +938,7 @@ class _BookingPageState extends State<BookingPage>
                     context.read<BookingBloc>().add(UpdateEvent());
                   },
                   onVerticalDragEnd: (details) {
-                    debugPrint(
+                    log(
                         '${context.read<BookingBloc>().onRideBottomPosition} < ${-size.height * 0.35}');
                     // Optional: snap to positions if needed
                     if (context.read<BookingBloc>().onRideBottomPosition <

@@ -612,7 +612,7 @@ abstract class AppLocalizations {
   /// No description provided for @taxi.
   ///
   /// In en, this message translates to:
-  /// **'Taxi'**
+  /// **'Ride'**
   String get taxi;
 
   /// No description provided for @commercial.

@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../common/common.dart';
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
 import '../../domain/repositories/loader_repo.dart';
@@ -17,11 +16,11 @@ class LoaderRepositoryImpl implements LoaderRepository {
   @override
   Future<Either<Failure, dynamic>> updateUserLocation(
       {required LatLng currentLocation}) async {
-    dynamic response; 
+    dynamic response;
     try {
       Response response =
           await _loaderApi.updateUserLocation(currentLocation: currentLocation);
-      printWrapped('Update User Location Response : ${response.data}');
+      //printWrapped('Update User Location Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

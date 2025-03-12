@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kororyde_user/features/language/application/language_bloc.dart';
@@ -9,7 +7,6 @@ import '../../../auth/presentation/pages/auth_page.dart';
 import '../../../home/presentation/pages/home_page.dart';
 import '../../../landing/presentation/page/landing_page.dart';
 import '../../../../app/localization.dart';
-import '../../../language/presentation/page/choose_language_page.dart';
 import '../../application/loader_bloc.dart';
 
 class LoaderPage extends StatefulWidget {

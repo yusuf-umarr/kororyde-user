@@ -20,7 +20,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -38,7 +38,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -56,7 +56,7 @@ class AccApi {
         headers: {'Authorization': token, 'Content-Type': 'application/json'},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -74,7 +74,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -103,7 +103,7 @@ class AccApi {
               }),
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -123,7 +123,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -143,7 +143,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -164,7 +164,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -181,7 +181,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -206,7 +206,7 @@ class AccApi {
             'amount': transferAmount
           }));
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -247,7 +247,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -269,7 +269,7 @@ class AccApi {
             'number': number,
           }));
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -287,7 +287,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -305,7 +305,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -332,7 +332,7 @@ class AccApi {
             'address_name': name
           }));
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -359,7 +359,7 @@ class AccApi {
                   'conversation_id': chatId
                 }));
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -376,7 +376,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -393,7 +393,7 @@ class AccApi {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -411,7 +411,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -439,7 +439,7 @@ class AccApi {
                 'valid_through': validThrough
               }));
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {
@@ -457,7 +457,7 @@ class AccApi {
         headers: {'Authorization': token},
       );
       if (kDebugMode) {
-        printWrapped(response.data.toString());
+        //printWrapped(response.data.toString());
       }
       return response;
     } catch (e) {

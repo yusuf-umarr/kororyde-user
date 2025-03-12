@@ -199,7 +199,9 @@ class _DestinationPageState extends State<DestinationPage> {
               },
             );
           } else if (state is ConfirmRideAddressState) {
+            log("ConfirmRideAddressState ----in destination");
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
+                 log("ConfirmRideAddressState --000--in destination");
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
               context.read<HomeBloc>().nearByVechileSubscription = null;
             }
@@ -242,6 +244,7 @@ class _DestinationPageState extends State<DestinationPage> {
                   isOutstationRide: widget.arg.isOutstationRide,
                   mapType: widget.arg.mapType),
             );
+               log("ConfirmRideAddressState ---11111-in destination");
           } else if (state is RecentRouteSelectState) {
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
@@ -304,7 +307,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                 Navigator.pop(context);
                               },
                               child: Icon(Icons.cancel_outlined,
-                                  color: Theme.of(context).primaryColor))),
+                                  color: Theme.of(context).primaryColor,))),
                       Center(
                         child: MyText(
                             text: state.message,
@@ -352,7 +355,6 @@ class _DestinationPageState extends State<DestinationPage> {
                           onTap: () {
                             // Navigator.pop(context);
                             Navigator.of(context).pop();
-                            log("adcavdsvbvfsvshfds");
                           },
                           icon: Icon(Icons.arrow_back_ios_new_rounded,
                               size: 18,
@@ -481,6 +483,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       .withOpacity(0.2)
                                   : Theme.of(context).primaryColor,
                               onTap: () {
+                                log("done clickkkk");
                                 if (!context.read<HomeBloc>().addressList.any(
                                     (element) => element.address.isEmpty)) {
                                   context.read<HomeBloc>().add(

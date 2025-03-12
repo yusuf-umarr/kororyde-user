@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:math' as math;
 import 'package:intl/intl.dart' as intel;
 import 'package:flutter/services.dart';
@@ -117,9 +118,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   String dropdownValue = '';
   String lightMapString = '';
   String darkMapString = '';
-  List<EtaDetails> etaDetailsList = [];
+  List<EtaDetails> etaDetailsList = []; //this eta deta
   List<RentalEtaDetails> rentalEtaDetailsList = [];
-  List<RentalPackagesData> rentalPackagesList = [];
+  List<RentalPackagesData> rentalPackagesList = []; ///this for rental
   List<CategoryData> categoryList = [];
   List<EtaDetails> sortedEtaDetailsList = [];
   List<String> paymentList = [];
@@ -244,11 +245,19 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> getDirection(
       BookingEvent event, Emitter<BookingState> emit) async {
+        
     emit(BookingLoadingStartState());
+    log("getDirection in booking==1 1==");
     textDirection = await AppSharedPreference.getLanguageDirection();
+     log("textDirection ::${textDirection}");
     lightMapString = await rootBundle.loadString('assets/light.json');
+      log("lightMapString ::===done");
     darkMapString = await rootBundle.loadString('assets/dark.json');
+       log("darkMapString ::----");
+      log("getDirection in booking==2-111 2-11==");
     emit(BookingLoadingStopState());
+      log("getDirection in booking==2 2==");
+
   }
 
   Future<void> navigatorPop(
@@ -292,6 +301,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> bookingInitEvent(
       BookingInitEvent event, Emitter<BookingState> emit) async {
+
+        log("bookingInitEvent ==calling");
     vsync = event.vsync;
     mapType = event.arg.mapType;
     // if (mapType != 'google_map') {
@@ -795,6 +806,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   // Eta Request
   FutureOr<void> bookingEtaRequest(
       BookingEtaRequestEvent event, Emitter<BookingState> emit) async {
+
+        log("bookingEtaRequest  also called----1");// etaDetailsList
     final data = await serviceLocator<BookingUsecase>().etaRequest(
         picklat: event.picklat,
         picklng: event.picklng,
@@ -893,6 +906,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   // Rental Eta Request
   FutureOr<void> bookingRentalEtaRequest(
       BookingRentalEtaRequestEvent event, Emitter<BookingState> emit) async {
+      log("bookingRentalEtaRequest  called====1");
     final data = await serviceLocator<BookingUsecase>().rentalEtaRequest(
         picklat: event.picklat,
         picklng: event.picklng,

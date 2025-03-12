@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../common/common.dart';
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
 import '../../../account/domain/models/history_model.dart';
@@ -27,9 +26,9 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       Response response =
           await _homeApi.getUserDetailsApi(requestId: requestId);
-          log("response res----:${requestId}");
-          // log("response res----:${response}");
-      printWrapped('Get User Response : ${response.data}');
+      log("response res----:${requestId}");
+      // log("response res----:${response}");
+      // //printWrapped('Get User Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -71,7 +70,7 @@ class HomeRepositoryImpl implements HomeRepository {
           input: input,
           mapType: mapType,
           currentLatLng: currentLatLng);
-      printWrapped('Places Response : $response');
+      //printWrapped('Places Response : $response');
       if (mapType == 'google_map') {
         for (var element in response.data["suggestions"]) {
           placesResponse.add({
@@ -104,7 +103,7 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response =
           await _homeApi.getAutocompletePlaceLatLng(placeId: placeId);
-      printWrapped('Place LatLng Response : $response');
+      //printWrapped('Place LatLng Response : $response');
       placesResponse = response;
     } on FetchDataException catch (e) {
       return Left(GetDataFailure(message: e.message));
@@ -120,15 +119,15 @@ class HomeRepositoryImpl implements HomeRepository {
       {required double lat,
       required double lng,
       required String mapType}) async {
-    String placesResponse ='';
+    String placesResponse = '';
     try {
       final response = await _homeApi.getAddressFromLatLng(
           lat: lat, lng: lng, mapType: mapType);
-      printWrapped('Place Address Response : $response');
-      //TODO::UN COMMENT 
-      // placesResponse = (mapType == 'google_map')
-      //     ? response.data['results'][0]['formatted_address']
-      //     : response.data['display_name'];
+      //printWrapped('Place Address Response : $response');
+ 
+      placesResponse = (mapType == 'google_map')
+          ? response.data['results'][0]['formatted_address']
+          : response.data['display_name'];
     } on FetchDataException catch (e) {
       return Left(GetDataFailure(message: e.message));
     } on BadRequestException catch (e) {
@@ -172,7 +171,7 @@ class HomeRepositoryImpl implements HomeRepository {
     RecentRoutesModel recentRoutes;
     try {
       Response response = await _homeApi.getRecentRoutesApi();
-      printWrapped('Recent Routes Response : ${response.data}');
+      //printWrapped('Recent Routes Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -202,10 +201,25 @@ class HomeRepositoryImpl implements HomeRepository {
     required String rideType,
     required List<AddressModel> address,
   }) async {
+    log("rideType====:$rideType");
+    if (address.isNotEmpty) {
+       log("address==0==:${address[0].lat}");
+       log("address==0==:${address[0].lng}");
+      
+    }
+    if (address.length <1) {
+       log("address==1==:${address[1].lat}");
+       log("address==1==:${address[1].lng}");
+      
+    }
+   
     dynamic res;
     try {
-      Response response = await _homeApi.serviceLocationVerifyApi(rideType: rideType,address: address);
-      printWrapped('Service Available Response : ${response.data}');
+      Response response = await _homeApi.serviceLocationVerifyApi(
+        rideType: rideType,
+        address: address,
+      );
+      log('Service Available Response : ${response.data}'); 
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

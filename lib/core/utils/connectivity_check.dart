@@ -80,7 +80,7 @@ class ConnectivityService {
     if (navigatorKey.currentState?.canPop() ?? false) {
       navigatorKey.currentState?.pop();
     } else {
-      printWrapped("No routes to pop.");
+      //printWrapped("No routes to pop.");
     }
   }
 

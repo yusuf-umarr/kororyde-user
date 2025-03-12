@@ -436,7 +436,7 @@ Widget etaListViewWidget(Size size, BuildContext context,
                 physics: context.read<BookingBloc>().enableEtaScrolling
                     ? const BouncingScrollPhysics()
                     : const NeverScrollableScrollPhysics(),
-                itemCount: context.read<BookingBloc>().isMultiTypeVechiles
+                itemCount: context.read<BookingBloc>().isMultiTypeVechiles 
                     ? context.read<BookingBloc>().sortedEtaDetailsList.length
                     : context.read<BookingBloc>().etaDetailsList.length,
                 itemBuilder: (context, index) {

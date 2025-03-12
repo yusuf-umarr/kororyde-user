@@ -7,7 +7,6 @@ import '../../../../core/utils/custom_loader.dart';
 import '../../../../core/utils/custom_text.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../home/domain/models/user_details_model.dart';
-import '../../../language/presentation/page/choose_language_page.dart';
 import '../../application/acc_bloc.dart';
 import '../widgets/page_options.dart';
 import '../widgets/profile_design.dart';

@@ -1,6 +1,8 @@
+import 'dart:developer';
+import 'dart:developer' as dev;
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import '../../../../common/common.dart';
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
 import '../../../home/domain/models/user_details_model.dart';
@@ -56,7 +58,7 @@ class BookingRepositoryImpl implements BookingRepository {
           dropAddressList: dropAddressList,
           isOutstationRide: isOutstationRide,
           isWithoutDestinationRide: isWithoutDestinationRide);
-      printWrapped('ETA RESPONSE : ${response.data}');
+      log('ETA RESPONSE  etaRequestApi eta ---here: ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -97,7 +99,9 @@ class BookingRepositoryImpl implements BookingRepository {
         transportType: transportType,
         promoCode: promoCode,
       );
-      printWrapped('RENTAL ETA RESPONSE : ${response.data}');
+
+      log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
+      dev.log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -171,7 +175,7 @@ class BookingRepositoryImpl implements BookingRepository {
         isRoundTrip: isRoundTrip,
         scheduleDateTimeForReturn: scheduleDateTimeForReturn,
       );
-      printWrapped('Create Request Response : ${response.data}');
+      //printWrapped('Create Request Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -203,7 +207,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response = await _bookingApi.cancelRequestApi(
           requestId: requestId, reason: reason, timerCancel: timerCancel);
-      printWrapped('Cancel Request Response : ${response.data}');
+      //printWrapped('Cancel Request Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -234,7 +238,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response = await _bookingApi.userReviewApi(
           requestId: requestId, ratings: ratings, feedBack: feedBack);
-      printWrapped('Review Response : ${response.data}');
+      //printWrapped('Review Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -261,7 +265,7 @@ class BookingRepositoryImpl implements BookingRepository {
     GoodsTypeModel goodTypeResponse;
     try {
       Response response = await _bookingApi.goodsTypeApi();
-      printWrapped('Goods Type Response : ${response.data}');
+      //printWrapped('Goods Type Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -296,7 +300,7 @@ class BookingRepositoryImpl implements BookingRepository {
           driverId: driverId,
           acceptRideFare: acceptRideFare,
           offeredRideFare: offeredRideFare);
-      printWrapped('Bidding accept Response : ${response.data}');
+      //printWrapped('Bidding accept Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -325,7 +329,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response = await _bookingApi.cancelReasonsApi(
           beforeOrAfter: beforeOrAfter, transportType: transportType);
-      printWrapped('Cancel Reasons Response : ${response.data}');
+      //printWrapped('Cancel Reasons Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -421,7 +425,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response =
           await _bookingApi.getChatHistoryApi(requestId: requestId);
-      printWrapped('Chat History Response : ${response.data}');
+      //printWrapped('Chat History Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -450,7 +454,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response =
           await _bookingApi.chatMessageSeenApi(requestId: requestId);
-      printWrapped('Chat Seen Response : ${response.data}');
+      //printWrapped('Chat Seen Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -479,7 +483,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response = await _bookingApi.sendChatMessageApi(
           requestId: requestId, message: message);
-      printWrapped('Chat Send Response : ${response.data}');
+      //printWrapped('Chat Send Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:kororyde_user/db/app_database.dart';
@@ -33,6 +32,7 @@ import '../domain/models/recent_routes_model.dart';
 import '../domain/models/user_details_model.dart';
 import '../domain/models/stop_address_model.dart';
 import 'usecase/home_usecases.dart';
+import 'dart:developer' as dev;
 
 part 'home_event.dart';
 
@@ -538,6 +538,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // LocateMe
   Future<void> locateMe(LocateMeEvent event, Emitter<HomeState> emit) async {
+    dev.log("locateMe called=====");
     isOnCurrentLocation = true;
     await Permission.location.request();
     PermissionStatus status = await Permission.location.status;
@@ -570,17 +571,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-
-
   // UserDetails
   FutureOr<void> getUserDetails(
       GetUserDetailsEvent event, Emitter<HomeState> emit) async {
-        log("getUserDetails called=======");
+    // log("getUserDetails called=======");
     emit(HomeLoadingStartState());
     textDirection = await AppSharedPreference.getLanguageDirection();
     final val = await AppSharedPreference.getRecentSearchPlaces();
-    log("getRecentSearchPlaces----: ${val}");
-    log("getLanguageDirection----: ${textDirection}");
+    // log("getRecentSearchPlaces----: ${val}");
+    // log("getLanguageDirection----: ${textDirection}");
     if (val.isNotEmpty) {
       List<dynamic> decodedList = jsonDecode(val);
       List<AddressModel> decodedData =
@@ -588,8 +587,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       recentSearchPlaces = decodedData;
     }
     final data = await serviceLocator<HomeUsecase>().userDetails();
- emit(HomeLoadingStopState());//TODO:: temporary
-    log("user data res:--=====${data}");
+    emit(HomeLoadingStopState()); //TODO:: temporary
+    // log("user data res:--=====${data}");
     await data.fold(
       (error) {
         //debugPrint(error.toString());
@@ -599,11 +598,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(HomeLoadingStopState());
         }
       },
-      
-      
       (success) async {
         userData = success.data;
-         log("UserData====: ${userData}"); // Add
+       dev. log("UserData====: ${userData!.name}"); // Add
 
         if (mapType.isEmpty) {
           mapType = success.data.mapType;
@@ -709,8 +706,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
     add(InitScrollPositionEvent());
   }
-
-  
 
 //  Locations
   Future<void> getLocationPermission(
@@ -840,6 +835,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> updateLocation(
       UpdateLocationEvent event, Emitter<HomeState> emit) async {
+        dev.log("updateLocation called=====");
     if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {
       final data = await serviceLocator<HomeUsecase>().getAddressFromLatLng(
           lat: event.latLng.latitude,
@@ -1506,10 +1502,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (success) {
         if (success["success"] == false) {
           if (event.isFromHomePage != null && event.isFromHomePage!) {
-            serviceAvailable = false;
+            //TODO:: change it back to false
+            serviceAvailable = true;
             emit(HomeUpdateState());
           } else {
-            emit(ServiceNotAvailableState(message: success["message"]));
+            //TODO:  comment /del " emit(ConfirmRideAddressState());"
+            emit(ConfirmRideAddressState());
+            // emit(ServiceNotAvailableState(message: success["message"]));
           }
         } else {
           if (event.isFromHomePage != null && event.isFromHomePage!) {
