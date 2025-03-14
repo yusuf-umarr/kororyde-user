@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/language/application/language_bloc.dart';
 import '../../../../common/common.dart';
 import '../../../auth/presentation/pages/auth_page.dart';

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kororyde_user/common/app_provider.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
+import 'package:kororyde_user/features/home/presentation/pages/home_page.dart';
+import 'package:provider/provider.dart';
 import '../../../../common/common.dart';
 import '../core/utils/connectivity_check.dart';
 import '../core/utils/custom_loader.dart';
@@ -27,6 +31,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => OnBoardingBloc()),
         BlocProvider(create: (context) => AuthBloc()),
         BlocProvider(create: (context) => AccBloc()),
+        BlocProvider(create: (context) => BottomNavCubit()),
         BlocProvider(create: (context) => HomeBloc()),
         BlocProvider(create: (context) => BookingBloc()),
       ],
@@ -38,20 +43,25 @@ class MyApp extends StatelessWidget {
                   : const Locale('en');
           bool isDark =
               (state is LocalizationInitialState) ? state.isDark : false;     
-          return MaterialApp(
-            scaffoldMessengerKey: scaffoldMessengerKey,
-            navigatorKey: navigatorKey,
-            debugShowCheckedModeBanner: false,
-            theme: AppThemes.applicationDefaultTheme(context),
-            onGenerateRoute: AppRoutes.onGenerateRoutes,
-            onUnknownRoute: AppRoutes.onUnknownRoute,
-            initialRoute: LoaderPage.routeName,
-            title: AppConstants.title,
-            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-            darkTheme: AppThemes.darkTheme(context),
-            locale: locale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
+          return MultiProvider(
+               providers: AppProvider.providers,
+            builder: (context, child) {
+              return MaterialApp(
+                scaffoldMessengerKey: scaffoldMessengerKey,
+                navigatorKey: navigatorKey,
+                debugShowCheckedModeBanner: false,
+                theme: AppThemes.applicationDefaultTheme(context),
+                onGenerateRoute: AppRoutes.onGenerateRoutes,
+                onUnknownRoute: AppRoutes.onUnknownRoute,
+                initialRoute: LoaderPage.routeName,
+                title: AppConstants.title,
+                themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+                darkTheme: AppThemes.darkTheme(context),
+                locale: locale,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+              );
+            }
           );
         },
       ),

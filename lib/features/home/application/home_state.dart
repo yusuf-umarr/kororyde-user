@@ -111,7 +111,9 @@ final class DeliverySelectState extends HomeState {}
 
 final class RentalSelectState extends HomeState {}
 
-final class OutStationSelectState extends HomeState {}
+final class AdvertSelectState extends HomeState {}
+
+final class BillPaymentSelectState extends HomeState {}
 
 final class ConfirmRideAddressState extends HomeState {}
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kororyde_user/features/account/presentation/pages/outstation_page.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
+import 'package:kororyde_user/features/home/presentation/pages/advert_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/bill_payment_page.dart';
 import '../core/error/error_page.dart';
 import '../features/account/presentation/pages/confirm_fav_location.dart';
 import '../features/account/presentation/pages/delete_account.dart';
@@ -96,6 +99,16 @@ class AppRoutes {
           builder: (context) => UpdatePasswordPage(
             arg: arg as UpdatePasswordPageArguments,
           ),
+        );
+        break;
+      case AdvertPage.routeName:
+        pageRoute = MaterialPageRoute(
+          builder: (context) => const AdvertPage(),
+        );
+        break;
+      case BillPaymentPage.routeName:
+        pageRoute = MaterialPageRoute(
+          builder: (context) => const BillPaymentPage(),
         );
         break;
       case HomePage.routeName:

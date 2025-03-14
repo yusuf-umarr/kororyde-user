@@ -106,7 +106,7 @@ class DestinationPageArguments {
 }
 
 class ConfirmLocationPageArguments {
-  final UserDetail userData;
+  final UserDetail? userData;
   final bool isPickupEdit;
   final bool isEditAddress;
   final LatLng? latlng;
@@ -114,7 +114,7 @@ class ConfirmLocationPageArguments {
   final String mapType;
 
   ConfirmLocationPageArguments({
-    required this.userData,
+     this.userData,
     required this.isPickupEdit,
     required this.isEditAddress,
     this.latlng,

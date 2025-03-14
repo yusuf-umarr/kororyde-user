@@ -42,6 +42,21 @@ class BookingRepositoryImpl implements BookingRepository {
   }) async {
     EtaDetailsListModel etaResposeModel;
     try {
+      // log('picklat ---here: ${picklat}');
+      // log('picklng ---here: ${picklng}');
+      // log('droplat ---here: ${droplat}');
+      // log('droplng ---here: ${droplng}');
+      // log('rideType ---here: ${rideType}');
+      // log('transportType ---here: ${transportType}');
+      // log('promoCode ---here: ${promoCode}');
+      // log('vehicleType ---here: ${vehicleType}');
+      // log('distance ---here: ${distance}');
+      // log('duration ---here: ${duration}');
+      // log('polyLine ---here: ${polyLine}');
+      // log('pickupAddressList ---here: ${pickupAddressList[0].address}');
+      // log('dropAddressList ---here: ${dropAddressList[0].address}');
+      // log('isOutstationRide ---here: ${isOutstationRide}');
+      // log('isWithoutDestinationRide ---here: ${isWithoutDestinationRide}');
       Response response = await _bookingApi.etaRequestApi(
           picklat: picklat,
           picklng: picklng,
@@ -93,6 +108,10 @@ class BookingRepositoryImpl implements BookingRepository {
   }) async {
     RentalPackagesModel etaResposeModel;
     try {
+      log(' rentalEtaRequest --picklat : ${picklat}');
+      log(' rentalEtaRequest --picklng : ${picklng}');
+      log(' rentalEtaRequest --transportType : ${transportType}');
+      log(' rentalEtaRequest --promoCode : ${promoCode}');
       Response response = await _bookingApi.rentalEtaRequestApi(
         picklat: picklat,
         picklng: picklng,
@@ -100,7 +119,6 @@ class BookingRepositoryImpl implements BookingRepository {
         promoCode: promoCode,
       );
 
-      log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
       dev.log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
@@ -505,3 +523,24 @@ class BookingRepositoryImpl implements BookingRepository {
     return Right(seenResponse);
   }
 }
+
+
+/*
+[log] bookingEtaRequest  also called----1
+[log] picklat ---here: 6.601838
+[log] picklng ---here: 3.3514863
+[log] droplat ---here: 6.5243793
+[log] droplng ---here: 3.3792057
+[log] rideType ---here: 1
+[log] transportType ---here: taxi
+[log] promoCode ---here: null
+[log] vehicleType ---here: null
+[log] distance ---here: 15249
+[log] duration ---here: 35
+[log] pickupAddressList ---here: [Instance of 'AddressModel']
+[log] dropAddressList ---here: [Instance of 'AddressModel']
+[log] isOutstationRide ---here: false
+[log] isWithoutDestinationRide ---here: false
+
+[log] polyLine ---here: }khg@_qmSPh@x@c@`Ak@b@Mf@?VG~CkAeAyBhCeA`HaDzC{AhBgAp@Wf@Kl@HRFLENQdAmCrDcFdBwBdEuD~BoBdCmBLADKEOKAW[gBcC}BkDmAaB_@U{FmHqEkIq@gAiAqA_C}B}AiBaAkA|EaGlFeFNUt@w@lD_DbH{FlAkA|CiDzCsCxA{@l@e@f@k@P_@ZcAJw@ViDD]rDaJn@qBNQHG`DxB|K`HxKfHxAz@`@Dv^|UdMhIhFbD~BpAtCrAdGxBbBf@pBb@pCf@vEf@`CLxCC~DDbJGjB@dLK`VKxDAd^WpVIxUQjs@[joAq@dCNXAJHfAFND`ACtFAfAEh@?l@F@c@AMMOMI{HBuCDcC?wDCAeGBeBJSTURO|C{ArCk@rDsAH@LJJBN?JJNAHM?OIKO?GDm@HIAy@_@[GeBKqCSUESMi@g@m@e@iAi@s@SyAAWAsA_@_AYoCoAs@k@}AaBYa@gDwDj@a@jDgBnCaA|@c@z@q@v@}@fCiCJWXuAHiCPGqA}BWo@b@A^Q
+*/

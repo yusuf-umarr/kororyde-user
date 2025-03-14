@@ -1,0 +1,34 @@
+# [log] picklat ---here: 6.578996999999999
+# [log] picklng ---here: 3.3494666
+# [log] droplat ---here: 6.5243793
+# [log] droplng ---here: 3.3792057
+# [log] rideType ---here: 1
+# [log] transportType ---here: taxi
+# [log] promoCode ---here: null
+# [log] vehicleType ---here: null
+# [log] distance ---here: 11485
+# [log] duration ---here: 26
+# [log] pickupAddressList ---here: Ikeja GRA, Ikeja, Nigeria
+# [log] dropAddressList ---here: Yaba Lagos, Lagos, Nigeria 
+# [log] isOutstationRide ---here: false
+# [log] isWithoutDestinationRide ---here: false
+# [log] picklat ---here: 6.578996999999999
+# [log] picklng ---here: 3.3494666
+# [log] droplat ---here: 6.5243793
+# [log] droplng ---here: 3.3792057
+# [log] rideType ---here: 1
+# [log] transportType ---here: taxi
+# [log] promoCode ---here: null
+# [log] vehicleType ---here: null
+# [log] distance ---here: 11485
+# [log] duration ---here: 26
+# [log] pickupAddressList ---here: Ikeja GRA, Ikeja, Nigeria
+# [log] pick_short_address ---here: Ikeja GRA
+# [log] drop_address ---here: Yaba Lagos, Lagos, Nigeria
+# [log] drop_address ---here: Yaba Lagos
+# [log] isOutstationRide ---here: false
+# [log] isWithoutDestinationRide ---here: false
+# [log] stop ---here: []
+# [log] widget.arg.mapTyp:google_map
+# D/Surface ( 2247): lockHardwareCanvas
+# [log] polyLine ---here: c~cg@kemSIPBPLJN@LG~@\~@Rd@A~FmBjBk@xA_@`@YJQd@_C?a@Mg@yFmRsAyDFUEYMKQAC@sHiWkAqDrDgAhGoBjOsE`Ac@ZSx@s@p@s@d@iAbAkDrBiIxAuFx@a@fARvCp@lEp@hALrDT~CAxCDpJC\KxAAFEFGdLK`VKxDAd^WpVIxUQjs@[joAq@dCNXAJHfAFND`ACtFAfAEh@?l@F@c@AMMOMI{HBuCDcC?wDCAeGBeBJSTURO|C{ArCk@rDsAH@LJJBN?JJNAHM?OIKO?GDm@HIAy@_@[GeBKqCSUESMi@g@m@e@iAi@s@SyAAWAsA_@_AYoCoAs@k@}AaBYa@gDwDj@a@jDgBnCaA|@c@z@q@v@}@fCiCJWXuAHiCPGqA}BWo@b@A^Q

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:latlong2/latlong.dart' as fmlt;
 import 'package:kororyde_user/features/account/presentation/pages/outstation_page.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';

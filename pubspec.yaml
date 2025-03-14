@@ -117,6 +117,8 @@ dependencies:
   # drift_flutter: ^0.2.4
 
   rename_app: ^1.6.2
+  google_nav_bar: ^5.0.7
+  provider: ^6.1.2
 
 
 

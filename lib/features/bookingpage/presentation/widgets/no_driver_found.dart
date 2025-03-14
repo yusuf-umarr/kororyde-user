@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 
 import '../../../../core/utils/custom_button.dart';
@@ -41,6 +42,8 @@ class NoDriverFoundWidget extends StatelessWidget {
                   buttonColor: Theme.of(context).primaryColor,
                   buttonName: AppLocalizations.of(context)!.okText,
                   onTap: () {
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //     context, HomePage.routeName, (route) => false);
                     Navigator.pop(context);
                   },
                 ),

@@ -201,17 +201,7 @@ class HomeRepositoryImpl implements HomeRepository {
     required String rideType,
     required List<AddressModel> address,
   }) async {
-    log("rideType====:$rideType");
-    if (address.isNotEmpty) {
-       log("address==0==:${address[0].lat}");
-       log("address==0==:${address[0].lng}");
-      
-    }
-    if (address.length <1) {
-       log("address==1==:${address[1].lat}");
-       log("address==1==:${address[1].lng}");
-      
-    }
+   
    
     dynamic res;
     try {

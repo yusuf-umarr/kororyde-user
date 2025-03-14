@@ -1,9 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
+import 'package:kororyde_user/features/bookingpage/presentation/page/booking_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/home_page.dart';
 import 'package:latlong2/latlong.dart' as fmlt;
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import '../../../../common/common.dart';
@@ -43,6 +47,7 @@ class _ConfirmLocationPageState extends State<ConfirmLocationPage>
     return BlocProvider(
       create: (context) => HomeBloc()
         ..add(GetDirectionEvent())
+        ..add(GetUserEvent())
         ..add(ConfirmLocationPageInitEvent(arg: widget.arg)),
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) async {
@@ -61,7 +66,55 @@ class _ConfirmLocationPageState extends State<ConfirmLocationPage>
                 context, AuthPage.routeName, (route) => false);
             await AppSharedPreference.setLoginStatus(false);
           } else if (state is ConfirmAddressState) {
-            Navigator.pop(context, state.address);
+            // Navigator.pop(context, state.address);
+            // context.read<BottomNavCubit>().setSelectedIndex(0);
+            // context
+            //     .read<HomeBloc>()
+            //     .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
+
+            log("state.address:${state.address}");
+
+              {
+                    if (context.read<HomeBloc>().nearByVechileSubscription !=
+                        null) {
+                      context
+                          .read<HomeBloc>()
+                          .nearByVechileSubscription
+                          ?.cancel();
+                      context.read<HomeBloc>().nearByVechileSubscription = null;
+                    }
+                    // context.read<HomeBloc>().pickupAddressList.clear();
+                    // final add = value as AddressModel;
+                    // context.read<HomeBloc>().pickupAddressList.add(add);
+                    Navigator.pushNamed(
+                      context,
+                      BookingPage.routeName,
+                      arguments: BookingPageArguments(
+                          picklat: context
+                              .read<HomeBloc>()
+                              .pickupAddressList[0]
+                              .lat
+                              .toString(),
+                          picklng: context
+                              .read<HomeBloc>()
+                              .pickupAddressList[0]
+                              .lng
+                              .toString(),
+                          droplat: '',
+                          droplng: '',
+                          userData: context.read<HomeBloc>().userData!,
+                          transportType: '',
+                          pickupAddressList:
+                              context.read<HomeBloc>().pickupAddressList,
+                          stopAddressList: [],
+                          polyString: '',
+                          distance: '',
+                          duration: '',
+                          mapType: context.read<HomeBloc>().mapType,
+                          isOutstationRide: false,
+                          isRentalRide: true),
+                    );
+                  }
           }
         },
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -397,10 +450,12 @@ class _ConfirmLocationPageState extends State<ConfirmLocationPage>
                           context.read<HomeBloc>().add(SearchPlacesEvent(
                               context: context,
                               mapType: widget.arg.mapType,
-                              countryCode: widget.arg.userData.countryCode,
+                              countryCode: '+234',
                               latLng: context.read<HomeBloc>().currentLatLng,
-                              enbleContryRestrictMap: widget
-                                  .arg.userData.enableCountryRestrictOnMap,
+                              enbleContryRestrictMap: context
+                                  .read<HomeBloc>()
+                                  .userData!
+                                  .enableCountryRestrictOnMap,
                               searchText: value));
                         });
                       },
@@ -533,15 +588,17 @@ class _ConfirmLocationPageState extends State<ConfirmLocationPage>
                   : AppLocalizations.of(context)!.confirmLocation,
               width: size.width,
               onTap: () {
-                context.read<HomeBloc>().add(ConfirmAddressEvent(
-                      isDelivery:
-                          widget.arg.transportType.toString().toLowerCase() ==
-                                  'delivery'
-                              ? true
-                              : false,
-                      isEditAddress: widget.arg.isEditAddress,
-                      isPickUpEdit: widget.arg.isPickupEdit,
-                    ));
+                context.read<HomeBloc>().add(
+                      ConfirmAddressEvent(
+                        isDelivery:
+                            widget.arg.transportType.toString().toLowerCase() ==
+                                    'delivery'
+                                ? true
+                                : false,
+                        isEditAddress: widget.arg.isEditAddress,
+                        isPickUpEdit: widget.arg.isPickupEdit,
+                      ),
+                    );
               },
             ),
             SizedBox(height: size.width * 0.05),

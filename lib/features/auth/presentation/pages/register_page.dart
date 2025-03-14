@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kororyde_user/features/auth/presentation/pages/auth_page.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_background.dart';
 import '../../../../core/utils/custom_button.dart';
