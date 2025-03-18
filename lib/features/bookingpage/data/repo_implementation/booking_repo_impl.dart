@@ -108,10 +108,10 @@ class BookingRepositoryImpl implements BookingRepository {
   }) async {
     RentalPackagesModel etaResposeModel;
     try {
-      log(' rentalEtaRequest --picklat : ${picklat}');
-      log(' rentalEtaRequest --picklng : ${picklng}');
-      log(' rentalEtaRequest --transportType : ${transportType}');
-      log(' rentalEtaRequest --promoCode : ${promoCode}');
+      // log(' rentalEtaRequest --picklat : ${picklat}');
+      // log(' rentalEtaRequest --picklng : ${picklng}');
+      // log(' rentalEtaRequest --transportType : ${transportType}');
+      // log(' rentalEtaRequest --promoCode : ${promoCode}');
       Response response = await _bookingApi.rentalEtaRequestApi(
         picklat: picklat,
         picklng: picklng,

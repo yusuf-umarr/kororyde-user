@@ -299,8 +299,8 @@ class _CableTVState extends State<CableTV> {
                                     ),
                               ),
                               const SizedBox(height: 5),
-                              Consumer<HomeViewModel>(
-                                  builder: (context, homeVM, _) {
+                              Builder(
+                                  builder: (context, ) {
                                 // bool readOnly = homeVM.validateRes.isNotEmpty;
                                 return CustomTextField(
                                   onTap: () {
@@ -322,7 +322,7 @@ class _CableTVState extends State<CableTV> {
                           ),
                         ),
                         SizedBox(height: size.height * 0.17),
-                        Consumer<HomeViewModel>(builder: (context, homeVM, _) {
+                        Builder(builder: (context, ) {
                           return CustomButton(
                             buttonName: "Next",
                             onTap: () async {},

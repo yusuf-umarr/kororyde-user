@@ -118,7 +118,7 @@ dependencies:
 
   rename_app: ^1.6.2
   google_nav_bar: ^5.0.7
-  provider: ^6.1.2
+  # provider: ^6.1.2
 
 
 

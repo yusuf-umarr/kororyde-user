@@ -277,7 +277,7 @@ class _BuyElectricityState extends State<BuyElectricity> {
                           ),
                     ),
                     const SizedBox(height: 5),
-                    Consumer<HomeViewModel>(builder: (context, homeVM, _) {
+                    Builder(builder: (context,) {
                       return CustomTextField(
                         onTap: () {
                           // homeVM.clearMeterName();
@@ -295,7 +295,7 @@ class _BuyElectricityState extends State<BuyElectricity> {
                     }),
                     const CustomSpacer(flex: 25),
                     // const SizedBox(height: 5),
-                    Consumer<HomeViewModel>(builder: (context, homeVM, _) {
+                    Builder(builder: (context,) {
                       return CustomButton(
                             buttonName: "Next",
                             onTap: () async {},

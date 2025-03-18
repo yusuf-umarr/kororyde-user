@@ -292,8 +292,8 @@ class _BuyMobileDataState extends State<BuyMobileData> {
                                     ),
                               ),
                               const SizedBox(height: 5),
-                              Consumer<HomeViewModel>(
-                                  builder: (context, homeVM, _) {
+                              Builder(
+                                  builder: (context,) {
                                 // bool readOnly = homeVM.validateRes.isNotEmpty;
                                 return CustomTextField(
                                   onTap: () {
@@ -315,7 +315,7 @@ class _BuyMobileDataState extends State<BuyMobileData> {
                           ),
                         ),
                         SizedBox(height: size.height * 0.3),
-                        Consumer<HomeViewModel>(builder: (context, homeVM, _) {
+                        Builder(builder: (context,) {
                           return CustomButton(
                             buttonName: "Next",
                             onTap: () async {},

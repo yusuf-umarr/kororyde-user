@@ -58,7 +58,7 @@ class BookingUsecase {
     String? promoCode,
   }) async {
     return _bookingRepository.rentalEtaRequest(
-        picklat: picklat, picklng: picklng, transportType: transportType);
+        picklat: picklat, picklng: picklng, transportType: transportType,);
   }
 
   //  createRequest

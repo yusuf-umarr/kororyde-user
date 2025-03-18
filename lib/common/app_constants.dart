@@ -21,7 +21,8 @@ class AppConstants {
       : "ios firebase project id";
 
   static String mapKey =
-      (Platform.isAndroid) ? 'AIzaSyBT7rdRFRnm5nOpTdMBnqdn_PaZfJ4cHHA' : 'AIzaSyBT7rdRFRnm5nOpTdMBnqdn_PaZfJ4cHHA'; 
+      (Platform.isAndroid) ? 'AIzaSyBT7rdRFRnm5nOpTdMBnqdn_PaZfJ4cHHA' : 'AIzaSyBT7rdRFRnm5nOpTdMBnqdn_PaZfJ4cHHA'; //             AIzaSyBT7rdRFRnm5nOpTdMBnqdn_PaZfJ4cHHA
+
   static const String privacyPolicy = 'your privacy policy url';
   static const String termsCondition = 'your terms and condition url';
 

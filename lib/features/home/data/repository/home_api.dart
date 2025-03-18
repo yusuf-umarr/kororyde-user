@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 import '../../../../common/common.dart';
 import '../../../../core/network/network.dart';
 import '../../domain/models/stop_address_model.dart';
@@ -177,7 +175,8 @@ class HomeApi {
 
       dev.log("token:$token");
       dev.log("rideType:$rideType");
-      dev.log("address:$address");
+      dev.log("address-lat:${address[0].lat}");
+      dev.log("address-lng:${address[0].lng}");
       Response response =
           await DioProviderImpl().post(ApiEndpoints.serviceVerify, headers: {
         'Content-Type': 'application/json',
@@ -186,8 +185,8 @@ class HomeApi {
         'ride_type': rideType,
         'address': [
           {
-            "latitude": address[0].lat,
-            "longitude": address[0].lng,
+            "latitude": 6.57890379,//address[0].lat
+            "longitude": 3.24495855, // address[0].lng
           }
         ],
       });

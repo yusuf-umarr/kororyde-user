@@ -241,8 +241,8 @@ class _BuyAirtimeState extends State<BuyAirtime> {
                                     ),
                               ),
                               const SizedBox(height: 5),
-                              Consumer<HomeViewModel>(
-                                  builder: (context, homeVM, _) {
+                              Builder(
+                                  builder: (context,) {
                                 // bool readOnly = homeVM.validateRes.isNotEmpty;
                                 return CustomTextField(
                                   onTap: () {
@@ -264,7 +264,7 @@ class _BuyAirtimeState extends State<BuyAirtime> {
                           ),
                         ),
                         SizedBox(height: size.height * 0.3),
-                        Consumer<HomeViewModel>(builder: (context, homeVM, _) {
+                        Builder(builder: (context, ) {
                           return CustomButton(
                               buttonName: "Done", onTap: () async {});
                         }),

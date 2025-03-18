@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
+import 'dart:developer' as dev;
 import 'package:intl/intl.dart' as intel;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,7 +121,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   String darkMapString = '';
   List<EtaDetails> etaDetailsList = []; //this eta deta
   List<RentalEtaDetails> rentalEtaDetailsList = [];
-  List<RentalPackagesData> rentalPackagesList = []; ///this for rental
+  List<RentalPackagesData> rentalPackagesList = [];
+
+  ///this for rental
   List<CategoryData> categoryList = [];
   List<EtaDetails> sortedEtaDetailsList = [];
   List<String> paymentList = [];
@@ -245,19 +248,17 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> getDirection(
       BookingEvent event, Emitter<BookingState> emit) async {
-        
     emit(BookingLoadingStartState());
     log("getDirection in booking==1 1==");
     textDirection = await AppSharedPreference.getLanguageDirection();
-     log("textDirection ::${textDirection}");
+    log("textDirection ::${textDirection}");
     lightMapString = await rootBundle.loadString('assets/light.json');
-      log("lightMapString ::===done");
+    log("lightMapString ::===done");
     darkMapString = await rootBundle.loadString('assets/dark.json');
-       log("darkMapString ::----");
-      log("getDirection in booking==2-111 2-11==");
+    log("darkMapString ::----");
+    log("getDirection in booking==2-111 2-11==");
     emit(BookingLoadingStopState());
-      log("getDirection in booking==2 2==");
-
+    log("getDirection in booking==2 2==");
   }
 
   Future<void> navigatorPop(
@@ -301,8 +302,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> bookingInitEvent(
       BookingInitEvent event, Emitter<BookingState> emit) async {
-
-        log("bookingInitEvent ==calling");
+    log("bookingInitEvent ==calling");
     vsync = event.vsync;
     mapType = event.arg.mapType;
     // if (mapType != 'google_map') {
@@ -806,8 +806,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   // Eta Request
   FutureOr<void> bookingEtaRequest(
       BookingEtaRequestEvent event, Emitter<BookingState> emit) async {
-
-        log("bookingEtaRequest  also called----1");// etaDetailsList
+    log("bookingEtaRequest  also called----1"); // etaDetailsList
     final data = await serviceLocator<BookingUsecase>().etaRequest(
         picklat: event.picklat,
         picklng: event.picklng,
@@ -890,8 +889,19 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           etaDurationGetStream(etaDetailsList, double.parse(event.picklat),
               double.parse(event.picklng));
         } else {
-          emit(EtaNotAvailableState());
+          // emit(EtaNotAvailableState());
+          //TODO:===un comment   EtaNotAvailableState());
+          emit(BookingSuccessState());
+
+          //TODO: comment emit(BookingSuccessState());
         }
+
+        dev.log("================BookingSuccessState");
+        dev.log("================BookingSuccessState");
+        dev.log("================BookingSuccessState");
+        dev.log("================BookingSuccessState");
+        dev.log("================BookingSuccessState");
+        dev.log("================BookingSuccessState");
         emit(BookingSuccessState());
       },
     );
@@ -906,7 +916,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   // Rental Eta Request
   FutureOr<void> bookingRentalEtaRequest(
       BookingRentalEtaRequestEvent event, Emitter<BookingState> emit) async {
-      log("bookingRentalEtaRequest  called====1");
+    log("bookingRentalEtaRequest  called====1");
     final data = await serviceLocator<BookingUsecase>().rentalEtaRequest(
         picklat: event.picklat,
         picklng: event.picklng,
@@ -924,6 +934,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         }
       },
       (success) async {
+        dev.log("rentalPackagesList===${rentalPackagesList}");
         rentalPackagesList.clear();
         rentalPackagesList = success.data;
         if (event.promocode != null) {
@@ -968,6 +979,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   //Nearby Vechiles Stream
   etaDurationGetStream(List<dynamic> etaList, double pickLat, double pickLng) {
+    dev.log("etaDurationGetStream  callled===");
     if (etaDurationStream != null) etaDurationStream?.cancel();
     GeoHasher geo = GeoHasher();
     double lat = 0.0144927536231884;
@@ -996,10 +1008,14 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     }).listen((event) async {
       //debugPrint('nearByStreamStart Listening');
       if (nearByEtaVechileList.isEmpty) {
+        dev.log("nearByEtaVechileList is  not empty==========");
+
         for (var i = 0; i < etaList.length; i++) {
           nearByEtaVechileList
               .add(NearbyEtaModel(typeId: etaList[i].typeId, duration: ''));
         }
+      } else {
+        dev.log("nearByEtaVechileList  is  empty==========");
       }
       List vehicleList = [];
       List vehicles = [];
@@ -1010,6 +1026,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
       for (var i = 0; i < nearByEtaVechileList.length; i++) {
         if (vehicleList.isNotEmpty) {
+          dev.log("vehicle is not empty");
           for (var e in vehicleList) {
             if (e['is_active'] == 1 &&
                 e['is_available'] == true &&
@@ -1050,11 +1067,14 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
               }
             }
           }
+        } else {
+          dev.log("vehicle  not empty==========");
         }
       }
     });
   }
 
+//
   Future<void> createRequestEvent(
       BookingCreateRequestEvent event, Emitter<BookingState> emit) async {
     isLoading = true;
@@ -2623,6 +2643,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   nearByVechileCheckStream(
       BuildContext context, dynamic vsync, LatLng currentLatLng) async {
+    dev.log("nearByVechileCheckStream  calledd=====");
+    dev.log("nearByVechileCheckStream  calledd=====");
+    dev.log("nearByVechileCheckStream  calledd=====");
     GeoHasher geo = GeoHasher();
     double lat = 0.0144927536231884;
     double lon = 0.0181818181818182;
@@ -2649,12 +2672,16 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         .endAt(higher)
         .onValue
         .listen((onData) {
-      //debugPrint('Pickup NearBy Vechiles : ${onData.snapshot.children}');
+      dev.log('====Pickup NearBy Vechiles : ${onData.snapshot.children}');
       if (onData.snapshot.exists) {
+        dev.log("onData.snapshot exist---true");
+
         // List driverData = [];
         nearByDriversData.clear();
         for (var element in onData.snapshot.children) {
+          dev.log("nearByDriversData:${nearByDriversData}");
           nearByDriversData.add(element.value);
+          dev.log("nearByDriversData:${nearByDriversData}");
         }
         checkNearByEta(nearByDriversData, vsync);
       }

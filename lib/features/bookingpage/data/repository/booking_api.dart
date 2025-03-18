@@ -39,29 +39,29 @@ class BookingApi {
         }
       }
 
-      log('picklat ---here: ${picklat}');
-      log('picklng ---here: ${picklng}');
-      log('droplat ---here: ${droplat}');
-      log('droplng ---here: ${droplng}');
-      log('rideType ---here: ${rideType}');
-      log('transportType ---here: ${transportType}');
-      log('promoCode ---here: ${promoCode}');
-      log('vehicleType ---here: ${vehicleType}');
-      log('distance ---here: ${distance}');
-      log('duration ---here: ${duration}');
-      log('polyLine ---here: ${polyLine}');
-      log('pickupAddressList ---here: ${pickupAddressList.first.address}');
-      log('pick_short_address ---here: ${pickupAddressList.first.address.split(',')[0]}');
-      log('drop_address ---here: ${(dropAddressList.isNotEmpty) ? dropAddressList.last.address : ''}');
-      log('drop_address ---here: ${(dropAddressList.isNotEmpty) ? dropAddressList.last.address.split(',')[0] : ''}');
-      log('isOutstationRide ---here: ${isOutstationRide}');
-      log('isWithoutDestinationRide ---here: ${isWithoutDestinationRide}');
-      log('stop ---here: ${jsonEncode(stopList)}');
+      // log('picklat ---here: ${picklat}');
+      // log('picklng ---here: ${picklng}');
+      // log('droplat ---here: ${droplat}');
+      // log('droplng ---here: ${droplng}');
+      // log('rideType ---here: ${rideType}');
+      // log('transportType ---here: ${transportType}');
+      // log('promoCode ---here: ${promoCode}');
+      // log('vehicleType ---here: ${vehicleType}');
+      // log('distance ---here: ${distance}');
+      // log('duration ---here: ${duration}');
+      // log('polyLine ---here: ${polyLine}');
+      // log('pickupAddressList ---here: ${pickupAddressList.first.address}');
+      // log('pick_short_address ---here: ${pickupAddressList.first.address.split(',')[0]}');
+      // log('drop_address ---here: ${(dropAddressList.isNotEmpty) ? dropAddressList.last.address : ''}');
+      // log('drop_address ---here: ${(dropAddressList.isNotEmpty) ? dropAddressList.last.address.split(',')[0] : ''}');
+      // log('isOutstationRide ---here: ${isOutstationRide}');
+      // log('isWithoutDestinationRide ---here: ${isWithoutDestinationRide}');
+      // log('stop ---here: ${jsonEncode(stopList)}');
       Response response = await DioProviderImpl().post(ApiEndpoints.etaDetails,
           headers: {'Authorization': token},
           body: FormData.fromMap({
-            'pick_lat': picklat,
-            'pick_lng': picklng,
+            'pick_lat': 6.57890379, // picklat,
+            'pick_lng': 3.24495855, //picklng,
             if (droplat.isNotEmpty && !isWithoutDestinationRide)
               'drop_lat': droplat,
             if (droplng.isNotEmpty && !isWithoutDestinationRide)
@@ -99,6 +99,8 @@ class BookingApi {
     required String transportType,
     String? promoCode,
   }) async {
+
+    log("rentalEtaRequestApi  call========================");
     try {
       final token = await AppSharedPreference.getToken();
       Response response = await DioProviderImpl().post(
