@@ -889,9 +889,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           etaDurationGetStream(etaDetailsList, double.parse(event.picklat),
               double.parse(event.picklng));
         } else {
-          // emit(EtaNotAvailableState());
+          emit(EtaNotAvailableState());
           //TODO:===un comment   EtaNotAvailableState());
-          emit(BookingSuccessState());
+          // emit(BookingSuccessState());
 
           //TODO: comment emit(BookingSuccessState());
         }
@@ -1138,7 +1138,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
                 target: LatLng(event.pickupAddressList.first.lat,
                     event.pickupAddressList.first.lng),
                 zoom: 17.0,
-              )));
+              ),),);
             }
           } else {
             if (fmController != null) {
@@ -2013,6 +2013,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> biddingCreateRequest(
       BiddingCreateRequestEvent event, Emitter<BookingState> emit) async {
+    dev.log("BiddingCreateRequestEvent======");
     isLoading = true;
     final data = await serviceLocator<BookingUsecase>().createRequest(
         userData: event.userData,

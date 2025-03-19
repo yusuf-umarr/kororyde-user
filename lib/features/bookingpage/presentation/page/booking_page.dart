@@ -111,6 +111,7 @@ class _BookingPageState extends State<BookingPage>
           } else if (state is BookingLoadingStopState) {
             log("BookingLoadingStopState  2  now====");
             CustomLoader.dismiss(context);
+            log("Booking---LoadingStopState  2b  now====");
           } else if (state is BookingSuccessState) {
             log("BookingSuccessState  3  now====");
 
@@ -1072,248 +1073,267 @@ class _BookingPageState extends State<BookingPage>
                           child: const OnRideBottomSheet(),
                         ),
                       )
-                    :
+                    : ((!context.read<BookingBloc>().isRentalRide &&
+                                context
+                                    .read<BookingBloc>()
+                                    .etaDetailsList
+                                    .isNotEmpty) ||
+                            (context.read<BookingBloc>().isRentalRide &&
+                                context
+                                    .read<BookingBloc>()
+                                    .rentalEtaDetailsList
+                                    .isNotEmpty))
+                        ? Align(
+                            alignment: Alignment.bottomCenter,
+                            child: BlocBuilder<BookingBloc, BookingState>(
+                              builder: (context, state) {
+                                return StatefulBuilder(
+                                  builder:
+                                      (BuildContext context, StateSetter set) {
+                                    return GestureDetector(
+                                      onVerticalDragUpdate: (details) {
+                                        final dragAmount =
+                                            details.primaryDelta!;
 
-                    // (
-                    //   (!context.read<BookingBloc>().isRentalRide &&
-                    //             context
-                    //                 .read<BookingBloc>()
-                    //                 .etaDetailsList
-                    //                 .isNotEmpty) ||
-                    //         (context.read<BookingBloc>().isRentalRide &&
-                    //             context
-                    //                 .read<BookingBloc>()
-                    //                 .rentalEtaDetailsList
-                    //                 .isNotEmpty))
-                    //     ?
-
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: BlocBuilder<BookingBloc, BookingState>(
-                          builder: (context, state) {
-                            return StatefulBuilder(
-                              builder: (BuildContext context, StateSetter set) {
-                                return GestureDetector(
-                                  onVerticalDragUpdate: (details) {
-                                    final dragAmount = details.primaryDelta!;
-
-                                    set(() {
-                                      if (context
-                                          .read<BookingBloc>()
-                                          .detailView) {
-                                        if (dragAmount > 0) {
-                                          context
+                                        set(() {
+                                          if (context
                                               .read<BookingBloc>()
-                                              .detailView = false;
-                                          context
-                                              .read<BookingBloc>()
-                                              .add(UpdateEvent());
-                                        }
-                                      } else {
-                                        if (widget.arg.stopAddressList.length ==
-                                            1) {
-                                          context
-                                              .read<BookingBloc>()
-                                              .currentSize = (context
-                                                      .read<BookingBloc>()
-                                                      .currentSize -
-                                                  (dragAmount / size.height))
-                                              .clamp(
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .minChildSize,
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .maxChildSize);
-                                        } else if (widget
-                                                .arg.stopAddressList.length ==
-                                            2) {
-                                          context
-                                              .read<BookingBloc>()
-                                              .currentSizeTwo = (context
-                                                      .read<BookingBloc>()
-                                                      .currentSizeTwo -
-                                                  (dragAmount / size.height))
-                                              .clamp(
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .minChildSizeTwo,
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .maxChildSize);
-                                        } else {
-                                          context
-                                              .read<BookingBloc>()
-                                              .currentSizeThree = (context
-                                                      .read<BookingBloc>()
-                                                      .currentSizeThree -
-                                                  (dragAmount / size.height))
-                                              .clamp(
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .minChildSizeThree,
-                                                  context
-                                                      .read<BookingBloc>()
-                                                      .maxChildSize);
-                                        }
-                                      }
-                                    });
-                                  },
-                                  onVerticalDragEnd: (details) {
-                                    set(() {
-                                      // Snap to position logic for non-detail view
-                                      if (!context
-                                          .read<BookingBloc>()
-                                          .detailView) {
-                                        if (widget.arg.stopAddressList.length ==
-                                            1) {
-                                          context
-                                                  .read<BookingBloc>()
-                                                  .currentSize =
+                                              .detailView) {
+                                            if (dragAmount > 0) {
                                               context
                                                   .read<BookingBloc>()
-                                                  .snapToPosition(
-                                                      context
+                                                  .detailView = false;
+                                              context
+                                                  .read<BookingBloc>()
+                                                  .add(UpdateEvent());
+                                            }
+                                          } else {
+                                            if (widget.arg.stopAddressList
+                                                    .length ==
+                                                1) {
+                                              context
+                                                  .read<BookingBloc>()
+                                                  .currentSize = (context
                                                           .read<BookingBloc>()
-                                                          .currentSize,
+                                                          .currentSize -
+                                                      (dragAmount /
+                                                          size.height))
+                                                  .clamp(
                                                       context
                                                           .read<BookingBloc>()
                                                           .minChildSize,
                                                       context
                                                           .read<BookingBloc>()
                                                           .maxChildSize);
-                                        } else if (widget
-                                                .arg.stopAddressList.length ==
-                                            2) {
-                                          context
-                                                  .read<BookingBloc>()
-                                                  .currentSizeTwo =
+                                            } else if (widget.arg
+                                                    .stopAddressList.length ==
+                                                2) {
                                               context
                                                   .read<BookingBloc>()
-                                                  .snapToPosition(
-                                                      context
+                                                  .currentSizeTwo = (context
                                                           .read<BookingBloc>()
-                                                          .currentSizeTwo,
+                                                          .currentSizeTwo -
+                                                      (dragAmount /
+                                                          size.height))
+                                                  .clamp(
                                                       context
                                                           .read<BookingBloc>()
                                                           .minChildSizeTwo,
                                                       context
                                                           .read<BookingBloc>()
                                                           .maxChildSize);
-                                        } else {
-                                          context
-                                                  .read<BookingBloc>()
-                                                  .currentSizeThree =
+                                            } else {
                                               context
                                                   .read<BookingBloc>()
-                                                  .snapToPosition(
-                                                      context
+                                                  .currentSizeThree = (context
                                                           .read<BookingBloc>()
-                                                          .currentSizeThree,
+                                                          .currentSizeThree -
+                                                      (dragAmount /
+                                                          size.height))
+                                                  .clamp(
                                                       context
                                                           .read<BookingBloc>()
                                                           .minChildSizeThree,
                                                       context
                                                           .read<BookingBloc>()
                                                           .maxChildSize);
-                                        }
-                                      }
-                                    });
-                                  },
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 300),
-                                    height: (context
-                                            .read<BookingBloc>()
-                                            .detailView)
-                                        ? size.height *
-                                            context
+                                            }
+                                          }
+                                        });
+                                      },
+                                      onVerticalDragEnd: (details) {
+                                        set(() {
+                                          // Snap to position logic for non-detail view
+                                          if (!context
+                                              .read<BookingBloc>()
+                                              .detailView) {
+                                            if (widget.arg.stopAddressList
+                                                    .length ==
+                                                1) {
+                                              context
+                                                      .read<BookingBloc>()
+                                                      .currentSize =
+                                                  context
+                                                      .read<BookingBloc>()
+                                                      .snapToPosition(
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .currentSize,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .minChildSize,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .maxChildSize);
+                                            } else if (widget.arg
+                                                    .stopAddressList.length ==
+                                                2) {
+                                              context
+                                                      .read<BookingBloc>()
+                                                      .currentSizeTwo =
+                                                  context
+                                                      .read<BookingBloc>()
+                                                      .snapToPosition(
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .currentSizeTwo,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .minChildSizeTwo,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .maxChildSize);
+                                            } else {
+                                              context
+                                                      .read<BookingBloc>()
+                                                      .currentSizeThree =
+                                                  context
+                                                      .read<BookingBloc>()
+                                                      .snapToPosition(
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .currentSizeThree,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .minChildSizeThree,
+                                                          context
+                                                              .read<
+                                                                  BookingBloc>()
+                                                              .maxChildSize);
+                                            }
+                                          }
+                                        });
+                                      },
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        height: (context
                                                 .read<BookingBloc>()
-                                                .maxChildSize
-                                        : widget.arg.stopAddressList.length == 1
-                                            ? (size.height *
-                                                (context
-                                                        .read<BookingBloc>()
-                                                        .currentSize +
-                                                    (widget.arg.isOutstationRide
-                                                        ? 0.14
-                                                        : 0)))
+                                                .detailView)
+                                            ? size.height *
+                                                context
+                                                    .read<BookingBloc>()
+                                                    .maxChildSize
                                             : widget.arg.stopAddressList
                                                         .length ==
-                                                    2
-                                                ? size.height *
-                                                    context
-                                                        .read<BookingBloc>()
-                                                        .currentSizeTwo
-                                                : size.height *
-                                                    context
-                                                        .read<BookingBloc>()
-                                                        .currentSizeThree,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: const BorderRadius.vertical(
-                                        top: Radius.circular(20.0),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context).shadowColor,
-                                          blurRadius: 4.0,
-                                          spreadRadius: 2.0,
+                                                    1
+                                                ? (size.height *
+                                                    (context
+                                                            .read<BookingBloc>()
+                                                            .currentSize +
+                                                        (widget.arg
+                                                                .isOutstationRide
+                                                            ? 0.14
+                                                            : 0)))
+                                                : widget.arg.stopAddressList
+                                                            .length ==
+                                                        2
+                                                    ? size.height *
+                                                        context
+                                                            .read<BookingBloc>()
+                                                            .currentSizeTwo
+                                                    : size.height *
+                                                        context
+                                                            .read<BookingBloc>()
+                                                            .currentSizeThree,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              const BorderRadius.vertical(
+                                            top: Radius.circular(20.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Theme.of(context).shadowColor,
+                                              blurRadius: 4.0,
+                                              spreadRadius: 2.0,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    child: SingleChildScrollView(
-                                      physics: !context
-                                              .read<BookingBloc>()
-                                              .detailView
-                                          ? const NeverScrollableScrollPhysics()
-                                          : const AlwaysScrollableScrollPhysics(),
-                                      child: (!context
-                                              .read<BookingBloc>()
-                                              .detailView)
-                                          ? ridePreviewWidget(size, context)
-                                          : rideDetailsExpandedWidget(
-                                              size,
-                                              context,
-                                              (context
-                                                      .read<BookingBloc>()
-                                                      .isRentalRide
-                                                  ? context
+                                        child: SingleChildScrollView(
+                                          physics: !context
+                                                  .read<BookingBloc>()
+                                                  .detailView
+                                              ? const NeverScrollableScrollPhysics()
+                                              : const AlwaysScrollableScrollPhysics(),
+                                          child: (!context
+                                                  .read<BookingBloc>()
+                                                  .detailView)
+                                              ? ridePreviewWidget(size, context)
+                                              : rideDetailsExpandedWidget(
+                                                  size,
+                                                  context,
+                                                  (context
                                                           .read<BookingBloc>()
-                                                          .rentalEtaDetailsList[
-                                                      context
-                                                          .read<BookingBloc>()
-                                                          .selectedVehicleIndex]
-                                                  : context
-                                                          .read<BookingBloc>()
-                                                          .isMultiTypeVechiles
+                                                          .isRentalRide
                                                       ? context
                                                               .read<BookingBloc>()
-                                                              .sortedEtaDetailsList[
+                                                              .rentalEtaDetailsList[
                                                           context
                                                               .read<
                                                                   BookingBloc>()
                                                               .selectedVehicleIndex]
                                                       : context
-                                                              .read<BookingBloc>()
-                                                              .etaDetailsList[
-                                                          context
                                                               .read<
                                                                   BookingBloc>()
-                                                              .selectedVehicleIndex]),
-                                            ),
-                                    ),
-                                  ),
+                                                              .isMultiTypeVechiles
+                                                          ? context
+                                                                  .read<
+                                                                      BookingBloc>()
+                                                                  .sortedEtaDetailsList[
+                                                              context
+                                                                  .read<
+                                                                      BookingBloc>()
+                                                                  .selectedVehicleIndex]
+                                                          : context
+                                                                  .read<
+                                                                      BookingBloc>()
+                                                                  .etaDetailsList[
+                                                              context
+                                                                  .read<
+                                                                      BookingBloc>()
+                                                                  .selectedVehicleIndex]),
+                                                ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
-                            );
-                          },
-                        ),
-                      )
-        // :
-
-        // Align(
-        //     alignment: Alignment.bottomCenter,
-        //     child: EtaListShimmer(size: size))
+                            ),
+                          )
+                        : Align(
+                            alignment: Alignment.bottomCenter,
+                            child: EtaListShimmer(size: size))
       ],
     );
   }
@@ -1526,8 +1546,7 @@ class _BookingPageState extends State<BookingPage>
                       );
                     }),
 
-                                    ////pick up addr ends here ===================
-
+                ////pick up addr ends here ===================
 
                 ////////drop off addr  start here
                 if (widget.arg.stopAddressList.isNotEmpty) ...[
@@ -1578,13 +1597,12 @@ class _BookingPageState extends State<BookingPage>
                       color: Theme.of(context).dividerColor.withOpacity(0.4)),
                   SizedBox(height: size.width * 0.03),
                 ],
-                    ////////drop off addr  ends here=============================
+                ////////drop off addr  ends here=============================
 
                 if (!context.read<BookingBloc>().isRentalRide &&
                     context.read<BookingBloc>().etaDetailsList.isNotEmpty) ...[
                   etaListViewWidget(size, context, widget.arg, this),
                 ],
-
 
                 //this is for rental=============
 
@@ -1654,44 +1672,44 @@ class _BookingPageState extends State<BookingPage>
                         child: Column(
                           children: [
                             Text("pick upp===="),
-                            // ListView.builder(
-                            //     itemCount: widget.arg.pickupAddressList.length,
-                            //     shrinkWrap: true,
-                            //     physics: const NeverScrollableScrollPhysics(),
-                            //     padding: EdgeInsets.zero,
-                            //     itemBuilder: (context, index) {
-                            //       final address = widget.arg.pickupAddressList
-                            //           .elementAt(index);
-                            //       return Container(
-                            //         decoration: BoxDecoration(
-                            //           color: Theme.of(context)
-                            //               .disabledColor
-                            //               .withOpacity(0.1),
-                            //           borderRadius: BorderRadius.circular(5),
-                            //         ),
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.all(8),
-                            //           child: Row(
-                            //             children: [
-                            //               Padding(
-                            //                 padding: EdgeInsets.symmetric(
-                            //                     horizontal: size.width * 0.01),
-                            //                 child: const PickupIcon(),
-                            //               ),
-                            //               Expanded(
-                            //                 child: MyText(
-                            //                   text: address.address,
-                            //                   textStyle: Theme.of(context)
-                            //                       .textTheme
-                            //                       .bodySmall!
-                            //                       .copyWith(fontSize: 13),
-                            //                 ),
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       );
-                            //     }),
+                            ListView.builder(
+                                itemCount: widget.arg.pickupAddressList.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.zero,
+                                itemBuilder: (context, index) {
+                                  final address = widget.arg.pickupAddressList
+                                      .elementAt(index);
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .disabledColor
+                                          .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: size.width * 0.01),
+                                            child: const PickupIcon(),
+                                          ),
+                                          Expanded(
+                                            child: MyText(
+                                              text: address.address,
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(fontSize: 13),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
                             SizedBox(height: size.width * 0.01),
                             ListView.builder(
                                 itemCount: widget.arg.stopAddressList.length,

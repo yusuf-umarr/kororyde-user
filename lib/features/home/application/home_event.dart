@@ -7,7 +7,6 @@ class UpdateEvent extends HomeEvent {}
 class GetDirectionEvent extends HomeEvent {}
 
 class GetUserDetailsEvent extends HomeEvent {}
-class GetUserEvent extends HomeEvent {}
 
 class StreamRequestEvent extends HomeEvent {}
 

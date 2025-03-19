@@ -7,7 +7,7 @@ class AppTextStyle {
     FontWeight weight = FontWeight.normal,
     FontStyle style = FontStyle.normal,
   }) {
-    return GoogleFonts.lato(
+    return GoogleFonts.roboto(
       fontSize: size,
       fontWeight: weight,
       fontStyle: style,
@@ -19,7 +19,7 @@ class AppTextStyle {
     FontWeight weight = FontWeight.bold,
     FontStyle style = FontStyle.normal,
   }) {
-    return GoogleFonts.lato(
+    return GoogleFonts.roboto(
       fontSize: size,
       fontWeight: weight,
       fontStyle: style,

@@ -48,7 +48,7 @@ class AppThemes {
       snackBarTheme: const SnackBarThemeData(
         actionTextColor: AppColors.white,
       ),
-      textTheme: GoogleFonts.latoTextTheme(originalTheme.textTheme.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(originalTheme.textTheme.copyWith(
         titleLarge: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 16,
@@ -208,7 +208,7 @@ class AppThemes {
       snackBarTheme: const SnackBarThemeData(
         actionTextColor: AppColors.white,
       ),
-      textTheme: GoogleFonts.latoTextTheme(originalTheme.textTheme.copyWith(
+      textTheme: GoogleFonts.robotoTextTheme(originalTheme.textTheme.copyWith(
         titleLarge: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 16,

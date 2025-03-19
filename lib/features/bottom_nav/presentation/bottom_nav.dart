@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:developer';
+import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,10 +52,13 @@ class _HomePageState extends State<HomePage>
             if (state is HomeInitialState) {
               CustomLoader.loader(context);
             } else if (state is HomeLoadingStartState) {
-              CustomLoader.loader(context);
+              Center(child: Text("chggdahad"));
+              // CustomLoader.loader(context);
             } else if (state is HomeLoadingStopState) {
               CustomLoader.dismiss(context);
             } else if (state is VechileStreamMarkerState) {
+              context.read<HomeBloc>().nearByVechileCheckStream(context, this);
+              dev.log("nearByVechileCheckStream===============");
               context.read<HomeBloc>().nearByVechileCheckStream(context, this);
             } else if (state is LogoutState) {
               if (context.read<HomeBloc>().nearByVechileSubscription != null) {
@@ -149,35 +153,53 @@ class _HomePageState extends State<HomePage>
                 context.read<HomeBloc>().nearByVechileSubscription?.cancel();
                 context.read<HomeBloc>().nearByVechileSubscription = null;
               }
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                BookingPage.routeName,
-                (route) => false,
-                arguments: BookingPageArguments(
-                    picklat: state.tripData.pickLat,
-                    picklng: state.tripData.pickLng,
-                    droplat: state.tripData.dropLat,
-                    droplng: state.tripData.dropLng,
-                    pickupAddressList:
-                        context.read<HomeBloc>().pickupAddressList,
-                    stopAddressList: context.read<HomeBloc>().stopAddressList,
-                    userData: context.read<HomeBloc>().userData!,
-                    transportType: state.tripData.transportType,
-                    polyString: state.tripData.polyLine,
-                    distance:
-                        (double.parse(state.tripData.totalDistance) * 1000)
-                            .toString(),
-                    duration: state.tripData.totalTime.toString(),
-                    isRentalRide: state.tripData.isRental,
-                    isWithoutDestinationRide:
-                        ((state.tripData.dropLat.isEmpty &&
-                                    state.tripData.dropLng.isEmpty) &&
-                                !state.tripData.isRental)
-                            ? true
-                            : false,
-                    isOutstationRide: state.tripData.isOutStation == "1",
-                    mapType: context.read<HomeBloc>().mapType),
-              );
+              dev.log("BookingPage.routeName ---1");
+              // dev.log("picklat: ${state.tripData.pickLat}");
+              // dev.log("picklng: ${state.tripData.pickLng}");
+              // dev.log("droplat: ${state.tripData.dropLat}");
+              // dev.log("droplng: ${state.tripData.dropLng}");
+              // dev.log(" pickupAddressList: ${context.read<HomeBloc>().pickupAddressList}");
+              // dev.log(" stopAddressList: ${context.read<HomeBloc>().stopAddressList}");
+              // dev.log(" userData: ${context.read<HomeBloc>().userData!}");
+              // dev.log(" transportType: ${state.tripData.transportType}");
+              // dev.log(" polyString: ${state.tripData.polyLine}");
+              // dev.log("  distance:${(double.parse(state.tripData.totalDistance) * 1000).toString()}");
+              // dev.log("   duration: ${state.tripData.totalTime.toString()}");
+              // dev.log("   isRentalRide: ${state.tripData.isRental}");
+              // dev.log("   isOutstationRide: ${state.tripData.isOutStation == "1"} ");
+              // dev.log("   mapType: ${context.read<HomeBloc>().mapType }");
+              // dev.log("   isWithoutDestinationRide: ${((state.tripData.dropLat.isEmpty &&
+              //                       state.tripData.dropLng.isEmpty) &&
+              //                   !state.tripData.isRental)}");
+              // Navigator.pushNamedAndRemoveUntil(
+              //   context,
+              //   BookingPage.routeName,
+              //   (route) => false,
+              //   arguments: BookingPageArguments(
+              //       picklat: state.tripData.pickLat,
+              //       picklng: state.tripData.pickLng,
+              //       droplat: state.tripData.dropLat,
+              //       droplng: state.tripData.dropLng,
+              //       pickupAddressList:
+              //           context.read<HomeBloc>().pickupAddressList,
+              //       stopAddressList: context.read<HomeBloc>().stopAddressList,
+              //       userData: context.read<HomeBloc>().userData!,
+              //       transportType: state.tripData.transportType,
+              //       polyString: state.tripData.polyLine,
+              //       distance:
+              //           (double.parse(state.tripData.totalDistance) * 1000)
+              //               .toString(),
+              //       duration: state.tripData.totalTime.toString(),
+              //       isRentalRide: state.tripData.isRental,
+              //       isWithoutDestinationRide:
+              //           ((state.tripData.dropLat.isEmpty &&
+              //                       state.tripData.dropLng.isEmpty) &&
+              //                   !state.tripData.isRental)
+              //               ? true
+              //               : false,
+              //       isOutstationRide: state.tripData.isOutStation == "1",
+              //       mapType: context.read<HomeBloc>().mapType),
+              // );
             } else if (state is DeliverySelectState) {
               final homeBloc = context.read<HomeBloc>();
               showModalBottomSheet(
@@ -262,6 +284,7 @@ class _HomePageState extends State<HomePage>
               }
               if (context.read<HomeBloc>().pickupAddressList.isNotEmpty &&
                   context.read<HomeBloc>().stopAddressList.length == 1) {
+                dev.log("BookingPage.routeName ---22");
                 Navigator.pushNamed(
                   context,
                   BookingPage.routeName,
@@ -330,6 +353,7 @@ class _HomePageState extends State<HomePage>
                     context.read<HomeBloc>().pickupAddressList.clear();
                     final add = value as AddressModel;
                     context.read<HomeBloc>().pickupAddressList.add(add);
+                    dev.log("BookingPage.routeName ---33");
                     Navigator.pushNamed(
                       context,
                       BookingPage.routeName,
@@ -384,6 +408,7 @@ class _HomePageState extends State<HomePage>
                     context.read<HomeBloc>().pickupAddressList.clear();
                     final add = value as AddressModel;
                     context.read<HomeBloc>().pickupAddressList.add(add);
+                    dev.log("BookingPage.routeName ---44");
                     Navigator.pushNamed(
                       context,
                       BookingPage.routeName,
@@ -421,6 +446,7 @@ class _HomePageState extends State<HomePage>
                 context.read<HomeBloc>().nearByVechileSubscription?.cancel();
                 context.read<HomeBloc>().nearByVechileSubscription = null;
               }
+              dev.log("BookingPage.routeName ---55");
               Navigator.pushNamedAndRemoveUntil(
                   context, BookingPage.routeName, (route) => false,
                   arguments: BookingPageArguments(
@@ -548,7 +574,7 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
                     }),
-                         Builder(builder: (context) {
+                    Builder(builder: (context) {
                       return BlocProvider.value(
                         value: homeBloc,
                         child: Opacity(
@@ -572,7 +598,6 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
                     }),
-               
                   ],
                 );
               });

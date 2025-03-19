@@ -47,7 +47,6 @@ class _ConfirmLocationPageState extends State<ConfirmLocationPage>
     return BlocProvider(
       create: (context) => HomeBloc()
         ..add(GetDirectionEvent())
-        ..add(GetUserEvent())
         ..add(ConfirmLocationPageInitEvent(arg: widget.arg)),
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) async {

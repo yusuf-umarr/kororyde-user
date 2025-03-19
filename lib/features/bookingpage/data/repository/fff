@@ -1,0 +1,26 @@
+[log]   pickupAddressList[0].lat :8.4509728
+[log]   pickupAddressList[0].lng :4.5495995
+[log]   pickupAddressList[0].address :Asa-Dam Road, Ilorin, Nigeria
+[log]   vehicleData.zoneTypeId :4453b1c8-66d6-4906-be08-9b606b36e80b
+[log]   dropAddressList.last.lat :8.4962161
+[log]   drop_address :Trinity Baptist church tanke Ilorin, Ilorin, Nigeria
+[log]   paid_at :Sender
+[log]   transport_type :taxi
+[log]   return_time :
+[log]   distance :14872
+[log]   duration :24
+[log]   is_luggage_available :false
+[log]   is_pet_available :false
+[log]   promocode_id :
+[log]   rental_pack_id :null
+[log]   goods_type_quantity :Loose
+[log]   selectedPaymentType :cash
+[log]   pickup_poc_name :null
+[log]   pickup_poc_mobile :null
+[log]   drop_poc_mobile :null
+        selectedTransportType:taxi
+         'is_airport': true,
+      'is_parcel': 1,
+      'is_round_trip': '1',
+      'is_out_station': '1',
+[log]   poly_line :qqqr@_rwZ~Ir^N`BB|@Hz@C^BROz@Q~A_@tAo@|Ay@|AuDrGgE`I[FQ?iEqIu[yo@{@iBgDwGcBqD_AaB}@oAaA}@cAi@_AUsASkK_AgBSet@}GkNaAmD_@yIgAcIgAiEi@aGcAZmAtA{DjAaFNiACu@a@uCEwCL}FBg@n@iEFI@MMQ_@Ke@?s@OuBQ{Kw@x@cJZ}CJ{@LM?SCGBs@|A}Nj@aHvEwp@zDwf@d@}FNcCd@yB?YCGWOoCi@WCcPqAcAO[I[Q[S_GaHW[\c@lAoAZe@\m@Nm@F{@CcB_@cGy@qMEuAD}AX}Db@qF`@{DNcAZcBx@aDd@sAn@{AxCgGJG?MKGG@}EoFwCsCsHaHcGwG}FaG}BeCuCuCg@i@a@q@Yu@wAcFiCmK{A{EWk@GLx@|Bx@pCnC|Kh@lBWB}IGYC[Ic@Qa@dDiA?kAFI~CADOHGFGt@kB?y@KiBk@wA[
