@@ -248,7 +248,7 @@ class AuthRepositoryImpl implements AuthRepository {
           isOtpLogin: isOtpLogin,
           isLoginByEmail: isLoginByEmail);
 
-      dev.log("response login===:${response}");
+      // dev.log("response login===:${response}");
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

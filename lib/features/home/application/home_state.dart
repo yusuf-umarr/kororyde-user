@@ -137,3 +137,10 @@ final class ServiceNotAvailableState extends HomeState {
 
   ServiceNotAvailableState({required this.message});
 }
+
+
+final class HomeUserDataState extends HomeState {
+  final UserDetail userData;
+
+  HomeUserDataState({required this.userData});
+}

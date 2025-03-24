@@ -28,16 +28,16 @@ class CustomContainer extends StatelessWidget {
         color: color ?? Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(borderRadius ?? 5),
         border: border,
-        boxShadow: (isShadow != null && isShadow!)
-            ? [
-                BoxShadow(
-                    color: Theme.of(context).shadowColor.withOpacity(0.13),
-                    // color: Color(0x21000000),
-                    offset: const Offset(0, 9),
-                    spreadRadius: 0,
-                    blurRadius: 30.7)
-              ]
-            : null,
+        // boxShadow: (isShadow != null && isShadow!)
+        //     ? [
+        //         BoxShadow(
+        //             color: Theme.of(context).shadowColor.withOpacity(0.13),
+        //             // color: Color(0x21000000),
+        //             offset: const Offset(0, 9),
+        //             spreadRadius: 0,
+        //             blurRadius: 30.7)
+        //       ]
+        //     : null,
       ),
       child: child,
     );

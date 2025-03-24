@@ -60,6 +60,7 @@ class _VerifyPageState extends State<VerifyPage>
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (context) => AuthBloc()
         ..add(GetDirectionEvent())
@@ -73,7 +74,6 @@ class _VerifyPageState extends State<VerifyPage>
           } else if (state is AuthDataSuccessState) {
             CustomLoader.dismiss(context);
             if (!widget.arg.userExist && widget.arg.isOtpVerify) {
-          
               context.read<AuthBloc>().add(
                     SignInWithOTPEvent(
                       isOtpVerify: widget.arg.isOtpVerify,
@@ -220,7 +220,7 @@ class _VerifyPageState extends State<VerifyPage>
                                 context.read<AuthBloc>().isOtpVerify)
                               buildPinField(context),
                             const SizedBox(height: 20),
-                            buildLoginButton(context),
+                            buildLoginButton(context, size),
                           ],
                         ),
                       ),
@@ -424,12 +424,13 @@ class _VerifyPageState extends State<VerifyPage>
     );
   }
 
-  Widget buildLoginButton(BuildContext context) {
+  Widget buildLoginButton(BuildContext context, size) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
           child: CustomButton(
+            width: size.width,
             borderRadius: 10,
             height: MediaQuery.of(context).size.height * 0.06,
             buttonName: (!widget.arg.userExist)

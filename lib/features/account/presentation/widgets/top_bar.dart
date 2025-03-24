@@ -93,61 +93,64 @@ class TopBarDesign extends StatelessWidget {
                     children: [
                       Row(
                         children: [
+                          // Padding(
+                          //   padding: const EdgeInsets.all(20.0),
+                          //   child: Container(
+                          //     height: size.height * 0.08,
+                          //     width: size.width * 0.08,
+                          //     decoration: const BoxDecoration(
+                          //       // color:
+                          //       //     Theme.of(context).scaffoldBackgroundColor,
+                          //       color: AppColors.whiteText,
+                          //       shape: BoxShape.circle,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: Colors.black26,
+                          //           offset: Offset(5.0, 5.0),
+                          //           blurRadius: 10.0,
+                          //           spreadRadius: 2.0,
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     child: InkWell(
+                          //         onTap: () {
+                          //           Future.delayed(
+                          //               const Duration(milliseconds: 100), () {
+                          //             if (onTap != null) {
+                          //               onTap!();
+                          //             }
+                          //           });
+                          //         },
+                          //         highlightColor: Theme.of(context)
+                          //             .disabledColor
+                          //             .withOpacity(0.1),
+                          //         splashColor: Theme.of(context)
+                          //             .disabledColor
+                          //             .withOpacity(0.2),
+                          //         hoverColor: Theme.of(context)
+                          //             .disabledColor
+                          //             .withOpacity(0.05),
+                          //         child: const Icon(
+                          //           CupertinoIcons.back,
+                          //           size: 20,
+                          //           // color: Theme.of(context).primaryColor,
+                          //           color: AppColors.blackText,
+                          //         )),
+                          //   ),
+                          // ),
                           Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Container(
-                              height: size.height * 0.08,
-                              width: size.width * 0.08,
-                              decoration: const BoxDecoration(
-                                // color:
-                                //     Theme.of(context).scaffoldBackgroundColor,
-                                color: AppColors.whiteText,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    offset: Offset(5.0, 5.0),
-                                    blurRadius: 10.0,
-                                    spreadRadius: 2.0,
+                            padding: const EdgeInsets.only(top: 20, left: 20),
+                            child: MyText(
+                              text: title,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                    fontSize: 20,
+                                    // color: Theme.of(context).primaryColorLight,
+                                    color: AppColors.whiteText,
                                   ),
-                                ],
-                              ),
-                              child: InkWell(
-                                  onTap: () {
-                                    Future.delayed(
-                                        const Duration(milliseconds: 100), () {
-                                      if (onTap != null) {
-                                        onTap!();
-                                      }
-                                    });
-                                  },
-                                  highlightColor: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.1),
-                                  splashColor: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.2),
-                                  hoverColor: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.05),
-                                  child: const Icon(
-                                    CupertinoIcons.back,
-                                    size: 20,
-                                    // color: Theme.of(context).primaryColor,
-                                    color: AppColors.blackText,
-                                  )),
                             ),
-                          ),
-                          MyText(
-                            text: title,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                  fontSize: 20,
-                                  // color: Theme.of(context).primaryColorLight,
-                                  color: AppColors.whiteText,
-                                ),
                           ),
                         ],
                       ),

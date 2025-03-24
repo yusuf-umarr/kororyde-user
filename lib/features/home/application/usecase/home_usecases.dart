@@ -44,7 +44,7 @@ class HomeUsecase {
   }) async {
     var res =_homeRepository.getAddressFromLatLng(
         lat: lat, lng: lng, mapType: mapType);
-        dev.log(" getAddressFromLatLng:$res");
+        // dev.log(" getAddressFromLatLng:$res");
     return res;
   }
 

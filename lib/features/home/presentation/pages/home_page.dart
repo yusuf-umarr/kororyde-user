@@ -17,6 +17,7 @@ import 'package:kororyde_user/core/utils/custom_button.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import '../../../../core/utils/custom_divider.dart';
 import '../../../../core/utils/custom_navigation_icon.dart';
+import 'dart:developer' as dev;
 
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_text.dart';
@@ -523,98 +524,107 @@ class _HomePageContentState extends State<HomePageContent>
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    NavigationIconWidget(
-                      icon: InkWell(
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.primary,
+                  ),
+                  child: Row(
+                    children: [
+                      NavigationIconWidget(
+                        icon: InkWell(
+                          onTap: () {
+                            if (context.read<HomeBloc>().userData != null) {
+                              Navigator.pushNamed(
+                                      context, AccountPage.routeName,
+                                      arguments: AccountPageArguments(
+                                          userData: context
+                                              .read<HomeBloc>()
+                                              .userData!))
+                                  .then(
+                                (value) {
+                                  if (!context.mounted) return;
+                                  context
+                                      .read<HomeBloc>()
+                                      .add(GetDirectionEvent());
+                                  if (value != null) {
+                                    context.read<HomeBloc>().userData =
+                                        value as UserDetail;
+                                    context.read<HomeBloc>().add(UpdateEvent());
+                                  }
+                                },
+                              );
+                            }
+                          },
+                          child: SvgPicture.asset(
+                            "assets/svg/menuIcon.svg",
+                            colorFilter: ColorFilter.mode(
+                              AppColors.primary,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                        isShadowWidget: true,
+                      ),
+                      SizedBox(width: size.width * 0.03),
+                      InkWell(
                         onTap: () {
-                          if (context.read<HomeBloc>().userData != null) {
-                            Navigator.pushNamed(context, AccountPage.routeName,
-                                    arguments: AccountPageArguments(
-                                        userData:
-                                            context.read<HomeBloc>().userData!))
-                                .then(
-                              (value) {
-                                if (!context.mounted) return;
-                                context
-                                    .read<HomeBloc>()
-                                    .add(GetDirectionEvent());
-                                if (value != null) {
-                                  context.read<HomeBloc>().userData =
-                                      value as UserDetail;
-                                  context.read<HomeBloc>().add(UpdateEvent());
-                                }
-                              },
-                            );
+                          if (context
+                                      .read<HomeBloc>()
+                                      .userData!
+                                      .enableModulesForApplications ==
+                                  'both' ||
+                              context
+                                      .read<HomeBloc>()
+                                      .userData!
+                                      .enableModulesForApplications ==
+                                  'taxi') {
+                            context.read<HomeBloc>().add(
+                                DestinationSelectEvent(isPickupChange: true));
+                          } else {
+                            context.read<HomeBloc>().add(
+                                ServiceTypeChangeEvent(serviceTypeIndex: 1));
                           }
                         },
-                        child: SvgPicture.asset(
-                          "assets/svg/menuIcon.svg",
-                          colorFilter: ColorFilter.mode(
-                            AppColors.primary,
-                            BlendMode.srcIn,
+                        child: Container(
+                          width: size.width * 0.73,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 3,
+                                    spreadRadius: 2,
+                                    color: Theme.of(context).shadowColor)
+                              ]),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 6),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset("assets/svg/sourceAddr.svg"),
+                                SizedBox(width: size.width * 0.01),
+                                SizedBox(
+                                  width: size.width * 0.56,
+                                  child: MyText(
+                                      text: context
+                                          .read<HomeBloc>()
+                                          .currentLocation,
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                                Icon(Icons.edit_outlined,
+                                    size: 18, color: AppColors.primary),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      isShadowWidget: true,
-                    ),
-                    SizedBox(width: size.width * 0.03),
-                    InkWell(
-                      onTap: () {
-                        if (context
-                                    .read<HomeBloc>()
-                                    .userData!
-                                    .enableModulesForApplications ==
-                                'both' ||
-                            context
-                                    .read<HomeBloc>()
-                                    .userData!
-                                    .enableModulesForApplications ==
-                                'taxi') {
-                          context.read<HomeBloc>().add(
-                              DestinationSelectEvent(isPickupChange: true));
-                        } else {
-                          context
-                              .read<HomeBloc>()
-                              .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
-                        }
-                      },
-                      child: Container(
-                        width: size.width * 0.78,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 3,
-                                  spreadRadius: 2,
-                                  color: Theme.of(context).shadowColor)
-                            ]),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 6),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset("assets/svg/sourceAddr.svg"),
-                              SizedBox(width: size.width * 0.01),
-                              SizedBox(
-                                width: size.width * 0.63,
-                                child: MyText(
-                                    text: context
-                                        .read<HomeBloc>()
-                                        .currentLocation,
-                                    textStyle:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                              Icon(Icons.edit_outlined,
-                                  size: 18, color: AppColors.primary),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -667,8 +677,8 @@ class _HomePageContentState extends State<HomePageContent>
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          height:
-                              size.height * currentSize - (size.height * 0.3),
+                          height: size.height *
+                              currentSize, // - (size.height * 0.3)
                           curve: Curves.easeInOut,
                           child: Container(
                             decoration: BoxDecoration(
@@ -717,180 +727,167 @@ class _HomePageContentState extends State<HomePageContent>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MyText(
-          text: AppLocalizations.of(context)!.service,
-          textStyle: Theme.of(context).textTheme.bodyLarge,
+        SizedBox(height: size.width * 0.06),
+        Row(
+          children: [
+            MyText(
+              text: 'Our services', //AppLocalizations.of(context)!.service,
+              textStyle: Theme.of(context).textTheme.bodyLarge,
+            ),
+            Spacer(),
+            InkWell(
+              onTap: () {
+                context.read<BottomNavCubit>().setSelectedIndex(1);
+              },
+              child: MyText(
+                text: 'See all', //AppLocalizations.of(context)!.service,
+                textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: AppColors.primary,
+                    ),
+              ),
+            ),
+          ],
         ),
-        SizedBox(height: size.width * 0.025),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              if (context.read<HomeBloc>().userData != null &&
-                  (context
-                              .read<HomeBloc>()
-                              .userData!
-                              .enableModulesForApplications ==
-                          'taxi' ||
-                      context
-                              .read<HomeBloc>()
-                              .userData!
-                              .enableModulesForApplications ==
-                          'both'))
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: InkWell(
-                    onTap: () {
-                      context
-                          .read<HomeBloc>()
-                          .add(ServiceTypeChangeEvent(serviceTypeIndex: 0));
-                    },
-                    child: Card(
-                      elevation: 2,
-                      child: Container(
-                        height: size.width * 0.19,
-                        width: size.width * 0.21,
-                        decoration: BoxDecoration(
-                          color:
-                              context.read<HomeBloc>().selectedServiceType == 0
-                                  ? AppColors.primary
-                                  : Theme.of(context).splashColor,
-                          border: Border.all(
-                            color:
-                                context.read<HomeBloc>().selectedServiceType ==
-                                        0
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context).dividerColor,
+        SizedBox(height: size.width * 0.06),
+        Row(
+          children: [
+            if (context.read<HomeBloc>().userData != null &&
+                (context
+                            .read<HomeBloc>()
+                            .userData!
+                            .enableModulesForApplications ==
+                        'taxi' ||
+                    context
+                            .read<HomeBloc>()
+                            .userData!
+                            .enableModulesForApplications ==
+                        'both'))
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(ServiceTypeChangeEvent(serviceTypeIndex: 0));
+                    context
+                        .read<HomeBloc>()
+                        .add(DestinationSelectEvent(isPickupChange: false));
+                  },
+                  child: Card(
+                    child: Container(
+                      // height: size.width * 0.19,
+                      // width: size.width * 0.21,
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/png/ride.png',
+                            // colorFilter:
+                            //     ColorFilter.mode(Colors.blue, BlendMode.srcIn),
+                            height: size.width * 0.10,
                           ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              context.read<HomeBloc>().serviceTypeImages[0],
-                              // colorFilter:
-                              //     ColorFilter.mode(Colors.blue, BlendMode.srcIn),
-                              height: size.width * 0.10,
-                            ),
-                            const SizedBox(height: 6),
-                            MyText(
-                              text: AppLocalizations.of(context)!.taxi,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: AppColors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
+                          const SizedBox(height: 10),
+                          MyText(
+                            text: AppLocalizations.of(context)!.taxi,
+                            textStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              if (context.read<HomeBloc>().userData != null &&
-                  (context
-                              .read<HomeBloc>()
-                              .userData!
-                              .enableModulesForApplications ==
-                          'delivery' ||
-                      context
-                              .read<HomeBloc>()
-                              .userData!
-                              .enableModulesForApplications ==
-                          'both'))
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: InkWell(
-                    onTap: () {
-                      context
-                          .read<HomeBloc>()
-                          .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
-                    },
-                    child: Card(
-                      elevation: 2,
-                      child: Container(
-                        height: size.width * 0.19,
-                        width: size.width * 0.21,
-                        decoration: BoxDecoration(
-                          color:
-                              context.read<HomeBloc>().selectedServiceType == 1
-                                  ? AppColors.purple.withOpacity(0.2)
-                                  : AppColors.purple.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              context.read<HomeBloc>().serviceTypeImages[1],
-                              height: size.width * 0.10,
-                            ),
-                            const SizedBox(height: 6),
-                            MyText(
-                              text: AppLocalizations.of(context)!.delivery,
-                              // text: 'Delivery',
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: AppColors.purple,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
+              ),
+            const SizedBox(width: 20),
+            if (context.read<HomeBloc>().userData != null &&
+                (context
+                            .read<HomeBloc>()
+                            .userData!
+                            .enableModulesForApplications ==
+                        'delivery' ||
+                    context
+                            .read<HomeBloc>()
+                            .userData!
+                            .enableModulesForApplications ==
+                        'both'))
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
+                  },
+                  child: Card(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/png/delivery.png',
+                            height: size.width * 0.10,
+                          ),
+                          const SizedBox(height: 10),
+                          MyText(
+                            text: AppLocalizations.of(context)!.delivery,
+                            // text: 'Delivery',
+                            textStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              if (context.read<HomeBloc>().userData != null &&
-                  (context.read<HomeBloc>().userData!.showRentalRide))
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: InkWell(
-                    onTap: () {
-                      context
-                          .read<HomeBloc>()
-                          .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
-                    },
-                    child: Card(
-                      elevation: 2,
-                      child: Container(
-                        height: size.width * 0.19,
-                        width: size.width * 0.21,
-                        decoration: BoxDecoration(
-                          color:
-                              context.read<HomeBloc>().selectedServiceType == 2
-                                  ? AppColors.orange.withOpacity(0.2)
-                                  : AppColors.orange.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              context.read<HomeBloc>().serviceTypeImages[2],
-                              height: size.width * 0.11,
-                            ),
-                            const SizedBox(height: 2),
-                            MyText(
-                              text: AppLocalizations.of(context)!.rental,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    color: AppColors.orange,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
+              ),
+            const SizedBox(width: 20),
+            if (context.read<HomeBloc>().userData != null &&
+                (context.read<HomeBloc>().userData!.showRentalRide))
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
+                  },
+                  child: Card(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/png/rental.png',
+                            height: size.width * 0.11,
+                          ),
+                          const SizedBox(height: 10),
+                          MyText(
+                            text: AppLocalizations.of(context)!.rental,
+                            textStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ],
     );
@@ -1060,43 +1057,43 @@ class _HomePageContentState extends State<HomePageContent>
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: size.width * 0.02),
-                      if (context.read<HomeBloc>().isSheetAtTop)
-                        Flexible(
-                          child: NavigationIconWidget(
-                            icon: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                        context, AccountPage.routeName,
-                                        arguments: AccountPageArguments(
-                                            userData: context
-                                                .read<HomeBloc>()
-                                                .userData!))
-                                    .then((value) {
-                                  if (!context.mounted) return;
-                                  context
-                                      .read<HomeBloc>()
-                                      .add(GetDirectionEvent());
-                                  if (value != null) {
-                                    context.read<HomeBloc>().userData =
-                                        value as UserDetail;
-                                    context.read<HomeBloc>().add(UpdateEvent());
-                                  }
-                                });
-                              },
-                              child: SvgPicture.asset(
-                                "assets/svg/menuIcon.svg",
-                                colorFilter: ColorFilter.mode(
-                                  AppColors.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                            isShadowWidget: true,
-                          ),
-                        ),
-                      if (context.read<HomeBloc>().isSheetAtTop)
-                        SizedBox(width: size.width * 0.02),
+                      // SizedBox(width: size.width * 0.02),
+                      // if (context.read<HomeBloc>().isSheetAtTop)
+                      //   Flexible(
+                      //     child: NavigationIconWidget(
+                      //       icon: InkWell(
+                      //         onTap: () {
+                      //           Navigator.pushNamed(
+                      //                   context, AccountPage.routeName,
+                      //                   arguments: AccountPageArguments(
+                      //                       userData: context
+                      //                           .read<HomeBloc>()
+                      //                           .userData!))
+                      //               .then((value) {
+                      //             if (!context.mounted) return;
+                      //             context
+                      //                 .read<HomeBloc>()
+                      //                 .add(GetDirectionEvent());
+                      //             if (value != null) {
+                      //               context.read<HomeBloc>().userData =
+                      //                   value as UserDetail;
+                      //               context.read<HomeBloc>().add(UpdateEvent());
+                      //             }
+                      //           });
+                      //         },
+                      //         child: SvgPicture.asset(
+                      //           "assets/svg/menuIcon.svg",
+                      //           colorFilter: ColorFilter.mode(
+                      //             AppColors.primary,
+                      //             BlendMode.srcIn,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       isShadowWidget: true,
+                      //     ),
+                      //   ),
+                      // if (context.read<HomeBloc>().isSheetAtTop)
+                      //   SizedBox(width: size.width * 0.02),
                       Flexible(
                         flex: context
                             .read<HomeBloc>()
@@ -1145,17 +1142,18 @@ class _HomePageContentState extends State<HomePageContent>
                             ),
                             child: Row(
                               children: [
-                                Icon(
-                                  Icons.search,
-                                  size: 20,
-                                  color: AppColors.primary,
-                                ),
+                                SvgPicture.asset(
+                                    'assets/svg/destinationAddr.svg'),
+                                // Icon(
+                                //   Icons.search,
+                                //   size: 20,
+                                //   color: AppColors.primary,
+                                // ),
                                 SizedBox(width: size.width * 0.02),
                                 Expanded(
                                   // Place Expanded inside Row to prevent overflow here
                                   child: MyText(
-                                    text: AppLocalizations.of(context)!
-                                        .whereAreYouGoing,
+                                    text: "Where to?",
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -1247,36 +1245,50 @@ class _HomePageContentState extends State<HomePageContent>
                                   .read<HomeBloc>()
                                   .userData!
                                   .showRentalRide)))
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                    //   child: servicesWidget(context, size),
-                    // ),
-                    if (context.read<HomeBloc>().isMultipleRide) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            MyText(
-                                text:
-                                    AppLocalizations.of(context)!.onGoingRides,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .primaryColorDark)),
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: servicesWidget(context, size),
+                    ),
+                  if (context.read<HomeBloc>().isMultipleRide) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyText(
+                              text: AppLocalizations.of(context)!.onGoingRides,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).primaryColorDark)),
+                        ],
                       ),
-                      SizedBox(height: size.width * 0.01),
-                      onGoingRides(context, size),
-                    ],
+                    ),
+                    SizedBox(height: size.width * 0.01),
+                    onGoingRides(context, size),
+                  ],
                   if (context
                       .read<HomeBloc>()
                       .recentSearchPlaces
                       .isNotEmpty) ...[
+                    const SizedBox(height: 15),
+                    Row(
+                      children: [
+                        MyText(
+                          text: 'Recent place',
+                          textAlign: TextAlign.start,
+                          textStyle:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                          maxLines: 1,
+                        ),
+                      ],
+                    ),
                     SizedBox(
                         height: context.read<HomeBloc>().isSheetAtTop == false
                             ? size.width * 0.01
@@ -1326,60 +1338,67 @@ class _HomePageContentState extends State<HomePageContent>
                               }
                             }
                           },
-                          child: Row(
-                            children: [
-                              Container(
-                                height: size.height * 0.075,
-                                width: size.width * 0.075,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.1),
-                                  shape: BoxShape.circle,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.primary.withOpacity(0.2),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: size.height * 0.075,
+                                  width: size.width * 0.075,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.history,
+                                    size: 18,
+                                    color: Theme.of(context)
+                                        .disabledColor
+                                        .withOpacity(0.75),
+                                  ),
                                 ),
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.history,
-                                  size: 18,
-                                  color: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.75),
+                                SizedBox(width: size.width * 0.025),
+                                SizedBox(
+                                  width: size.width * 0.63,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      MyText(
+                                        text: recentPlace.address.split(',')[0],
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                        maxLines: 1,
+                                      ),
+                                      MyText(
+                                        text: recentPlace.address,
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: size.width * 0.025),
-                              SizedBox(
-                                width: size.width * 0.63,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    MyText(
-                                      text: recentPlace.address.split(',')[0],
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                      maxLines: 1,
-                                    ),
-                                    MyText(
-                                      text: recentPlace.address,
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                            color:
-                                                Theme.of(context).disabledColor,
-                                          ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

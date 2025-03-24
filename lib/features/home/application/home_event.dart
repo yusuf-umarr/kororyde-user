@@ -258,3 +258,9 @@ class ServiceLocationVerifyEvent extends HomeEvent {
 
   ServiceLocationVerifyEvent({required this.rideType, required this.address,this.isFromHomePage});
 }
+
+class UpdateUserDataEvent extends HomeEvent {
+  final UserDetail userData;
+
+  UpdateUserDataEvent({required this.userData});
+}

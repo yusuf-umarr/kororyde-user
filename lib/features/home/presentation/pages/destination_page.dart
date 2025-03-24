@@ -201,7 +201,7 @@ class _DestinationPageState extends State<DestinationPage> {
           } else if (state is ConfirmRideAddressState) {
             log("ConfirmRideAddressState ----in destination");
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
-                 log("ConfirmRideAddressState --000--in destination");
+              log("ConfirmRideAddressState --000--in destination");
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
               context.read<HomeBloc>().nearByVechileSubscription = null;
             }
@@ -244,7 +244,7 @@ class _DestinationPageState extends State<DestinationPage> {
                   isOutstationRide: widget.arg.isOutstationRide,
                   mapType: widget.arg.mapType),
             );
-               log("ConfirmRideAddressState ---11111-in destination");
+            log("ConfirmRideAddressState ---11111-in destination");
           } else if (state is RecentRouteSelectState) {
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
@@ -306,8 +306,10 @@ class _DestinationPageState extends State<DestinationPage> {
                               onTap: () {
                                 Navigator.pop(context);
                               },
-                              child: Icon(Icons.cancel_outlined,
-                                  color: Theme.of(context).primaryColor,))),
+                              child: Icon(
+                                Icons.cancel_outlined,
+                                color: Theme.of(context).primaryColor,
+                              ))),
                       Center(
                         child: MyText(
                             text: state.message,
@@ -701,13 +703,13 @@ class _DestinationPageState extends State<DestinationPage> {
                                             borderSide: BorderSide(
                                                 width: 0.5,
                                                 color: Theme.of(context)
-                                                    .disabledColor
+                                                    .primaryColor
                                                     .withOpacity(0.3))),
                                         focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 width: 0.8,
                                                 color: Theme.of(context)
-                                                    .disabledColor)),
+                                                    .primaryColor)),
                                         hintText: (index ==
                                                 context
                                                         .read<HomeBloc>()
@@ -901,18 +903,18 @@ class _DestinationPageState extends State<DestinationPage> {
 
   Widget buildFavoriteLocations(BuildContext context,
       List<FavoriteLocationData> favLocations, Size size) {
-    bool isHomeAvailable = false;
-    bool isWorkAvailable = false;
-    bool isOthersAvailable = false;
-    for (var element in favLocations) {
-      if (element.addressName == 'Home') {
-        isHomeAvailable = true;
-      } else if (element.addressName == 'Work') {
-        isWorkAvailable = true;
-      } else {
-        isOthersAvailable = true;
-      }
-    }
+    // bool isHomeAvailable = false;
+    // bool isWorkAvailable = false;
+    // bool isOthersAvailable = false;
+    // for (var element in favLocations) {
+    //   if (element.addressName == 'Home') {
+    //     isHomeAvailable = true;
+    //   } else if (element.addressName == 'Work') {
+    //     isWorkAvailable = true;
+    //   } else {
+    //     isOthersAvailable = true;
+    //   }
+    // }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
@@ -972,166 +974,167 @@ class _DestinationPageState extends State<DestinationPage> {
                 },
               ),
             ),
-            Row(
-              children: [
-                if (!isHomeAvailable)
-                  Padding(
-                    padding: EdgeInsets.only(right: size.width * 0.02),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                                context, FavoriteLocationPage.routeName,
-                                arguments: FavouriteLocationPageArguments(
-                                    userData: widget.arg.userData))
-                            .then(
-                          (value) {
-                            if (!context.mounted) return;
-                            if (value != null) {
-                              context.read<HomeBloc>().userData =
-                                  value as UserDetail;
-                              context.read<HomeBloc>().add(UpdateEvent());
-                            }
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color:
-                              Theme.of(context).disabledColor.withOpacity(0.1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.add_circle_outline,
-                                size: 18,
-                                color: Theme.of(context)
-                                    .disabledColor
-                                    .withOpacity(0.5),
-                              ),
-                              const SizedBox(width: 5),
-                              MyText(
-                                text: AppLocalizations.of(context)!.home,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (!isWorkAvailable)
-                  Padding(
-                    padding: EdgeInsets.only(right: size.width * 0.02),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                                context, FavoriteLocationPage.routeName,
-                                arguments: FavouriteLocationPageArguments(
-                                    userData: widget.arg.userData))
-                            .then(
-                          (value) {
-                            if (!context.mounted) return;
-                            if (value != null) {
-                              context.read<HomeBloc>().userData =
-                                  value as UserDetail;
-                              context.read<HomeBloc>().add(UpdateEvent());
-                            }
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color:
-                              Theme.of(context).disabledColor.withOpacity(0.1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.add_circle_outline,
-                                size: 18,
-                                color: Theme.of(context)
-                                    .disabledColor
-                                    .withOpacity(0.5),
-                              ),
-                              const SizedBox(width: 5),
-                              MyText(
-                                text: AppLocalizations.of(context)!.work,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (!isOthersAvailable)
-                  Padding(
-                    padding: EdgeInsets.only(right: size.width * 0.02),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                                context, FavoriteLocationPage.routeName,
-                                arguments: FavouriteLocationPageArguments(
-                                    userData: widget.arg.userData))
-                            .then(
-                          (value) {
-                            if (!context.mounted) return;
-                            if (value != null) {
-                              context.read<HomeBloc>().userData =
-                                  value as UserDetail;
-                              context.read<HomeBloc>().add(UpdateEvent());
-                            }
-                          },
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color:
-                              Theme.of(context).disabledColor.withOpacity(0.1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 5),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.add_circle_outline,
-                                size: 18,
-                                color: Theme.of(context)
-                                    .disabledColor
-                                    .withOpacity(0.5),
-                              ),
-                              const SizedBox(width: 5),
-                              MyText(
-                                text: AppLocalizations.of(context)!.others,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-              ],
-            )
+            //       Row(
+            //         children: [
+            //           if (!isHomeAvailable)
+            //             Padding(
+            //               padding: EdgeInsets.only(right: size.width * 0.02),
+            //               child: InkWell(
+            //                 onTap: () {
+            //                   // Navigator.pushNamed(
+            //                   //         context, FavoriteLocationPage.routeName,
+            //                   //         arguments: FavouriteLocationPageArguments(
+            //                   //             userData: widget.arg.userData))
+            //                   //     .then(
+            //                   //   (value) {
+            //                   //     if (!context.mounted) return;
+            //                   //     if (value != null) {
+            //                   //       context.read<HomeBloc>().userData =
+            //                   //           value as UserDetail;
+            //                   //       context.read<HomeBloc>().add(UpdateEvent());
+            //                   //     }
+            //                   //   },
+            //                   // );
+            //                 },
+            //                 child: Container(
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(20),
+            //                     color:
+            //                         Theme.of(context).disabledColor.withOpacity(0.1),
+            //                   ),
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                         horizontal: 8, vertical: 5),
+            //                     child: Row(
+            //                       children: [
+            //                         Icon(
+            //                           Icons.add_circle_outline,
+            //                           size: 18,
+            //                           color: Theme.of(context)
+            //                               .disabledColor
+            //                               .withOpacity(0.5),
+            //                         ),
+            //                         const SizedBox(width: 5),
+            //                         MyText(
+            //                           text: AppLocalizations.of(context)!.home,
+            //                           textStyle: Theme.of(context)
+            //                               .textTheme
+            //                               .labelMedium!
+            //                               .copyWith(fontWeight: FontWeight.bold),
+            //                         )
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           if (!isWorkAvailable)
+            //             Padding(
+            //               padding: EdgeInsets.only(right: size.width * 0.02),
+            //               child: InkWell(
+            //                 onTap: () {
+            //                   // Navigator.pushNamed(
+            //                   //         context, FavoriteLocationPage.routeName,
+            //                   //         arguments: FavouriteLocationPageArguments(
+            //                   //             userData: widget.arg.userData))
+            //                   //     .then(
+            //                   //   (value) {
+            //                   //     if (!context.mounted) return;
+            //                   //     if (value != null) {
+            //                   //       context.read<HomeBloc>().userData =
+            //                   //           value as UserDetail;
+            //                   //       context.read<HomeBloc>().add(UpdateEvent());
+            //                   //     }
+            //                   //   },
+            //                   // );
+            //                 },
+            //                 child: Container(
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(20),
+            //                     color:
+            //                         Theme.of(context).disabledColor.withOpacity(0.1),
+            //                   ),
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                         horizontal: 8, vertical: 5),
+            //                     child: Row(
+            //                       children: [
+            //                         Icon(
+            //                           Icons.add_circle_outline,
+            //                           size: 18,
+            //                           color: Theme.of(context)
+            //                               .disabledColor
+            //                               .withOpacity(0.5),
+            //                         ),
+            //                         const SizedBox(width: 5),
+            //                         MyText(
+            //                           text: AppLocalizations.of(context)!.work,
+            //                           textStyle: Theme.of(context)
+            //                               .textTheme
+            //                               .labelMedium!
+            //                               .copyWith(fontWeight: FontWeight.bold),
+            //                         )
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           if (!isOthersAvailable)
+            //             Padding(
+            //               padding: EdgeInsets.only(right: size.width * 0.02),
+            //               child: InkWell(
+            //                 onTap: () {
+            //                   // Navigator.pushNamed(
+            //                   //         context, FavoriteLocationPage.routeName,
+            //                   //         arguments: FavouriteLocationPageArguments(
+            //                   //             userData: widget.arg.userData))
+            //                   //     .then(
+            //                   //   (value) {
+            //                   //     if (!context.mounted) return;
+            //                   //     if (value != null) {
+            //                   //       context.read<HomeBloc>().userData =
+            //                   //           value as UserDetail;
+            //                   //       context.read<HomeBloc>().add(UpdateEvent());
+            //                   //     }
+            //                   //   },
+            //                   // );
+            //                 },
+            //                 child: Container(
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(20),
+            //                     color:
+            //                         Theme.of(context).disabledColor.withOpacity(0.1),
+            //                   ),
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.symmetric(
+            //                         horizontal: 8, vertical: 5),
+            //                     child: Row(
+            //                       children: [
+            //                         Icon(
+            //                           Icons.add_circle_outline,
+            //                           size: 18,
+            //                           color: Theme.of(context)
+            //                               .disabledColor
+            //                               .withOpacity(0.5),
+            //                         ),
+            //                         const SizedBox(width: 5),
+            //                         MyText(
+            //                           text: AppLocalizations.of(context)!.others,
+            //                           textStyle: Theme.of(context)
+            //                               .textTheme
+            //                               .labelMedium!
+            //                               .copyWith(fontWeight: FontWeight.bold),
+            //                         )
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             )
+            //         ],
+            //       )
+            // //
           ],
         ),
       ),
@@ -1178,8 +1181,11 @@ class _DestinationPageState extends State<DestinationPage> {
                     child: Container(
                       margin: const EdgeInsets.only(right: 5),
                       decoration: BoxDecoration(
-                        border: Border.all(),
-                        color: Theme.of(context).disabledColor.withOpacity(0.1),
+                        border: Border.all(
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withOpacity(0.1)),
+                        color: Theme.of(context).primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -1414,7 +1420,7 @@ class _DestinationPageState extends State<DestinationPage> {
                               Icons.location_pin,
                               size: 20,
                               color: Theme.of(context)
-                                  .disabledColor
+                                  .primaryColor
                                   .withOpacity(0.75),
                             ),
                           ),
@@ -1471,14 +1477,13 @@ class _DestinationPageState extends State<DestinationPage> {
     return Container(
       height: size.width * 0.1,
       width: double.infinity,
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, -1),
-              color: Theme.of(context).shadowColor,
-            )
-          ]),
+      decoration:
+          BoxDecoration(color: Theme.of(context).primaryColor, boxShadow: [
+        BoxShadow(
+          offset: const Offset(0, -1),
+          color: Theme.of(context).shadowColor,
+        )
+      ]),
       child: InkWell(
         onTap: () {
           context.read<HomeBloc>().add(SelectFromMapEvent(
@@ -1490,8 +1495,16 @@ class _DestinationPageState extends State<DestinationPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.pin_drop_outlined),
-            MyText(text: AppLocalizations.of(context)!.selectFromMap),
+            Icon(
+              Icons.pin_drop_outlined,
+              color: AppColors.white,
+            ),
+            MyText(
+              text: AppLocalizations.of(context)!.selectFromMap,
+              textStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),

@@ -486,6 +486,7 @@ class _BookingPageState extends State<BookingPage>
                 child: PopScope(
                   canPop: true,
                   child: Scaffold(
+                    backgroundColor: Colors.white,
                     body: bodyWidget(size, context),
                     bottomNavigationBar: (context
                                 .read<BookingBloc>()
@@ -1270,14 +1271,14 @@ class _BookingPageState extends State<BookingPage>
                                               const BorderRadius.vertical(
                                             top: Radius.circular(20.0),
                                           ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Theme.of(context).shadowColor,
-                                              blurRadius: 4.0,
-                                              spreadRadius: 2.0,
-                                            ),
-                                          ],
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color:
+                                          //         Theme.of(context).shadowColor,
+                                          //     blurRadius: 4.0,
+                                          //     spreadRadius: 2.0,
+                                          //   ),
+                                          // ],
                                         ),
                                         child: SingleChildScrollView(
                                           physics: !context
@@ -1627,23 +1628,23 @@ class _BookingPageState extends State<BookingPage>
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        // color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        boxShadow: [
-          BoxShadow(
-              offset: const Offset(-1, -2),
-              blurRadius: 10,
-              spreadRadius: 2,
-              color: Theme.of(context).splashColor)
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //       offset: const Offset(-1, -2),
+        //       blurRadius: 10,
+        //       spreadRadius: 2,
+        //       color: Theme.of(context).splashColor)
+        // ],
       ),
       child: Container(
         width: size.width,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          // color: Colors.grey,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -1666,12 +1667,13 @@ class _BookingPageState extends State<BookingPage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 5),
                         child: Column(
                           children: [
-                            Text("pick upp===="),
+                            // Text("pick upp===="),
                             ListView.builder(
                                 itemCount: widget.arg.pickupAddressList.length,
                                 shrinkWrap: true,
@@ -1755,6 +1757,7 @@ class _BookingPageState extends State<BookingPage>
                     ),
                     SizedBox(height: size.width * 0.04),
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 10),
@@ -1908,6 +1911,7 @@ class _BookingPageState extends State<BookingPage>
                           );
                         },
                         child: CustomContainer(
+                          color: AppColors.primary.withOpacity(0.2),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
@@ -1955,6 +1959,7 @@ class _BookingPageState extends State<BookingPage>
                       SizedBox(height: size.width * 0.04),
                     ],
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -1995,6 +2000,7 @@ class _BookingPageState extends State<BookingPage>
                     ),
                     SizedBox(height: size.width * 0.04),
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: InkWell(
                         onTap: () {
                           context.read<BookingBloc>().add(GetGoodsTypeEvent());
@@ -2085,6 +2091,7 @@ class _BookingPageState extends State<BookingPage>
                     if (!context.read<BookingBloc>().isRentalRide) ...[
                       SizedBox(height: size.width * 0.04),
                       CustomContainer(
+                        color: AppColors.primary.withOpacity(0.2),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -2142,8 +2149,7 @@ class _BookingPageState extends State<BookingPage>
                                           color: (!context
                                                   .read<BookingBloc>()
                                                   .payAtDrop)
-                                              ? Theme.of(context)
-                                                  .dividerColor
+                                              ? AppColors.primary
                                                   .withOpacity(0.8)
                                               : null,
                                           borderRadius: const BorderRadius.all(
@@ -2157,9 +2163,13 @@ class _BookingPageState extends State<BookingPage>
                                               .textTheme
                                               .bodySmall!
                                               .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Theme.of(context)
-                                                      .primaryColorDark),
+                                                fontWeight: FontWeight.bold,
+                                                color: (!context
+                                                        .read<BookingBloc>()
+                                                        .payAtDrop)
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -2198,9 +2208,7 @@ class _BookingPageState extends State<BookingPage>
                                             color: (context
                                                     .read<BookingBloc>()
                                                     .payAtDrop)
-                                                ? Theme.of(context)
-                                                    .dividerColor
-                                                    .withOpacity(0.5)
+                                                ? AppColors.primary
                                                 : null,
                                             borderRadius:
                                                 const BorderRadius.all(
@@ -2214,9 +2222,13 @@ class _BookingPageState extends State<BookingPage>
                                                 .textTheme
                                                 .bodySmall!
                                                 .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context)
-                                                        .primaryColorDark),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: (!context
+                                                          .read<BookingBloc>()
+                                                          .payAtDrop)
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                ),
                                           ),
                                         ),
                                       ),
@@ -2230,6 +2242,7 @@ class _BookingPageState extends State<BookingPage>
                     ],
                     SizedBox(height: size.width * 0.04),
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: InkWell(
                         onTap: () {
                           if (context.read<BookingBloc>().showPaymentChange) {
@@ -2312,6 +2325,7 @@ class _BookingPageState extends State<BookingPage>
                     ),
                     SizedBox(height: size.width * 0.04),
                     CustomContainer(
+                      color: AppColors.primary.withOpacity(0.2),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(

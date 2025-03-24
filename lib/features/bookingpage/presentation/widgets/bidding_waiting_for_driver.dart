@@ -40,7 +40,8 @@ class BiddingWaitingForDriverConfirmation extends StatelessWidget {
             ),
           ),
           child: context.read<BookingBloc>().biddingDriverList.isEmpty
-              ? Column(
+              ? 
+              Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: size.width * 0.02),
@@ -451,6 +452,7 @@ class BiddingWaitingForDriverConfirmation extends StatelessWidget {
                     SizedBox(height: size.width * 0.05),
                   ],
                 )
+          ///////////////
               : SizedBox(
                   height: size.height * 0.6,
                   child: Column(

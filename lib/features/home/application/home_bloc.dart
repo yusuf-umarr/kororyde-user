@@ -124,7 +124,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   StreamSubscription<DatabaseEvent>? nearByVechileSubscription;
   Map myBearings = {};
 
+  
+
   HomeBloc() : super(HomeInitialState()) {
+
+  on<UpdateUserDataEvent>((event, emit) {
+  emit(HomeUserDataState(userData: event.userData));
+});
     // update
     on<UpdateEvent>((event, emit) => emit(HomeUpdateState()));
     on<GetDirectionEvent>(getDirection);
@@ -176,6 +182,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       addressList.length,
       (index) => GlobalKey(),
     );
+
+    //  add(UpdateUserDataEvent(userData: userData)); 
   }
 
   Future<void> streamRequest(
@@ -588,8 +596,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       recentSearchPlaces = decodedData;
     }
     final data = await serviceLocator<HomeUsecase>().userDetails();
-    // emit(HomeLoadingStopState()); //TODO:: temporary
-    // log("user data res:--=====${data}");
+
     await data.fold(
       (error) {
         //debugPrint(error.toString());
@@ -602,7 +609,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (success) async {
         userData = success.data;
         user = success.data;
-        dev.log("UserData====: ${userData!.name}"); // Add
+         emit(HomeUserDataState(userData: userData!));
+        // dev.log("UserData====: ${userData!.name}"); // Add
 
         if (mapType.isEmpty) {
           mapType = success.data.mapType;
@@ -1023,22 +1031,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> serviceTypeChage(
       ServiceTypeChangeEvent event, Emitter<HomeState> emit) async {
-    dev.log("event----${event.serviceTypeIndex}");
     if (event.serviceTypeIndex == 1) {
-      dev.log("event---1-${event.serviceTypeIndex}");
       emit(DeliverySelectState());
     } else if (event.serviceTypeIndex == 2) {
-      dev.log("event--2--${event.serviceTypeIndex}");
       emit(RentalSelectState());
-    } else if (event.serviceTypeIndex == 3) {
-      dev.log("event--3--${event.serviceTypeIndex}");
-      emit(AdvertSelectState());
-    } else if (event.serviceTypeIndex == 4) {
-      dev.log("event--4--${event.serviceTypeIndex}");
-      emit(BillPaymentSelectState());
     } else {
       selectedServiceType = event.serviceTypeIndex;
-      emit(ServiceTypeChangeState());
+      emit(ServiceTypeChangeState()); 
     }
   }
 

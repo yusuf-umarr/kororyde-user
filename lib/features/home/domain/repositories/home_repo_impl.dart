@@ -209,7 +209,7 @@ class HomeRepositoryImpl implements HomeRepository {
         rideType: rideType,
         address: address,
       );
-      log('Service Available Response : ${response.data}'); 
+      // log('Service Available Response : ${response.data}'); 
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

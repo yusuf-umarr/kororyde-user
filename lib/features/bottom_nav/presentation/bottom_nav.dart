@@ -5,21 +5,20 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
+import 'package:kororyde_user/features/account/presentation/pages/history_page.dart';
 import 'package:kororyde_user/features/auth/presentation/pages/auth_page.dart';
 import 'package:kororyde_user/features/bill_payment/presentation/customer_wallet.dart';
 import 'package:kororyde_user/features/bookingpage/presentation/page/booking_page.dart';
 import 'package:kororyde_user/features/bookingpage/presentation/page/trip_summary_page.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/stop_address_model.dart';
-import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
-import 'package:kororyde_user/features/home/presentation/pages/advert_page.dart';
-import 'package:kororyde_user/features/home/presentation/pages/bill_payment_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/confirm_location_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/home_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/on_going_rides.dart';
+import 'package:kororyde_user/features/home/presentation/pages/services_page.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/send_receive_delivery.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:kororyde_user/core/utils/custom_button.dart';
@@ -45,14 +44,14 @@ class _HomePageState extends State<HomePage>
     return BlocProvider(
       create: (context) => HomeBloc()
         ..add(GetDirectionEvent())
-        ..add(GetUserDetailsEvent()),
+        ..add(GetUserDetailsEvent()), //method the fetch user data
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) async {
           try {
             if (state is HomeInitialState) {
               CustomLoader.loader(context);
             } else if (state is HomeLoadingStartState) {
-              Center(child: Text("chggdahad"));
+              Center(child: Text(""));
               // CustomLoader.loader(context);
             } else if (state is HomeLoadingStopState) {
               CustomLoader.dismiss(context);
@@ -154,52 +153,36 @@ class _HomePageState extends State<HomePage>
                 context.read<HomeBloc>().nearByVechileSubscription = null;
               }
               dev.log("BookingPage.routeName ---1");
-              // dev.log("picklat: ${state.tripData.pickLat}");
-              // dev.log("picklng: ${state.tripData.pickLng}");
-              // dev.log("droplat: ${state.tripData.dropLat}");
-              // dev.log("droplng: ${state.tripData.dropLng}");
-              // dev.log(" pickupAddressList: ${context.read<HomeBloc>().pickupAddressList}");
-              // dev.log(" stopAddressList: ${context.read<HomeBloc>().stopAddressList}");
-              // dev.log(" userData: ${context.read<HomeBloc>().userData!}");
-              // dev.log(" transportType: ${state.tripData.transportType}");
-              // dev.log(" polyString: ${state.tripData.polyLine}");
-              // dev.log("  distance:${(double.parse(state.tripData.totalDistance) * 1000).toString()}");
-              // dev.log("   duration: ${state.tripData.totalTime.toString()}");
-              // dev.log("   isRentalRide: ${state.tripData.isRental}");
-              // dev.log("   isOutstationRide: ${state.tripData.isOutStation == "1"} ");
-              // dev.log("   mapType: ${context.read<HomeBloc>().mapType }");
-              // dev.log("   isWithoutDestinationRide: ${((state.tripData.dropLat.isEmpty &&
-              //                       state.tripData.dropLng.isEmpty) &&
-              //                   !state.tripData.isRental)}");
-              // Navigator.pushNamedAndRemoveUntil(
-              //   context,
-              //   BookingPage.routeName,
-              //   (route) => false,
-              //   arguments: BookingPageArguments(
-              //       picklat: state.tripData.pickLat,
-              //       picklng: state.tripData.pickLng,
-              //       droplat: state.tripData.dropLat,
-              //       droplng: state.tripData.dropLng,
-              //       pickupAddressList:
-              //           context.read<HomeBloc>().pickupAddressList,
-              //       stopAddressList: context.read<HomeBloc>().stopAddressList,
-              //       userData: context.read<HomeBloc>().userData!,
-              //       transportType: state.tripData.transportType,
-              //       polyString: state.tripData.polyLine,
-              //       distance:
-              //           (double.parse(state.tripData.totalDistance) * 1000)
-              //               .toString(),
-              //       duration: state.tripData.totalTime.toString(),
-              //       isRentalRide: state.tripData.isRental,
-              //       isWithoutDestinationRide:
-              //           ((state.tripData.dropLat.isEmpty &&
-              //                       state.tripData.dropLng.isEmpty) &&
-              //                   !state.tripData.isRental)
-              //               ? true
-              //               : false,
-              //       isOutstationRide: state.tripData.isOutStation == "1",
-              //       mapType: context.read<HomeBloc>().mapType),
-              // );
+
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                BookingPage.routeName,
+                (route) => false,
+                arguments: BookingPageArguments(
+                    picklat: state.tripData.pickLat,
+                    picklng: state.tripData.pickLng,
+                    droplat: state.tripData.dropLat,
+                    droplng: state.tripData.dropLng,
+                    pickupAddressList:
+                        context.read<HomeBloc>().pickupAddressList,
+                    stopAddressList: context.read<HomeBloc>().stopAddressList,
+                    userData: context.read<HomeBloc>().userData!,
+                    transportType: state.tripData.transportType,
+                    polyString: state.tripData.polyLine,
+                    distance:
+                        (double.parse(state.tripData.totalDistance) * 1000)
+                            .toString(),
+                    duration: state.tripData.totalTime.toString(),
+                    isRentalRide: state.tripData.isRental,
+                    isWithoutDestinationRide:
+                        ((state.tripData.dropLat.isEmpty &&
+                                    state.tripData.dropLng.isEmpty) &&
+                                !state.tripData.isRental)
+                            ? true
+                            : false,
+                    isOutstationRide: state.tripData.isOutStation == "1",
+                    mapType: context.read<HomeBloc>().mapType),
+              );
             } else if (state is DeliverySelectState) {
               final homeBloc = context.read<HomeBloc>();
               showModalBottomSheet(
@@ -235,46 +218,7 @@ class _HomePageState extends State<HomePage>
                     isOutstationRide: false,
                     mapType: context.read<HomeBloc>().mapType),
               );
-            } else if (state is BillPaymentSelectState) {
-              Navigator.pushNamed(
-                context,
-                BillPaymentPage.routeName,
-                // arguments: DestinationPageArguments(
-                //     title: context.read<HomeBloc>().selectedServiceType == 0
-                //         ? 'Taxi'
-                //         : 'Delivery',
-                //     pickupAddress: context.read<HomeBloc>().currentLocation,
-                //     pickupLatLng: context.read<HomeBloc>().currentLatLng,
-                //     userData: context.read<HomeBloc>().userData!,
-                //     pickUpChange: false,
-                //     transportType:
-                //         context.read<HomeBloc>().selectedServiceType == 0
-                //             ? 'taxi'
-                //             : 'delivery',
-                //     isOutstationRide: true,
-                //     mapType: context.read<HomeBloc>().mapType),
-              );
-            } else if (state is AdvertSelectState) {
-              Navigator.pushNamed(
-                context,
-                AdvertPage.routeName,
-                // arguments: DestinationPageArguments(
-                //     title: context.read<HomeBloc>().selectedServiceType == 0
-                //         ? 'Taxi'
-                //         : 'Delivery',
-                //     pickupAddress: context.read<HomeBloc>().currentLocation,
-                //     pickupLatLng: context.read<HomeBloc>().currentLatLng,
-                //     userData: context.read<HomeBloc>().userData!,
-                //     pickUpChange: false,
-                //     transportType:
-                //         context.read<HomeBloc>().selectedServiceType == 0
-                //             ? 'taxi'
-                //             : 'delivery',
-                //     isOutstationRide: true,
-                //     mapType: context.read<HomeBloc>().mapType
-                //     ),
-              );
-            } else if (state is RecentSearchPlaceSelectState) {
+            }  else if (state is RecentSearchPlaceSelectState) {
               context.read<HomeBloc>().add(ServiceLocationVerifyEvent(
                   address: [state.address], rideType: state.transportType));
             } else if (state is ConfirmRideAddressState) {
@@ -385,7 +329,7 @@ class _HomePageState extends State<HomePage>
                   }
                 },
               );
-            } else if (state is RideWithoutDestinationState) {
+            } else if (state is RideWithoutDestinationState) {  
               Navigator.pushNamed(context, ConfirmLocationPage.routeName,
                       arguments: ConfirmLocationPageArguments(
                           userData: context.read<HomeBloc>().userData!,
@@ -533,8 +477,6 @@ class _HomePageState extends State<HomePage>
               return BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {
                 final homeBloc = context.read<HomeBloc>();
-                //  UserDetail _userData = context.read<HomeBloc>().userData!;
-
                 return Stack(
                   children: [
                     Opacity(
@@ -551,7 +493,7 @@ class _HomePageState extends State<HomePage>
                           opacity: selectedIndex == 1 ? 1.0 : 0.0,
                           child: IgnorePointer(
                             ignoring: selectedIndex != 1,
-                            child: SendOrReceiveDelivery(),
+                            child: ServicesPage(),
                           ),
                         ),
                       );
@@ -563,13 +505,7 @@ class _HomePageState extends State<HomePage>
                           opacity: selectedIndex == 2 ? 1.0 : 0.0,
                           child: IgnorePointer(
                             ignoring: selectedIndex != 2,
-                            child: ConfirmLocationPage(
-                                arg: ConfirmLocationPageArguments(
-                                    // userData: UserDetail(),
-                                    isPickupEdit: true,
-                                    isEditAddress: false,
-                                    mapType: context.read<HomeBloc>().mapType,
-                                    transportType: '')),
+                            child: HistoryPage(),
                           ),
                         ),
                       );
@@ -581,7 +517,7 @@ class _HomePageState extends State<HomePage>
                           opacity: selectedIndex == 3 ? 1.0 : 0.0,
                           child: IgnorePointer(
                             ignoring: selectedIndex != 3,
-                            child: AdvertPage(),
+                            child: CustomerWalletScreen(),
                           ),
                         ),
                       );
@@ -593,7 +529,19 @@ class _HomePageState extends State<HomePage>
                           opacity: selectedIndex == 4 ? 1.0 : 0.0,
                           child: IgnorePointer(
                             ignoring: selectedIndex != 4,
-                            child: CustomerWalletScreen(),
+                            child: BlocBuilder<HomeBloc, HomeState>(
+                              builder: (context, state) {
+                                if (state is HomeUserDataState) {
+                                  // log("state.userData:${state.userData}");
+                                  return AccountPage(
+                                      arg: AccountPageArguments(
+                                          userData: state.userData));
+                                }
+                                return Center(
+                                  child: Text(""),
+                                ); // Fallback in case userData is not available yet
+                              },
+                            ),
                           ),
                         ),
                       );
@@ -620,6 +568,17 @@ class _HomePageState extends State<HomePage>
                     selectedIndex: selectedIndex,
                     onTabChange: (index) {
                       context.read<BottomNavCubit>().setSelectedIndex(index);
+                      final homeBloc = context.read<HomeBloc>();
+
+                      if (index == 4) {
+                        if (homeBloc.state is !HomeUserDataState) {
+                          final userData = homeBloc.userData;
+                          homeBloc
+                              .add(UpdateUserDataEvent(userData: userData!));
+                        }
+
+                        // context.read<BottomNavCubit>().setSelectedIndex(4);
+                      }
                     },
                     backgroundColor: AppColors.black,
                     color: AppColors.grey,
@@ -636,29 +595,29 @@ class _HomePageState extends State<HomePage>
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.data_exploration_outlined,
-                        text: 'Delivery',
+                        icon: Icons.difference_outlined,
+                        text: 'Services',
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.car_repair,
-                        text: 'Rental',
+                        icon: Icons.assignment_sharp,
+                        text: 'History',
                         // leading: SvgPicture.asset('assets/svg/rentalIcon.svg'),
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.campaign_sharp, //aspect_ratio_sharp
-                        text: 'Advert',
+                        icon: Icons.currency_exchange, //aspect_ratio_sharp
+                        text: 'Payment',
                         // leading:
                         //     SvgPicture.asset('assets/svg/advert.svg'),
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.currency_exchange,
-                        text: 'Bill Payment',
+                        icon: Icons.account_circle,
+                        text: 'Profile',
                         // leading:
                         //   SvgPicture.asset('assets/svg/advert.svg'),
                       ),

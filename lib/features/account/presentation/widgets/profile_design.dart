@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import '../../../../app/localization.dart';
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_text.dart';
@@ -68,64 +69,76 @@ class ProfileWidget extends StatelessWidget {
                     () {
                       Navigator.pop(context, user);
                     },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: size.width * 0.1,
-                          width: size.width * 0.1,
-                          decoration:
-                              const BoxDecoration(shape: BoxShape.circle),
-                          child: const Icon(CupertinoIcons.back,
-                              // color: Theme.of(context).primaryColorLight,
-                              color: AppColors.whiteText),
-                        ),
-                        Text(
-                          !isEditPage
-                              ? AppLocalizations.of(context)!.back.toLowerCase()
-                              : AppLocalizations.of(context)!
-                                  .personalInformation,
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (state is HomeUserDataState)
+                        SizedBox()
+                      else
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: size.width * 0.1,
+                              width: size.width * 0.1,
+                              decoration:
+                                  const BoxDecoration(shape: BoxShape.circle),
+                              child: const Icon(CupertinoIcons.back,
                                   // color: Theme.of(context).primaryColorLight,
-                                  color: AppColors.whiteText,
-                                  fontSize: 20),
+                                  color: AppColors.whiteText),
+                            ),
+                            Text(
+                              !isEditPage
+                                  ? AppLocalizations.of(context)!
+                                      .back
+                                      .toLowerCase()
+                                  : AppLocalizations.of(context)!
+                                      .personalInformation,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                      // color: Theme.of(context).primaryColorLight,
+                                      color: AppColors.whiteText,
+                                      fontSize: 20),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Transform.scale(
-                        scaleX: size.width * 0.003,
-                        scaleY: size.width * 0.0026,
-                        child: Switch(
-                          value: context.read<AccBloc>().isDarkTheme,
-                          activeColor: Theme.of(context).primaryColorDark,
-                          activeTrackColor: Theme.of(context).primaryColorDark,
-                          inactiveTrackColor:
-                              Theme.of(context).primaryColorDark,
-                          activeThumbImage: const AssetImage(AppImages.sun),
-                          inactiveThumbImage: const AssetImage(AppImages.moon),
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          onChanged: (value) async {
-                            context.read<AccBloc>().isDarkTheme = value;
-                            final locale = await AppSharedPreference
-                                .getSelectedLanguageCode();
-                            if (!context.mounted) return;
-                            context.read<LocalizationBloc>().add(
-                                LocalizationInitialEvent(
-                                    isDark: value, locale: Locale(locale)));
-                          },
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Transform.scale(
+                          scaleX: size.width * 0.003,
+                          scaleY: size.width * 0.0026,
+                          child: Switch(
+                            value: context.read<AccBloc>().isDarkTheme,
+                            activeColor: Theme.of(context).primaryColorDark,
+                            activeTrackColor:
+                                Theme.of(context).primaryColorDark,
+                            inactiveTrackColor:
+                                Theme.of(context).primaryColorDark,
+                            activeThumbImage: const AssetImage(AppImages.sun),
+                            inactiveThumbImage:
+                                const AssetImage(AppImages.moon),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            onChanged: (value) async {
+                              context.read<AccBloc>().isDarkTheme = value;
+                              final locale = await AppSharedPreference
+                                  .getSelectedLanguageCode();
+                              if (!context.mounted) return;
+                              context.read<LocalizationBloc>().add(
+                                  LocalizationInitialEvent(
+                                      isDark: value, locale: Locale(locale)));
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                      )
+                    ],
+                  );
+                }),
               ),
               Column(
                 children: [

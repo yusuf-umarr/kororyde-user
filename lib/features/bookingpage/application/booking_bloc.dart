@@ -1006,7 +1006,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         .handleError((onError) {
       etaDurationStream?.cancel();
     }).listen((event) async {
-      //debugPrint('nearByStreamStart Listening');
+    dev.  log('nearByStreamStart Listening');
       if (nearByEtaVechileList.isEmpty) {
         dev.log("nearByEtaVechileList is  not empty==========");
 
@@ -2139,6 +2139,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> biddingFareUpdate(
       BiddingFareUpdateEvent event, Emitter<BookingState> emit) async {
+
+        dev.log("biddingFareUpdate called-==================");
     isLoading = true;
     await FirebaseDatabase.instance
         .ref()
@@ -2160,6 +2162,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     if (biddingRequestStream != null) {
       biddingRequestStream?.cancel();
     }
+    dev.log("biddingStreamRequest  called------------================");
     biddingRequestStream = FirebaseDatabase.instance
         .ref()
         .child('bid-meta/${requestData!.id}')

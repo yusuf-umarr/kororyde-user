@@ -127,7 +127,7 @@ class AuthApi {
                     "login_by": (Platform.isAndroid) ? 'android' : 'ios',
                   }),
       );
-      dev.log("userlogin res----:${response}");
+      // dev.log("userlogin res----:${response}");
       return response;
     } catch (e) {
       rethrow;

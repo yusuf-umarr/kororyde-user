@@ -94,16 +94,22 @@ class RegisterPage extends StatelessWidget {
                                             color: Colors.white,
                                           )),
                                     ),
-                                    MyText(
-                                      text: AppLocalizations.of(context)!
-                                          .register,
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .displayLarge!
-                                          .copyWith(color: AppColors.black),
-                                    ),
+                                    Image.asset(
+                                        "assets/images/kororydeText.png"),
                                   ],
                                 ),
+
+                                const SizedBox(height: 10),
+                                Center(
+                                  child: MyText(
+                                    text: "Hello, Let's Get You Started!",
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(color: AppColors.black),
+                                  ),
+                                ),
+
                                 SizedBox(height: size.width * 0.1),
                                 buildProfilePick(size, context),
                                 SizedBox(height: size.width * 0.1),
@@ -173,7 +179,7 @@ class RegisterPage extends StatelessWidget {
                                 buildPasswordField(context, size),
                                 SizedBox(height: size.width * 0.02),
                                 SizedBox(height: size.width * 0.1),
-                                buildButton(context),
+                                buildButton(context, size),
                                 SizedBox(height: size.width * 0.3),
                               ],
                             ),
@@ -231,9 +237,10 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget buildButton(BuildContext context) {
+  Widget buildButton(BuildContext context, size) {
     return Center(
       child: CustomButton(
+        width: size.width,
         buttonName: AppLocalizations.of(context)!.register,
         borderRadius: 10,
         height: MediaQuery.of(context).size.height * 0.06,

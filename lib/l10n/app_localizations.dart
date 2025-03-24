@@ -600,7 +600,7 @@ abstract class AppLocalizations {
   /// No description provided for @whereAreYouGoing.
   ///
   /// In en, this message translates to:
-  /// **'Where are you going ?'**
+  /// **'Where to?'**
   String get whereAreYouGoing;
 
   /// No description provided for @service.

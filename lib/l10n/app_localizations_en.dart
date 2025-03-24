@@ -256,7 +256,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logout => 'Logout';
 
   @override
-  String get whereAreYouGoing => 'Where are you going ?';
+  String get whereAreYouGoing => 'Where to?';
 
   @override
   String get service => 'Service';

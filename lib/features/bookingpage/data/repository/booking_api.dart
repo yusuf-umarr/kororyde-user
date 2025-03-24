@@ -223,27 +223,27 @@ class BookingApi {
             'return_time': scheduleDateTimeForReturn,
         }),
       );
-      log(" cre8 pickupAddressList[0].lat :${pickupAddressList[0].lat}");
-      log(" cre8 pickupAddressList[0].lng :${pickupAddressList[0].lng}");
-      log(" cre8 pickupAddressList[0].address :${pickupAddressList[0].address}");
-      log(" cre8 vehicleData.zoneTypeId :${vehicleData.zoneTypeId}");
-      log(" cre8 dropAddressList.last.lat :${dropAddressList.last.lat}");
-      log(" cre8 drop_address :${dropAddressList.first.address}");
-      log(" cre8 paid_at :${paidAt}");
-      log(" cre8 transport_type :${selectedTransportType}");
-      log(" cre8 return_time :${scheduleDateTimeForReturn}");
-      log(" cre8 distance :${vehicleData.distanceInMeters}");
-      log(" cre8 duration :${vehicleData.time.toString()}");
-      log(" cre8 is_luggage_available :${isLuggageAvailable}");
-      log(" cre8 is_pet_available :${isPetAvailable}");
-      log(" cre8 poly_line :${polyLine}");
-      log(" cre8 promocode_id :${vehicleData.promocodeId}");
-      log(" cre8 rental_pack_id :${packageId}");
-      log(" cre8 goods_type_quantity :${goodsQuantity}");
-      log(" cre8 selectedPaymentType :${selectedPaymentType}");
-      log(" cre8 pickup_poc_name :${pickupAddressList[0].name}");
-      log(" cre8 pickup_poc_mobile :${pickupAddressList[0].number}");
-      log(" cre8 drop_poc_mobile :${dropAddressList[dropAddressList.length - 1].number}");
+      // log(" cre8 pickupAddressList[0].lat :${pickupAddressList[0].lat}");
+      // log(" cre8 pickupAddressList[0].lng :${pickupAddressList[0].lng}");
+      // log(" cre8 pickupAddressList[0].address :${pickupAddressList[0].address}");
+      // log(" cre8 vehicleData.zoneTypeId :${vehicleData.zoneTypeId}");
+      // log(" cre8 dropAddressList.last.lat :${dropAddressList.last.lat}");
+      // log(" cre8 drop_address :${dropAddressList.first.address}");
+      // log(" cre8 paid_at :${paidAt}");
+      // log(" cre8 transport_type :${selectedTransportType}");
+      // log(" cre8 return_time :${scheduleDateTimeForReturn}");
+      // log(" cre8 distance :${vehicleData.distanceInMeters}");
+      // log(" cre8 duration :${vehicleData.time.toString()}");
+      // log(" cre8 is_luggage_available :${isLuggageAvailable}");
+      // log(" cre8 is_pet_available :${isPetAvailable}");
+      // log(" cre8 poly_line :${polyLine}");
+      // log(" cre8 promocode_id :${vehicleData.promocodeId}");
+      // log(" cre8 rental_pack_id :${packageId}");
+      // log(" cre8 goods_type_quantity :${goodsQuantity}");
+      // log(" cre8 selectedPaymentType :${selectedPaymentType}");
+      // log(" cre8 pickup_poc_name :${pickupAddressList[0].name}");
+      // log(" cre8 pickup_poc_mobile :${pickupAddressList[0].number}");
+      // log(" cre8 drop_poc_mobile :${dropAddressList[dropAddressList.length - 1].number}");
       // 'is_airport': true,
       // 'is_parcel': 1,
       // 'is_round_trip': '1',

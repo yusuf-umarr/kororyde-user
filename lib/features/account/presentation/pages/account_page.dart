@@ -117,14 +117,14 @@ class AccountPage extends StatelessWidget {
                                         context, NotificationPage.routeName);
                                   },
                                 ),
-                                PageOptions(
-                                  optionName:
-                                      AppLocalizations.of(context)!.history,
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, HistoryPage.routeName);
-                                  },
-                                ),
+                                // PageOptions(
+                                //   optionName:
+                                //       AppLocalizations.of(context)!.history,
+                                //   onTap: () {
+                                //     Navigator.pushNamed(
+                                //         context, HistoryPage.routeName);
+                                //   },
+                                // ),
                                 if (context
                                         .read<AccBloc>()
                                         .userData!
