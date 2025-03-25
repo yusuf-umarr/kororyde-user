@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kororyde_user/features/bookingpage/presentation/widgets/co_share_togle.dart';
+import 'package:kororyde_user/features/bookingpage/presentation/widgets/custom_switch.dart';
 
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_loader.dart';
@@ -15,108 +17,202 @@ Widget etaListViewWidget(Size size, BuildContext context,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       if (context.read<BookingBloc>().isMultiTypeVechiles &&
-          !arg.isOutstationRide && (arg.isWithoutDestinationRide == null ||(arg.isWithoutDestinationRide!= null &&!arg.isWithoutDestinationRide!)))  ...[
+          !arg.isOutstationRide &&
+          (arg.isWithoutDestinationRide == null ||
+              (arg.isWithoutDestinationRide != null &&
+                  !arg.isWithoutDestinationRide!))) ...[
         SizedBox(height: size.width * 0.04),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if(arg.isWithoutDestinationRide == null||!arg.isWithoutDestinationRide!)
-                  InkWell(
-                    onTap: () {
-                      if (!context.read<BookingBloc>().showBiddingVehicles) {
-                        context.read<BookingBloc>().add(
-                            SelectBiddingOrDemandEvent(
-                                selectedTypeEta: 'Bidding', isBidding: true));
-                        // For Check near ETA
-                        context.read<BookingBloc>().checkNearByEta(
-                            context.read<BookingBloc>().nearByDriversData,
-                            thisValue);
-                      }
-                    },
-                    child: Container(
-                      height: size.width * 0.08,
-                      width: size.width * 0.25,
-                      margin: const EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: context.read<BookingBloc>().showBiddingVehicles
-                            ? Theme.of(context).dividerColor.withOpacity(0.5)
-                            : Theme.of(context).dividerColor.withOpacity(0.5),
-                        border: Border.all(
-                            color:
-                                context.read<BookingBloc>().showBiddingVehicles
-                                    ? Theme.of(context)
-                                        .primaryColorDark
-                                        .withOpacity(0.5)
-                                    : AppColors.transparent),
+        SizedBox(
+          height: size.height * 0.05,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                //     Row(
+                //       children: [
+                //         if (arg.isWithoutDestinationRide == null ||
+                //             !arg.isWithoutDestinationRide!)
+                //           InkWell(
+                //             onTap: () {
+                //               if (!context.read<BookingBloc>().showBiddingVehicles) {
+                //                 context.read<BookingBloc>().add(
+                //                     SelectBiddingOrDemandEvent(
+                //                         selectedTypeEta: 'Bidding', isBidding: true));
+                //                 // For Check near ETA
+                //                 context.read<BookingBloc>().checkNearByEta(
+                //                     context.read<BookingBloc>().nearByDriversData,
+                //                     thisValue);
+                //               }
+                //             },
+                //             child: Container(
+                //               height: size.width * 0.08,
+                //               width: size.width * 0.25,
+                //               margin: const EdgeInsets.only(right: 5),
+                //               decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(20),
+                //                 color: context.read<BookingBloc>().showBiddingVehicles
+                //                     ? Theme.of(context).primaryColor.withOpacity(0.5)
+                //                     : Theme.of(context).primaryColor.withOpacity(0.1),
+                //                 border: Border.all(
+                //                   color:
+                //                       context.read<BookingBloc>().showBiddingVehicles
+                //                           ? Theme.of(context)
+                //                               .primaryColor
+                //                               .withOpacity(0.5)
+                //                           : AppColors.transparent,
+                //                 ),
+                //               ),
+                //               child: Center(
+                //                 child: MyText(
+                //                   text: 'Bidding',
+                //                   textStyle: Theme.of(context)
+                //                       .textTheme
+                //                       .bodyMedium!
+                //                       .copyWith(
+                //                           color: context
+                //                                   .read<BookingBloc>()
+                //                                   .showBiddingVehicles
+                //                               ? Colors.white
+                //                               : Colors.black),
+                //                 ),
+                //               ),
+                //             ),
+                //           ),
+                //         InkWell(
+                //           onTap: () {
+                //             if (context.read<BookingBloc>().showBiddingVehicles) {
+                //               context.read<BookingBloc>().add(
+                //                   SelectBiddingOrDemandEvent(
+                //                       selectedTypeEta: 'On Demand',
+                //                       isBidding: false));
+                //               // For Check near ETA
+                //               context.read<BookingBloc>().checkNearByEta(
+                //                   context.read<BookingBloc>().nearByDriversData,
+                //                   thisValue);
+                //             }
+                //           },
+                //           child: Container(
+                //             height: size.width * 0.08,
+                //             width: size.width * 0.25,
+                //             margin: const EdgeInsets.only(right: 5),
+                //             decoration: BoxDecoration(
+                //               borderRadius: BorderRadius.circular(20),
+                //               color: !context.read<BookingBloc>().showBiddingVehicles
+                //                   ? Theme.of(context).primaryColor.withOpacity(0.5)
+                //                   : Theme.of(context).primaryColor.withOpacity(0.1),
+                //               border: Border.all(
+                //                 color:
+                //                     !context.read<BookingBloc>().showBiddingVehicles
+                //                         ? Theme.of(context).primaryColor.withOpacity(
+                //                               0.5,
+                //                             )
+                //                         : AppColors.transparent,
+                //               ),
+                //             ),
+                //             child: Center(
+                //               child: MyText(
+                //                 text: 'Negotiable',
+                //                 textStyle:
+                //                     Theme.of(context).textTheme.bodyMedium!.copyWith(
+                //                           color: context
+                //                                   .read<BookingBloc>()
+                //                                   .showBiddingVehicles
+                //                               ? Colors.black
+                //                               : Colors.white,
+                //                         ),
+                //               ),
+                //             ),
+                //           ),
+                //         )
+
+                //       ],
+                //     ),
+                //  //
+
+                Row(
+                  children: [
+                    if (arg.isWithoutDestinationRide == null ||
+                        !arg.isWithoutDestinationRide!)
+                      Row(
+                        children: [
+                          MyText(
+                            text:
+                                context.watch<BookingBloc>().showBiddingVehicles
+                                    ? 'Bidding'
+                                    : 'Negotiable',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                    color: context
+                                            .watch<BookingBloc>()
+                                            .showBiddingVehicles
+                                        ? AppColors.primary
+                                        : AppColors.green),
+                          ),
+
+                          const SizedBox(width: 10),
+
+                          CustomSwitch(
+                            initialValue: context
+                                .watch<BookingBloc>()
+                                .showBiddingVehicles,
+                            onChanged: (bool value) {
+                              context.read<BookingBloc>().add(
+                                    SelectBiddingOrDemandEvent(
+                                      selectedTypeEta:
+                                          value ? 'Bidding' : 'On Demand',
+                                      isBidding: value,
+                                    ),
+                                  );
+                              context.read<BookingBloc>().checkNearByEta(
+                                    context
+                                        .read<BookingBloc>()
+                                        .nearByDriversData,
+                                    thisValue,
+                                  );
+                            },
+                          ),
+                          // Switch(
+                          //   value:
+                          //       context.watch<BookingBloc>().showBiddingVehicles,
+                          //   onChanged: (bool value) {
+                          //     context.read<BookingBloc>().add(
+                          //           SelectBiddingOrDemandEvent(
+                          //             selectedTypeEta:
+                          //                 value ? 'Bidding' : 'On Demand',
+                          //             isBidding: value,
+                          //           ),
+                          //         );
+                          //     context.read<BookingBloc>().checkNearByEta(
+                          //           context.read<BookingBloc>().nearByDriversData,
+                          //           thisValue,
+                          //         );
+                          //   },
+                          //   activeColor: Theme.of(context).primaryColor,
+                          //   inactiveTrackColor:
+                          //       Theme.of(context).primaryColor.withOpacity(0.1),
+                          // ),
+                        ],
                       ),
-                      child: Center(
-                        child: MyText(
-                          text: AppLocalizations.of(context)!.bidding,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context).primaryColorDark),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (context.read<BookingBloc>().showBiddingVehicles) {
-                        context.read<BookingBloc>().add(
-                            SelectBiddingOrDemandEvent(
-                                selectedTypeEta: 'On Demand',
-                                isBidding: false));
-                        // For Check near ETA
-                        context.read<BookingBloc>().checkNearByEta(
-                            context.read<BookingBloc>().nearByDriversData,
-                            thisValue);
-                      }
-                    },
-                    child: Container(
-                      height: size.width * 0.08,
-                      width: size.width * 0.25,
-                      margin: const EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: !context.read<BookingBloc>().showBiddingVehicles
-                            ? Theme.of(context).dividerColor.withOpacity(0.5)
-                            : Theme.of(context).dividerColor.withOpacity(0.5),
-                        border: Border.all(
-                            color:
-                                !context.read<BookingBloc>().showBiddingVehicles
-                                    ? Theme.of(context)
-                                        .primaryColorDark
-                                        .withOpacity(0.5)
-                                    : AppColors.transparent),
-                      ),
-                      child: Center(
-                        child: MyText(
-                          text: AppLocalizations.of(context)!.onDemand,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: Theme.of(context).primaryColorDark),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ],
+                  ],
+                ),
+
+                Spacer(),
+                if (context.watch<BookingBloc>().showBiddingVehicles)
+                  ...{}
+                else ...[CoShare()]
+              
+              ],
+            ),
           ),
         ),
+
+      
         SizedBox(height: size.width * 0.05),
       ],
-      if(arg.isWithoutDestinationRide != null &&
-          arg.isWithoutDestinationRide!)
+      if (arg.isWithoutDestinationRide != null && arg.isWithoutDestinationRide!)
         SizedBox(height: size.width * 0.04),
       if (arg.isOutstationRide) ...[
         Padding(
@@ -418,15 +514,18 @@ Widget etaListViewWidget(Size size, BuildContext context,
       ),
       SizedBox(height: size.width * 0.02),
       ((context.read<BookingBloc>().isEtaFilter &&
-              !context.read<BookingBloc>().filterSuccess) || ((context
-                      .read<BookingBloc>()
-                      .isMultiTypeVechiles && context.read<BookingBloc>().sortedEtaDetailsList.isEmpty) 
-                      || context.read<BookingBloc>().etaDetailsList.isEmpty))
+                  !context.read<BookingBloc>().filterSuccess) ||
+              ((context.read<BookingBloc>().isMultiTypeVechiles &&
+                      context
+                          .read<BookingBloc>()
+                          .sortedEtaDetailsList
+                          .isEmpty) ||
+                  context.read<BookingBloc>().etaDetailsList.isEmpty))
           ? SizedBox(
               height: size.height * 0.49,
               child: Center(child: Image.asset(AppImages.noDataFound)))
           : SizedBox(
-              height: (arg.isOutstationRide) 
+              height: (arg.isOutstationRide)
                   ? size.height * 0.34
                   : size.height * 0.44,
               child: ListView.builder(
@@ -436,7 +535,7 @@ Widget etaListViewWidget(Size size, BuildContext context,
                 physics: context.read<BookingBloc>().enableEtaScrolling
                     ? const BouncingScrollPhysics()
                     : const NeverScrollableScrollPhysics(),
-                itemCount: context.read<BookingBloc>().isMultiTypeVechiles 
+                itemCount: context.read<BookingBloc>().isMultiTypeVechiles
                     ? context.read<BookingBloc>().sortedEtaDetailsList.length
                     : context.read<BookingBloc>().etaDetailsList.length,
                 itemBuilder: (context, index) {
@@ -491,12 +590,12 @@ Widget etaListViewWidget(Size size, BuildContext context,
                       margin: const EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
                         color: (index == 0) // Highlight the item now at the top
-                            ? AppColors.darkGrey.withOpacity(0.5)
+                            ? AppColors.primary.withOpacity(0.2)
                             : Theme.of(context).dividerColor.withOpacity(0.1),
                         border: Border.all(
                             color: (index == 0) // Selected item at the top
                                 ? Theme.of(context)
-                                    .primaryColorDark
+                                    .primaryColor
                                     .withOpacity(0.5)
                                 : Colors.white),
                         borderRadius: BorderRadius.circular(6),
@@ -547,7 +646,7 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                       children: [
                                         Icon(
                                           Icons.timer,
-                                          color: Theme.of(context).hintColor,
+                                          color: Theme.of(context).primaryColor,
                                           size: 14,
                                         ),
                                         SizedBox(width: size.width * 0.005),
@@ -585,8 +684,8 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                               .bodySmall!
                                               .copyWith(
                                                 fontSize: 14,
-                                                color:
-                                                    Theme.of(context).hintColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                               ),
                                         ),
                                         SizedBox(width: size.width * 0.005),
@@ -598,7 +697,8 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                           },
                                           child: Icon(
                                             Icons.info,
-                                            color: Theme.of(context).hintColor,
+                                            color:
+                                                Theme.of(context).primaryColor,
                                             size: 14,
                                           ),
                                         ),
@@ -626,8 +726,9 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                             .bodySmall!
                                             .copyWith(
                                                 fontSize: 12,
-                                                color:
-                                                    Theme.of(context).hintColor,
+                                                fontWeight: FontWeight.w500,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                                 decoration: (eta.hasDiscount &&
                                                         !context
                                                             .read<BookingBloc>()
@@ -651,8 +752,8 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                               .bodySmall!
                                               .copyWith(
                                                 fontSize: 14,
-                                                color:
-                                                    Theme.of(context).hintColor,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
                                               ),
                                         ),
                                     ],

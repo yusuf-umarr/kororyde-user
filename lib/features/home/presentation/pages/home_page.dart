@@ -677,8 +677,9 @@ class _HomePageContentState extends State<HomePageContent>
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
-                          height: size.height *
-                              currentSize, // - (size.height * 0.3)
+                          height: size.height * 0.5,
+
+                          //  * currentSize, // - (size.height * 0.3)
                           curve: Curves.easeInOut,
                           child: Container(
                             decoration: BoxDecoration(
@@ -976,7 +977,7 @@ class _HomePageContentState extends State<HomePageContent>
     return BlocProvider.value(
         value: context.read<HomeBloc>(),
         child: Container(
-          height: size.height * 0.9,
+          height: size.height * 1,
           margin: const EdgeInsets.only(top: 1),
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -1293,115 +1294,122 @@ class _HomePageContentState extends State<HomePageContent>
                         height: context.read<HomeBloc>().isSheetAtTop == false
                             ? size.width * 0.01
                             : size.width * 0.02),
-                    ListView.builder(
-                      itemCount:
-                          context.read<HomeBloc>().recentSearchPlaces.length > 2
-                              ? 2
-                              : context
-                                  .read<HomeBloc>()
-                                  .recentSearchPlaces
-                                  .length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, index) {
-                        final recentPlace = context
-                            .read<HomeBloc>()
-                            .recentSearchPlaces
-                            .reversed
-                            .elementAt(index);
-                        return InkWell(
-                          onTap: () {
-                            if (context
-                                .read<HomeBloc>()
-                                .pickupAddressList
-                                .isNotEmpty) {
+                    SizedBox(
+                      height: size.height * 0.1,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                            context.read<HomeBloc>().recentSearchPlaces.length >
+                                    2
+                                ? 2
+                                : context
+                                    .read<HomeBloc>()
+                                    .recentSearchPlaces
+                                    .length,
+                        shrinkWrap: true,
+                        // physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          final recentPlace = context
+                              .read<HomeBloc>()
+                              .recentSearchPlaces
+                              .reversed
+                              .elementAt(index);
+                          return InkWell(
+                            onTap: () {
                               if (context
-                                          .read<HomeBloc>()
-                                          .userData!
-                                          .enableModulesForApplications ==
-                                      'both' ||
-                                  context
-                                          .read<HomeBloc>()
-                                          .userData!
-                                          .enableModulesForApplications ==
-                                      'taxi') {
-                                context.read<HomeBloc>().add(
-                                    RecentSearchPlaceSelectEvent(
-                                        address: recentPlace,
-                                        isPickupSelect: false,
-                                        transportType: 'taxi'));
-                              } else {
-                                context.read<HomeBloc>().add(
-                                    ServiceTypeChangeEvent(
-                                        serviceTypeIndex: 1));
+                                  .read<HomeBloc>()
+                                  .pickupAddressList
+                                  .isNotEmpty) {
+                                if (context
+                                            .read<HomeBloc>()
+                                            .userData!
+                                            .enableModulesForApplications ==
+                                        'both' ||
+                                    context
+                                            .read<HomeBloc>()
+                                            .userData!
+                                            .enableModulesForApplications ==
+                                        'taxi') {
+                                  context.read<HomeBloc>().add(
+                                      RecentSearchPlaceSelectEvent(
+                                          address: recentPlace,
+                                          isPickupSelect: false,
+                                          transportType: 'taxi'));
+                                } else {
+                                  context.read<HomeBloc>().add(
+                                      ServiceTypeChangeEvent(
+                                          serviceTypeIndex: 1));
+                                }
                               }
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: AppColors.primary.withOpacity(0.2),
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.primary.withOpacity(0.2),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: size.height * 0.075,
+                                    width: size.width * 0.075,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .primaryColor
+                                          .withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.history,
+                                      size: 18,
+                                      color: Theme.of(context)
+                                          .disabledColor
+                                          .withOpacity(0.75),
+                                    ),
+                                  ),
+                                  SizedBox(width: size.width * 0.025),
+                                  SizedBox(
+                                    width: size.width * 0.63,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        MyText(
+                                          text:
+                                              recentPlace.address.split(',')[0],
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                          maxLines: 1,
+                                        ),
+                                        MyText(
+                                          text: recentPlace.address,
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                color: Theme.of(context)
+                                                    .disabledColor,
+                                              ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: size.height * 0.075,
-                                  width: size.width * 0.075,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.history,
-                                    size: 18,
-                                    color: Theme.of(context)
-                                        .disabledColor
-                                        .withOpacity(0.75),
-                                  ),
-                                ),
-                                SizedBox(width: size.width * 0.025),
-                                SizedBox(
-                                  width: size.width * 0.63,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      MyText(
-                                        text: recentPlace.address.split(',')[0],
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                        maxLines: 1,
-                                      ),
-                                      MyText(
-                                        text: recentPlace.address,
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              color: Theme.of(context)
-                                                  .disabledColor,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ],
