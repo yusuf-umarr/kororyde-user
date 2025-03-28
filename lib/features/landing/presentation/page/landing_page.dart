@@ -62,31 +62,56 @@ class _LandingPageState extends State<LandingPage> {
                       ? Stack(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  SizedBox(height: size.height * 0.1),
+                                  SizedBox(height: size.height * 0.17),
                                   Container(
                                     height: size.height * 0.35,
                                     width: size.width,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
-                                      color: Theme.of(context).primaryColor,
+                                      // color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   SizedBox(height: size.height * 0.15),
                                   buildLandingContentWidget(size, context),
                                   SizedBox(height: size.height * 0.02),
-                                  buildSkipButton(context, size),
+                                  buildContinueButton(context, size),
                                 ],
                               ),
                             ),
                             Positioned(
-                              top: size.height * 0.15,
-                              left: size.width * 0.09,
-                              child: buildLandingImageContainer(size, context),
+                              // top: size.height * 0.1,
+                              // left: size.width * 0.09,
+                              child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: SafeArea(
+                                    child: buildLandingImageContainer(
+                                        size, context),
+                                  )),
                             ),
+                            Positioned(
+                                top: size.height * 0.1,
+                                right: size.width * 0.09,
+                                child: InkWell(
+                                  onTap: () {
+                                    context
+                                        .read<OnBoardingBloc>()
+                                        .add(SkipEvent());
+                                  },
+                                  child: Container(
+                                    child: Text(
+                                      "Skip",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )),
                           ],
                         )
                       : const SizedBox(),
@@ -103,8 +128,35 @@ class _LandingPageState extends State<LandingPage> {
     return context.read<OnBoardingBloc>().onBoardingData.isNotEmpty
         ? Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  context.read<OnBoardingBloc>().onBoardingData.length,
+                  (index) {
+                    return Container(
+                      margin: const EdgeInsets.only(right: 5),
+                      height:
+                          context.read<OnBoardingBloc>().onBoardChangeIndex ==
+                                  index
+                              ? 30
+                              : 20,
+                      width: 7,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          // shape: BoxShape.circle,
+                          color: context
+                                      .read<OnBoardingBloc>()
+                                      .onBoardChangeIndex ==
+                                  index
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).splashColor),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
               SizedBox(
-                height: size.height * 0.25,
+                height: size.height * 0.18,
                 width: size.width,
                 child: PageView.builder(
                   controller:
@@ -131,7 +183,7 @@ class _LandingPageState extends State<LandingPage> {
                               .read<OnBoardingBloc>()
                               .onBoardingData[index]
                               .description,
-                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                          textStyle: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                           maxLines: 3,
                         ),
@@ -149,78 +201,54 @@ class _LandingPageState extends State<LandingPage> {
                   },
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  context.read<OnBoardingBloc>().onBoardingData.length,
-                  (index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 5),
-                      height: 10,
-                      width: 10,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: context
-                                      .read<OnBoardingBloc>()
-                                      .onBoardChangeIndex ==
-                                  index
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).splashColor),
-                    );
-                  },
-                ),
-              )
             ],
           )
         : const SizedBox();
   }
 
   Widget buildLandingImageContainer(Size size, BuildContext context) {
-    return ClipPath(
-      clipper: CustomCliper(),
-      child: Container(
-        height: size.height * 0.5,
-        width: size.width * 0.83,
-        decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(10)),
-        child: PageView.builder(
-          controller: context.read<OnBoardingBloc>().imagePageController,
-          scrollDirection: Axis.horizontal,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: context.read<OnBoardingBloc>().onBoardingData.length,
-          itemBuilder: (context, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: context.read<OnBoardingBloc>().onBoardingData.isNotEmpty
-                  ? Image.asset(
-                      context
-                          .read<OnBoardingBloc>()
-                          .onBoardingData[
-                              context.read<OnBoardingBloc>().onBoardChangeIndex]
-                          .onboardingImage,
-                      width: 30,
-                      height: 20,
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-            );
-          },
-          onPageChanged: (value) {
-            context
-                .read<OnBoardingBloc>()
-                .contentPageController
-                .jumpToPage(value);
-            context
-                .read<OnBoardingBloc>()
-                .add(OnBoardingDataChangeEvent(currentIndex: value));
-          },
-        ),
+    return Container(
+      height: size.height * 0.6,
+      width: size.width * 0.9,
+      padding: EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: PageView.builder(
+        controller: context.read<OnBoardingBloc>().imagePageController,
+        scrollDirection: Axis.horizontal,
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: context.read<OnBoardingBloc>().onBoardingData.length,
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            child: context.read<OnBoardingBloc>().onBoardingData.isNotEmpty
+                ? Image.asset(
+                    context
+                        .read<OnBoardingBloc>()
+                        .onBoardingData[
+                            context.read<OnBoardingBloc>().onBoardChangeIndex]
+                        .onboardingImage,
+                    width: 30,
+                    height: 20,
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          );
+        },
+        onPageChanged: (value) {
+          context
+              .read<OnBoardingBloc>()
+              .contentPageController
+              .jumpToPage(value);
+          context
+              .read<OnBoardingBloc>()
+              .add(OnBoardingDataChangeEvent(currentIndex: value));
+        },
       ),
     );
   }
 
-  Widget buildSkipButton(BuildContext context, Size size) {
+  Widget buildContinueButton(BuildContext context, Size size) {
     if (context.read<OnBoardingBloc>().onBoardingData.isNotEmpty) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -229,16 +257,23 @@ class _LandingPageState extends State<LandingPage> {
             buttonName: (context.read<OnBoardingBloc>().onBoardChangeIndex ==
                     context.read<OnBoardingBloc>().onBoardingData.length - 1)
                 ? '${AppLocalizations.of(context)!.continueN} '
-                : '${AppLocalizations.of(context)!.skip} ',
-            onTap: () => context.read<OnBoardingBloc>().add(SkipEvent()),
+                : '${AppLocalizations.of(context)!.continueN} ',
+            onTap: () {
+              if ((context.read<OnBoardingBloc>().onBoardChangeIndex ==
+                  context.read<OnBoardingBloc>().onBoardingData.length - 1)) {
+                context.read<OnBoardingBloc>().add(SkipEvent());
+              }
+              context.read<OnBoardingBloc>().imagePageController.nextPage(
+                  duration: Duration(milliseconds: 200), curve: Curves.linear);
+            },
             textSize: 12,
-            width: size.width * 0.2,
-            height: size.width * 0.08,
+            width: size.width * 0.9,
+            // height: size.width * 0.08,
             borderRadius: 20,
             buttonColor: (context.read<OnBoardingBloc>().onBoardChangeIndex ==
                     context.read<OnBoardingBloc>().onBoardingData.length - 1)
                 ? Theme.of(context).primaryColor
-                : Theme.of(context).primaryColor.withOpacity(0.6),
+                : Theme.of(context).primaryColor,
           ),
         ],
       );
