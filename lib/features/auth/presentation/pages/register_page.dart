@@ -73,40 +73,42 @@ class RegisterPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            AuthPage.routeName,
-                                            (route) => false);
-                                      },
-                                      child: Container(
-                                          margin: EdgeInsets.only(right: 10),
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Theme.of(context)
-                                                  .primaryColor),
-                                          child: Icon(
-                                            Icons.keyboard_arrow_left,
-                                            color: Colors.white,
-                                          )),
-                                    ),
-                                    Image.asset(
-                                        "assets/images/kororydeText.png"),
-                                  ],
-                                ),
+                                // Row(
+                                //   children: [
+                                //     InkWell(
+                                //       onTap: () {
+                                //         Navigator.pushNamedAndRemoveUntil(
+                                //             context,
+                                //             AuthPage.routeName,
+                                //             (route) => false);
+                                //       },
+                                //       child: Container(
+                                //           margin: EdgeInsets.only(right: 10),
+                                //           padding: EdgeInsets.all(5),
+                                //           decoration: BoxDecoration(
+                                //               shape: BoxShape.circle,
+                                //               color: Theme.of(context)
+                                //                   .primaryColor),
+                                //           child: Icon(
+                                //             Icons.keyboard_arrow_left,
+                                //             color: Colors.white,
+                                //           )),
+                                //     ),
+                                //   ],
+                                // ),
 
                                 const SizedBox(height: 10),
                                 Center(
                                   child: MyText(
-                                    text: "Hello, Let's Get You Started!",
+                                    text:
+                                        "Provide your details to complete your registration",
                                     textStyle: Theme.of(context)
                                         .textTheme
-                                        .bodySmall!
-                                        .copyWith(color: AppColors.black),
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: AppColors.black,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                   ),
                                 ),
 
@@ -114,27 +116,27 @@ class RegisterPage extends StatelessWidget {
                                 buildProfilePick(size, context),
                                 SizedBox(height: size.width * 0.1),
                                 MyText(
-                                  text: AppLocalizations.of(context)!.name,
+                                  text: 'Full name',
                                   textStyle: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(
-                                          color: AppColors.black,
-                                          fontSize:
-                                              AppConstants().subHeaderSize),
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.black,
+                                      ),
                                 ),
                                 SizedBox(height: size.width * 0.02),
                                 buildUserNameField(context),
                                 SizedBox(height: size.width * 0.02),
                                 MyText(
-                                  text: AppLocalizations.of(context)!.mobile,
+                                  text: 'Phone number',
                                   textStyle: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(
-                                          color: AppColors.black,
-                                          fontSize:
-                                              AppConstants().subHeaderSize),
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                 ),
                                 SizedBox(height: size.width * 0.02),
                                 buildMobileField(context, size),
@@ -145,9 +147,9 @@ class RegisterPage extends StatelessWidget {
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(
-                                          color: AppColors.black,
-                                          fontSize:
-                                              AppConstants().subHeaderSize),
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                 ),
                                 SizedBox(height: size.width * 0.02),
                                 buildEmailField(context),
@@ -171,9 +173,9 @@ class RegisterPage extends StatelessWidget {
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(
-                                          color: AppColors.black,
-                                          fontSize:
-                                              AppConstants().subHeaderSize),
+                                        color: AppColors.black,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                 ),
                                 SizedBox(height: size.width * 0.02),
                                 buildPasswordField(context, size),
@@ -220,7 +222,7 @@ class RegisterPage extends StatelessWidget {
                     width: size.width * 0.1,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.black,
+                      color: AppColors.primary,
                     ),
                     child: const Center(
                         child: Icon(
@@ -242,7 +244,7 @@ class RegisterPage extends StatelessWidget {
       child: CustomButton(
         width: size.width,
         buttonName: AppLocalizations.of(context)!.register,
-        borderRadius: 10,
+        borderRadius: 20,
         height: MediaQuery.of(context).size.height * 0.06,
         isLoader: context.read<AuthBloc>().isLoading,
         onTap: () {
@@ -265,6 +267,8 @@ class RegisterPage extends StatelessWidget {
 
   Widget buildPasswordField(BuildContext context, Size size) {
     return CustomTextField(
+     
+      borderRadius: 20,
       controller: context.read<AuthBloc>().rPasswordController,
       filled: true,
       obscureText: !context.read<AuthBloc>().showPassword,
@@ -280,14 +284,14 @@ class RegisterPage extends StatelessWidget {
                 padding: EdgeInsets.only(right: 10),
                 child: Icon(
                   Icons.visibility_off_outlined,
-                  color: AppColors.darkGrey,
+                  color: AppColors.primary,
                 ),
               )
             : const Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: Icon(
                   Icons.visibility,
-                  color: AppColors.darkGrey,
+                  color: AppColors.primary,
                 ),
               ),
       ),
@@ -305,6 +309,7 @@ class RegisterPage extends StatelessWidget {
 
   Widget buildEmailField(BuildContext context) {
     return CustomTextField(
+      borderRadius: 20,
       controller: context.read<AuthBloc>().rEmailController,
       enabled: !context.read<AuthBloc>().isLoginByEmail,
       filled: true,
@@ -326,6 +331,7 @@ class RegisterPage extends StatelessWidget {
 
   Widget buildMobileField(BuildContext context, Size size) {
     return CustomTextField(
+      borderRadius: 20,
       controller: context.read<AuthBloc>().rMobileController,
       filled: true,
       fillColor: !context.read<AuthBloc>().isLoginByEmail
@@ -389,6 +395,7 @@ class RegisterPage extends StatelessWidget {
 
   Widget buildUserNameField(BuildContext context) {
     return CustomTextField(
+      borderRadius: 20,
       controller: context.read<AuthBloc>().rUserNameController,
       filled: true,
       hintText: AppLocalizations.of(context)!.enterYourName,

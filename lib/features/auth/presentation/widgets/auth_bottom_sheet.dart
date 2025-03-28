@@ -92,41 +92,45 @@ class AuthBottomSheetState extends State<AuthBottomSheet>
               )
             ],
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    MyText(
-                      text:
-                          '${AppLocalizations.of(context)!.welcome}, ${AppLocalizations.of(context)!.user}',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontSize: 20),
-                    ),
-                    const SizedBox(width: 10),
-                    SvgPicture.asset(AppImages.hi, height: 20, width: 25)
-                  ],
-                ),
+                // Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   children: [
+                //     MyText(
+                //       text:
+                //           '${AppLocalizations.of(context)!.welcome}, ${AppLocalizations.of(context)!.user}',
+                //       textStyle: Theme.of(context)
+                //           .textTheme
+                //           .titleLarge!
+                //           .copyWith(fontSize: 20),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     SvgPicture.asset(AppImages.hi, height: 20, width: 25)
+                //   ],
+                // ),
                 SizedBox(height: size.width * 0.05),
                 MyText(
                   text:
                       '${AppLocalizations.of(context)!.email}/${AppLocalizations.of(context)!.mobile}',
                   textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: AppColors.darkGrey,
-                        fontWeight: FontWeight.bold,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w500,
                       ),
                 ),
                 SizedBox(height: size.width * 0.02),
                 Form(
                   key: widget.formKey,
                   child: CustomTextField(
+                    
+                    borderRadius: 15,
                     controller: widget.emailOrMobile,
                     filled: true,
                     focusNode: widget.focusNode,
@@ -197,14 +201,12 @@ class AuthBottomSheetState extends State<AuthBottomSheet>
                     width: size.width,
                     height: size.width * 0.12,
                     textColor: AppColors.white,
-                    buttonColor: (widget.emailOrMobile.text.isEmpty)
-                        ? Theme.of(context).disabledColor.withOpacity(0.5)
-                        : null,
+                    buttonColor: AppColors.primary,
                     onTap: () {
                       if (widget.formKey.currentState!.validate() &&
                           widget.emailOrMobile.text.isNotEmpty) {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        _continuePressed(); 
+                        _continuePressed();
                       }
                     },
                   ),
@@ -292,10 +294,10 @@ class AuthBottomSheetState extends State<AuthBottomSheet>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Wrap(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              alignment : WrapAlignment.center,
-                              children: [
-                                if(!widget.isLoginByEmail)
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              if (!widget.isLoginByEmail)
                                 MyText(
                                   text: widget.dialCode,
                                   textStyle: Theme.of(context)
@@ -303,17 +305,17 @@ class AuthBottomSheetState extends State<AuthBottomSheet>
                                       .titleLarge!
                                       .copyWith(fontSize: 20),
                                 ),
-                                SizedBox(width: size.width * 0.02),
-                                MyText(
-                                  text: widget.emailOrMobile.text,
-                                  maxLines: 3,
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(fontSize: 20),
-                                ),
-                              ],
-                            ),
+                              SizedBox(width: size.width * 0.02),
+                              MyText(
+                                text: widget.emailOrMobile.text,
+                                maxLines: 3,
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(fontSize: 20),
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: 20),
                           RichText(
                             text: TextSpan(

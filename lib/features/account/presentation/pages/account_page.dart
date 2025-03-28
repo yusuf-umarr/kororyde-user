@@ -141,23 +141,24 @@ class AccountPage extends StatelessWidget {
                                                   isFromBooking: false));
                                     },
                                   ),
-                                if (context
-                                        .read<AccBloc>()
-                                        .userData!
-                                        .showWalletFeatureOnMobileApp ==
-                                    '1')
-                                  PageOptions(
-                                    optionName:
-                                        AppLocalizations.of(context)!.payment,
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, WalletHistoryPage.routeName,
-                                          arguments: WalletPageArguments(
-                                              userData: context
-                                                  .read<AccBloc>()
-                                                  .userData!));
-                                    },
-                                  ),
+                                // if (context
+                                //         .read<AccBloc>()
+                                //         .userData!
+                                //         .showWalletFeatureOnMobileApp ==
+                                //     '1')
+                                //   PageOptions(
+                                //     optionName:
+                                //         AppLocalizations.of(context)!.payment,
+                                //     onTap: () {
+                                //       Navigator.pushNamed(
+                                //           context, WalletHistoryPage.routeName,
+                                //           arguments: WalletPageArguments(
+                                //               userData: context
+                                //                   .read<AccBloc>()
+                                //                   .userData!)
+                                //                   );
+                                //     },
+                                //   ),
                                 PageOptions(
                                   optionName:
                                       AppLocalizations.of(context)!.referEarn,

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
@@ -192,35 +191,45 @@ class _ServicesPageState extends State<ServicesPage> {
                         ),
                       ),
                     ),
-                    // Card(
-                    //   child: Container(
-                    //     padding:
-                    //         EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       borderRadius: BorderRadius.circular(12),
-                    //     ),
-                    //     child: Column(
-                    //       children: [
-                    //         Image.asset(
-                    //           'assets/png/delivery.png',
-                    //           height: size.width * 0.10,
-                    //         ),
-                    //         const SizedBox(height: 10),
-                    //         MyText(
-                    //           text: AppLocalizations.of(context)!.delivery,
-                    //           // text: 'Delivery',
-                    //           textStyle: Theme.of(context)
-                    //               .textTheme
-                    //               .bodySmall!
-                    //               .copyWith(
-                    //                 fontWeight: FontWeight.bold,
-                    //               ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CustomerWalletScreen(),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/png/invest.png',
+                                height: size.width * 0.10,
+                              ),
+                              const SizedBox(height: 10),
+                              MyText(
+                                text: 'Payment',
+                                // text: 'Delivery',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     // Card(
                     //   child: Container(
                     //     padding:

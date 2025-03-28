@@ -3,8 +3,9 @@ class AppImages {
   static const String logo = 'assets/images/logo.png';
   static const String backGroundImage = 'assets/images/background.png';
   static const String bottomBackground = 'assets/images/bottomBackground.png';
-  static const String splash1 = 'assets/images/tagxi_splash.png'; 
-  static const String splash2 = 'assets/images/delivery_splash.png';
+  static const String splash1 = 'assets/png/sliderImage.png'; 
+  // static const String splash2 = 'assets/images/delivery_splash.png'; 
+  static const String splash2 = 'assets/png/sliderImage.png'; 
   static const String taxi = 'assets/images/Taxi.png';
   static const String taxiSv = 'assets/svg/taxi.svg';
   static const String delivery = 'assets/images/Delivery.png';

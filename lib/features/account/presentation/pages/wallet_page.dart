@@ -156,40 +156,7 @@ class WalletHistoryPage extends StatelessWidget {
                           child: Column(
                             children: [
                               SizedBox(
-                                height: MediaQuery.of(context).padding.top,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    height: size.height * 0.08,
-                                    width: size.width * 0.08,
-                                    margin: EdgeInsets.only(
-                                        left: size.width * 0.05,
-                                        right: size.width * 0.05),
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.whiteText,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black26,
-                                          offset: Offset(5.0, 5.0),
-                                          blurRadius: 10.0,
-                                          spreadRadius: 2.0,
-                                        ),
-                                      ],
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      icon: const Icon(
-                                        CupertinoIcons.back,
-                                        size: 20,
-                                        color: AppColors.blackText,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                height: size.height * 0.1,
                               ),
                               SizedBox(
                                 height: size.width * 0.25,

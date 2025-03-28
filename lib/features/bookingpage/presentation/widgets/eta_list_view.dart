@@ -174,35 +174,13 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                   );
                             },
                           ),
-                          // Switch(
-                          //   value:
-                          //       context.watch<BookingBloc>().showBiddingVehicles,
-                          //   onChanged: (bool value) {
-                          //     context.read<BookingBloc>().add(
-                          //           SelectBiddingOrDemandEvent(
-                          //             selectedTypeEta:
-                          //                 value ? 'Bidding' : 'On Demand',
-                          //             isBidding: value,
-                          //           ),
-                          //         );
-                          //     context.read<BookingBloc>().checkNearByEta(
-                          //           context.read<BookingBloc>().nearByDriversData,
-                          //           thisValue,
-                          //         );
-                          //   },
-                          //   activeColor: Theme.of(context).primaryColor,
-                          //   inactiveTrackColor:
-                          //       Theme.of(context).primaryColor.withOpacity(0.1),
-                          // ),
+                        
                         ],
                       ),
                   ],
                 ),
 
-                Spacer(),
-                if (context.watch<BookingBloc>().showBiddingVehicles)
-                  ...{}
-                else ...[CoShare()]
+              
               
               ],
             ),

@@ -1,0 +1,16 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+class CosharePage extends StatelessWidget {
+  const CosharePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Text("Co Share"),
+      ),
+    );
+  }
+}

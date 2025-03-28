@@ -140,23 +140,23 @@ class _VerifyPageState extends State<VerifyPage>
                                 ? MyText(
                                     text: AppLocalizations.of(context)!
                                         .otpSendContent,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                          color: AppColors.greyHintColor,
+                                          color: AppColors.black,
                                         ),
                                   )
                                 : MyText(
                                     text: AppLocalizations.of(context)!
                                         .passwordContent,
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.left,
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
                                         .copyWith(
-                                          color: AppColors.greyHintColor,
+                                          color: AppColors.black,
                                         ),
                                     maxLines: 2,
                                   ),
@@ -192,8 +192,28 @@ class _VerifyPageState extends State<VerifyPage>
                                       .textTheme
                                       .bodyMedium!
                                       .copyWith(
-                                        color: AppColors.black,
-                                      ),
+                                          color: AppColors.primary,
+                                          fontSize: 1),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                const SizedBox(width: 20),
+                                MyText(
+                                  text:
+                                      'Not your ${!widget.arg.isLoginByEmail ? "phone number" : "email address"}?',
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color:
+                                              AppColors.black.withOpacity(0.6),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
                                 ),
                                 const SizedBox(width: 10),
                                 InkWell(
@@ -201,13 +221,14 @@ class _VerifyPageState extends State<VerifyPage>
                                     Navigator.pop(context);
                                   },
                                   child: MyText(
-                                    text: AppLocalizations.of(context)!.change,
+                                    text: "Edit",
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
                                         .copyWith(
-                                          color: AppColors.black,
-                                        ),
+                                            fontSize: 15,
+                                            color: AppColors.black,
+                                            fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
@@ -246,6 +267,7 @@ class _VerifyPageState extends State<VerifyPage>
               text: AppLocalizations.of(context)!.password,
               textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: AppColors.black,
+                  fontWeight: FontWeight.w400,
                   fontSize: AppConstants().subHeaderSize),
             ),
             InkWell(
@@ -263,9 +285,9 @@ class _VerifyPageState extends State<VerifyPage>
                 timerCount(context, duration: 60);
               },
               child: MyText(
-                text: AppLocalizations.of(context)!.signInUsingOtp,
+                text: "Login using OTP",
                 textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: AppColors.black,
+                      color: AppColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
               ),
@@ -274,6 +296,11 @@ class _VerifyPageState extends State<VerifyPage>
         ),
         const SizedBox(height: 10),
         CustomTextField(
+          hintTextStyle: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: Colors.black.withOpacity(0.6)),
+          borderRadius: 20,
           controller: context.read<AuthBloc>().passwordController,
           filled: true,
           obscureText: !context.read<AuthBloc>().showPassword,
@@ -286,11 +313,11 @@ class _VerifyPageState extends State<VerifyPage>
             child: !context.read<AuthBloc>().showPassword
                 ? const Icon(
                     Icons.visibility_off_outlined,
-                    color: AppColors.darkGrey,
+                    color: AppColors.primary,
                   )
                 : const Icon(
                     Icons.visibility,
-                    color: AppColors.darkGrey,
+                    color: AppColors.primary,
                   ),
           ),
         ),
@@ -310,7 +337,7 @@ class _VerifyPageState extends State<VerifyPage>
           },
           child: MyText(
             text: '${AppLocalizations.of(context)!.forgetPassword} ?',
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                 color: AppColors.greyHintColor,
                 fontSize: AppConstants().subHeaderSize),
           ),
@@ -428,10 +455,10 @@ class _VerifyPageState extends State<VerifyPage>
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: CustomButton(
             width: size.width,
-            borderRadius: 10,
+            borderRadius: 20,
             height: MediaQuery.of(context).size.height * 0.06,
             buttonName: (!widget.arg.userExist)
                 ? AppLocalizations.of(context)!.confirm
@@ -440,6 +467,7 @@ class _VerifyPageState extends State<VerifyPage>
             onTap: () {
               if (widget.arg.isOtpVerify ||
                   context.read<AuthBloc>().isOtpVerify) {
+                context.read<BottomNavCubit>().setSelectedIndex(0);
                 // OTPverify
                 context.read<AuthBloc>().add(
                       ConfirmOrVerifyOTPEvent(
@@ -457,6 +485,7 @@ class _VerifyPageState extends State<VerifyPage>
                       ),
                     );
               } else {
+                context.read<BottomNavCubit>().setSelectedIndex(0);
                 // PasswordLogin
                 context.read<AuthBloc>().add(LoginUserEvent(
                       emailOrMobile: widget.arg.mobileOrEmail,

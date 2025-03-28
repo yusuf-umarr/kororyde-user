@@ -1,6 +1,9 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:kororyde_user/core/utils/custom_text.dart';
+import 'package:kororyde_user/l10n/app_localizations.dart';
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_background.dart';
 import '../../../../core/utils/custom_loader.dart';
@@ -141,7 +144,35 @@ class AuthPage extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: size.height * 0.6,
+            height: size.height * 0.07,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              MyText(
+                text: 'Hello, welcome',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontSize: 17),
+              ),
+              const SizedBox(width: 10),
+              SvgPicture.asset(AppImages.hi, height: 20, width: 25)
+            ],
+          ),
+          SizedBox(height: 5),
+          MyText(
+            text: 'Login/create a new account',
+            textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black.withOpacity(
+                    0.7,
+                  ),
+                ),
+          ),
+          SizedBox(
+            height: size.height * 0.5,
             child: Center(
               child: CarouselSlider(
                 items: context.read<AuthBloc>().splashImages,

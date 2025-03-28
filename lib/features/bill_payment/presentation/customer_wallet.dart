@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kororyde_user/common/app_colors.dart';
@@ -9,7 +10,7 @@ import 'package:kororyde_user/features/bill_payment/presentation/buy_electricity
 import 'package:kororyde_user/features/bill_payment/presentation/cable_tv.dart';
 import 'package:kororyde_user/features/bill_payment/presentation/education.dart';
 
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class CustomerWalletScreen extends StatelessWidget {
   const CustomerWalletScreen({super.key});
@@ -20,7 +21,11 @@ class CustomerWalletScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: Stack(
-        children: [WalletHeader(), PaymentList(), TopUpCard()],
+        children: [
+          WalletHeader(),
+          PaymentList(),
+          TopUpCard(),
+        ],
       ),
     );
   }
@@ -57,39 +62,102 @@ class _WalletHeaderState extends State<WalletHeader> {
               fit: BoxFit.cover,
             ),
           ),
-          child: Column(
+          child: Stack(
             children: [
-              const CustomSpacer(
-                flex: 10,
+              Center(
+                child: Column(
+                  children: [
+                    const CustomSpacer(
+                      flex: 10,
+                    ),
+                    Text(
+                      "Your Balance",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 14, color: AppColors.white),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          visibility ? "${getCurrency()}0:0" : "*****",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  fontSize: 22,
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                visibility = !visibility;
+                              });
+                            },
+                            icon: Icon(
+                              visibility
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: AppColors.white,
+                            ))
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                "Your Balance",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(fontSize: 14, color: AppColors.white),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    visibility ? "${getCurrency()}0:0" : "*****",
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 22,
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          visibility = !visibility;
-                        });
-                      },
-                      icon: Icon(
-                        visibility ? Icons.visibility : Icons.visibility_off,
-                        color: AppColors.white,
-                      ))
-                ],
+              Positioned(
+                left: 10,
+                top: 10,
+                child: Row(
+                  children: [
+                    Container(
+                      height: size.height * 0.08,
+                      width: size.width * 0.08,
+                      margin: EdgeInsets.only(
+                          left: size.width * 0.05, right: size.width * 0.05),
+                      decoration: const BoxDecoration(
+                        color: AppColors.whiteText,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(5.0, 5.0),
+                            blurRadius: 10.0,
+                            spreadRadius: 2.0,
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(
+                          CupertinoIcons.back,
+                          size: 20,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // InkWell(
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //   },
+                //   child: Container(
+                //     alignment: Alignment.center,
+                //     padding: EdgeInsets.all(5),
+                //     decoration: BoxDecoration(
+                //         shape: BoxShape.circle, color: Colors.white),
+                //     child: Icon(
+                //       Icons.arrow_back_ios,
+                //       color: AppColors.primary,
+                //     ),
+                //   ),
+                // ),
               ),
             ],
           ),
@@ -112,9 +180,7 @@ class PaymentList extends StatelessWidget {
       left: 0,
       bottom: 0,
       child: Container(
-        padding: EdgeInsets.all(20
-        
-        ),
+        padding: EdgeInsets.all(20),
         width: size.width,
         height: size.height * 0.58,
         decoration: BoxDecoration(
@@ -196,23 +262,7 @@ class PaymentList extends StatelessWidget {
                       );
                     },
                   ),
-                  // ServiceCard(
-                  //   icon: "assets/svg/game.svg",
-                  //   name: "Betting",
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => Betting(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // ServiceCard(
-                  //   icon: "assets/svg/online.svg",
-                  //   name: "Online\nTicket",
-                  //   onTap: () {},
-                  // ),
+
                   ServiceCard(
                     icon: "assets/svg/education.svg",
                     name: "Education",
@@ -226,37 +276,31 @@ class PaymentList extends StatelessWidget {
                     },
                   ),
 
-                  ServiceCard(
-                    icon: "assets/svg/invest.svg",
-                    name: "Invest",
-                    onTap: () {
-                      // cus.showConfirmDialogCustom(
-                      //   isTwoBtn: true,
-                      //   context,
-                      //   positiveText: "Continue",
-                      //   title:
-                      //       "You are about to switch to the investor's portal. Do you want to proceed?",
-                      //   subTitle: "",
-                      //   dialogType: DialogType.ACCEPT,
-                      //   onAccept: () {
-                      //     context.read<AuthViewModel>().logOut();
-                      //     // Navigator.of(context).pop();
-                      //   },
-                      //   onCancel: () {},
-                      //   primaryColor: AppColors.blue,
-                      // );
-                    },
-                  ),
-
                   // ServiceCard(
-                  //   icon: "assets/svg/streaming.svg",
-                  //   name: "Streaming",
-                  //   onTap: () {},
+                  //   icon: "assets/svg/invest.svg",
+                  //   name: "Invest",
+                  //   onTap: () {
+                  //     // cus.showConfirmDialogCustom(
+                  //     //   isTwoBtn: true,
+                  //     //   context,
+                  //     //   positiveText: "Continue",
+                  //     //   title:
+                  //     //       "You are about to switch to the investor's portal. Do you want to proceed?",
+                  //     //   subTitle: "",
+                  //     //   dialogType: DialogType.ACCEPT,
+                  //     //   onAccept: () {
+                  //     //     context.read<AuthViewModel>().logOut();
+                  //     //     // Navigator.of(context).pop();
+                  //     //   },
+                  //     //   onCancel: () {},
+                  //     //   primaryColor: AppColors.blue,
+                  //     // );
+                  //   },
                   // ),
                 ],
               ),
             ),
-        //
+            //
           ],
         ),
       ),
@@ -306,7 +350,7 @@ class TopUpCard extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Positioned(
-      top: size.height * 0.29,
+      top: size.height * 0.355,
       left: 0,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),

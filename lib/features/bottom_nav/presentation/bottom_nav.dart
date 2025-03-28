@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
 import 'package:kororyde_user/features/account/presentation/pages/history_page.dart';
+import 'package:kororyde_user/features/account/presentation/pages/wallet_page.dart';
 import 'package:kororyde_user/features/auth/presentation/pages/auth_page.dart';
 import 'package:kororyde_user/features/bill_payment/presentation/customer_wallet.dart';
 import 'package:kororyde_user/features/bookingpage/presentation/page/booking_page.dart';
@@ -510,14 +511,26 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
                     }),
-                    Builder(builder: (context) {
+                   Builder(builder: (context) {
                       return BlocProvider.value(
                         value: homeBloc,
                         child: Opacity(
                           opacity: selectedIndex == 3 ? 1.0 : 0.0,
                           child: IgnorePointer(
                             ignoring: selectedIndex != 3,
-                            child: CustomerWalletScreen(),
+                            child: BlocBuilder<HomeBloc, HomeState>(
+                              builder: (context, state) {
+                                if (state is HomeUserDataState) {
+                                  // log("state.userData:${state.userData}");
+                                  return WalletHistoryPage(
+                                      arg: WalletPageArguments(
+                                          userData: state.userData));
+                                }
+                                return Center(
+                                  child: Text(""),
+                                ); // Fallback in case userData is not available yet
+                              },
+                            ),
                           ),
                         ),
                       );
@@ -532,20 +545,21 @@ class _HomePageState extends State<HomePage>
                             child: BlocBuilder<HomeBloc, HomeState>(
                               builder: (context, state) {
                                 if (state is HomeUserDataState) {
-                                  // log("state.userData:${state.userData}");
                                   return AccountPage(
                                       arg: AccountPageArguments(
                                           userData: state.userData));
                                 }
                                 return Center(
                                   child: Text(""),
-                                ); // Fallback in case userData is not available yet
+                                ); 
                               },
                             ),
                           ),
                         ),
                       );
                     }),
+                   
+                  
                   ],
                 );
               });
@@ -570,7 +584,7 @@ class _HomePageState extends State<HomePage>
                       context.read<BottomNavCubit>().setSelectedIndex(index);
                       final homeBloc = context.read<HomeBloc>();
 
-                      if (index == 4) {
+                      if (index == 3 ||index == 4) {
                         if (homeBloc.state is !HomeUserDataState) {
                           final userData = homeBloc.userData;
                           homeBloc
@@ -603,23 +617,20 @@ class _HomePageState extends State<HomePage>
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         icon: Icons.assignment_sharp,
                         text: 'History',
-                        // leading: SvgPicture.asset('assets/svg/rentalIcon.svg'),
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.currency_exchange, //aspect_ratio_sharp
+                        icon: Icons.currency_exchange, 
                         text: 'Payment',
-                        // leading:
-                        //     SvgPicture.asset('assets/svg/advert.svg'),
+                      
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         icon: Icons.account_circle,
                         text: 'Profile',
-                        // leading:
-                        //   SvgPicture.asset('assets/svg/advert.svg'),
+                   
                       ),
                     ],
                   );

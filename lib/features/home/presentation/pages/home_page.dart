@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
+import 'package:kororyde_user/features/home/presentation/pages/coshare_page.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_on_going_rides.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_page_shimmer.dart';
 import 'package:latlong2/latlong.dart' as fmlt;
@@ -109,6 +110,32 @@ class _HomePageContentState extends State<HomePageContent>
                                   "")))
                   ? bodyMapBuilder(context, size)
                   : HomePageShimmer(size: size),
+              floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CosharePage(),
+                    ),
+                  );
+                },
+                label: const Text(
+                  "Co Share",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                icon: SvgPicture.asset(
+                  "assets/svg/rentalIcon.svg",
+                  colorFilter: ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                tooltip: 'CoShare',
+              ),
             ),
           ),
         );

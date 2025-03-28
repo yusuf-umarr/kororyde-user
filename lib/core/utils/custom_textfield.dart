@@ -95,7 +95,7 @@ class CustomTextField extends StatelessWidget {
       textAlign: textAlign,
       style: style ??
           Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w400,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -110,7 +110,7 @@ class CustomTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: hintTextStyle ??
             Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: Theme.of(context).hintColor),
         filled: filled ?? true,
@@ -150,7 +150,7 @@ class CustomTextField extends StatelessWidget {
         enabledBorder: enabledBorder ??
             OutlineInputBorder(
               borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
+                color: Colors.grey.withOpacity(0.8),
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(borderRadius),
