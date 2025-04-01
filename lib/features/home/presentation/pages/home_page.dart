@@ -110,32 +110,32 @@ class _HomePageContentState extends State<HomePageContent>
                                   "")))
                   ? bodyMapBuilder(context, size)
                   : HomePageShimmer(size: size),
-              floatingActionButton: FloatingActionButton.extended(
-                backgroundColor: AppColors.primary,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CosharePage(),
-                    ),
-                  );
-                },
-                label: const Text(
-                  "Co Share",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                icon: SvgPicture.asset(
-                  "assets/svg/rentalIcon.svg",
-                  colorFilter: ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                tooltip: 'CoShare',
-              ),
+              // floatingActionButton: FloatingActionButton.extended(
+              //   backgroundColor: AppColors.primary,
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => CosharePage(),
+              //       ),
+              //     );
+              //   },
+              //   label: const Text(
+              //     "Co Share",
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              //   icon: SvgPicture.asset(
+              //     "assets/svg/rentalIcon.svg",
+              //     colorFilter: ColorFilter.mode(
+              //       Colors.white,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   tooltip: 'CoShare',
+              // ),
             ),
           ),
         );
