@@ -986,44 +986,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       UpdateLocationEvent event, Emitter<HomeState> emit) async {
     dev.log("updateLocation called=====");
     if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {
-      final data = await serviceLocator<HomeUsecase>().getAddressFromLatLng(
-          lat: event.latLng.latitude,
-          lng: event.latLng.longitude,
-          mapType: event.mapType);
-      data.fold((error) {
-        currentLocation = '';
-        pickupAddressController.text = '';
-        emit(HomeUpdateState());
-      }, (success) {
-        if (success.toString().isNotEmpty) {
-          currentLocation = success.toString();
-          if (event.isFromHomePage) {
-            pickupAddressController.text = currentLocation;
-            pickupAddressList.removeWhere((element) => element.pickup == true);
-            pickupAddressList.add(AddressModel(
-                orderId: '1',
-                address: currentLocation,
-                lat: event.latLng.latitude,
-                lng: event.latLng.longitude,
-                name: (userData != null) ? userData!.name : '',
-                number: (userData != null) ? userData!.mobile : '',
-                isAirportLocation:
-                    (currentLocation.toLowerCase().contains('airport'))
-                        ? true
-                        : false,
-                pickup: true));
-            //debugPrint('pickup add');
-            add(ServiceLocationVerifyEvent(
-                isFromHomePage: event.isFromHomePage,
-                rideType: 'taxi',
-                address: pickupAddressList));
-            add(StreamRequestEvent());
-          }
-        } else {
-          currentLocation = '';
-          pickupAddressController.text = '';
-        }
-      });
+     
     }
     isCameraMoveComplete = false;
     emit(UpdateLocationState());

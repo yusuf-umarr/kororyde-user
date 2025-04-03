@@ -71,7 +71,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           child: Column(
                             children: [
                               Image.asset(
-                                'assets/png/ride.png',
+                                'assets/png/rideIcon.png',
                                 height: size.width * 0.10,
                               ),
                               const SizedBox(height: 10),
@@ -107,7 +107,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           child: Column(
                             children: [
                               Image.asset(
-                                'assets/png/delivery.png',
+                                'assets/png/deliveryIcon.png',
                                 height: size.width * 0.10,
                               ),
                               const SizedBox(height: 10),
@@ -143,7 +143,7 @@ class _ServicesPageState extends State<ServicesPage> {
                           child: Column(
                             children: [
                               Image.asset(
-                                'assets/png/rental.png',
+                                'assets/png/rentalIcon.png',
                                 height: size.width * 0.10,
                               ),
                               const SizedBox(height: 10),
@@ -173,7 +173,7 @@ class _ServicesPageState extends State<ServicesPage> {
                         child: Column(
                           children: [
                             Image.asset(
-                              'assets/png/advertise.png',
+                              'assets/png/advertIcon.png',
                               height: size.width * 0.10,
                             ),
                             const SizedBox(height: 10),

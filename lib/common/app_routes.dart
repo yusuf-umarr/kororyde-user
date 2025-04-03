@@ -3,6 +3,8 @@ import 'package:kororyde_user/features/account/presentation/pages/outstation_pag
 import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/presentation/pages/advert_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/bill_payment_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/available_coshare_ride.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
 import '../core/error/error_page.dart';
 import '../features/account/presentation/pages/confirm_fav_location.dart';
 import '../features/account/presentation/pages/delete_account.dart';
@@ -120,6 +122,20 @@ class AppRoutes {
         pageRoute = MaterialPageRoute(
           builder: (context) => DestinationPage(
             arg: arg as DestinationPageArguments,
+          ),
+        );
+        break;
+      case CosharePage.routeName:
+        pageRoute = MaterialPageRoute(
+          builder: (context) => CosharePage(
+            arg: arg as DestinationPageArguments,
+          ),
+        );
+        break;
+      case AvailableCoshareRidePage.routeName:
+        pageRoute = MaterialPageRoute(
+          builder: (context) => AvailableCoshareRidePage(
+            arg: arg as BookingPageArguments,
           ),
         );
         break;

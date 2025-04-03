@@ -343,164 +343,162 @@ class _DestinationPageState extends State<DestinationPage> {
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
-                child: SafeArea(
-                  child: Scaffold(
-                    appBar: AppBar(
-                      automaticallyImplyLeading: false,
-                      leadingWidth: size.width * 0.2,
-                      surfaceTintColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      leading: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 3),
-                        child: NavigationIconWidget(
-                          onTap: () {
-                            // Navigator.pop(context);
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(Icons.arrow_back_ios_new_rounded,
-                              size: 18,
-                              color: Theme.of(context).primaryColorDark),
-                          isShadowWidget: true,
-                        ),
-                      ),
-                      actions: [
-                        (context.read<HomeBloc>().addressList.length < 4 &&
-                                !widget.arg.isOutstationRide)
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: InkWell(
-                                  onTap: () {
-                                    context
-                                        .read<HomeBloc>()
-                                        .add(AddStopEvent());
-                                  },
-                                  // child: Icon(
-                                  //   Icons.add_outlined,
-                                  //   color: Theme.of(context).primaryColor,
-                                  // ),
-                                  child: MyText(
-                                      text:
-                                          AppLocalizations.of(context)!.addStop,
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColorDark,
-                                              fontWeight: FontWeight.w600)),
-                                ),
-                              )
-                            : const SizedBox(width: 1)
-                      ],
-                      bottom: PreferredSize(
-                        preferredSize: Size(
-                            size.width,
-                            (context.read<HomeBloc>().addressList.length == 2)
-                                ? size.width * 0.3
-                                : (context
-                                            .read<HomeBloc>()
-                                            .addressList
-                                            .length ==
-                                        3)
-                                    ? size.width * 0.4
-                                    : size.width * 0.55),
-                        child: buildLocationSelect(context, size),
+                child: Scaffold(
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    leadingWidth: size.width * 0.2,
+                    surfaceTintColor:
+                        Theme.of(context).scaffoldBackgroundColor,
+                    leading: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 3),
+                      child: NavigationIconWidget(
+                        onTap: () {
+                          // Navigator.pop(context);
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(Icons.arrow_back_ios_new_rounded,
+                            size: 18,
+                            color: Theme.of(context).primaryColorDark),
+                        isShadowWidget: true,
                       ),
                     ),
-                    body: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (context
-                              .read<HomeBloc>()
-                              .searchInfoMessage
-                              .isEmpty) ...[
-                            SizedBox(height: size.width * 0.03),
-                            if (context.read<HomeBloc>().userData != null)
-                              buildFavoriteLocations(
-                                  context,
+                    actions: [
+                      (context.read<HomeBloc>().addressList.length < 4 &&
+                              !widget.arg.isOutstationRide)
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: InkWell(
+                                onTap: () {
                                   context
                                       .read<HomeBloc>()
-                                      .userData!
-                                      .favouriteLocations
-                                      .data,
-                                  size),
-                            SizedBox(height: size.width * 0.03),
-                            if (context
-                                .read<HomeBloc>()
-                                .recentSearchPlaces
-                                .isNotEmpty) ...[
-                              if (context
-                                      .read<HomeBloc>()
-                                      .recentRoutes
-                                      .isNotEmpty &&
-                                  context.read<HomeBloc>().recentRoutes.any(
-                                      (element) =>
-                                          element.transportType ==
-                                          widget.arg.transportType))
-                                buildRecentRoutes(context, size),
-                              SizedBox(height: size.width * 0.02),
-                              buildRecentSearchLocations(context, size)
-                            ],
-                          ],
-                          if (context
-                              .read<HomeBloc>()
-                              .searchInfoMessage
-                              .isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16, top: 16),
-                              child: MyText(
-                                  text: context
-                                      .read<HomeBloc>()
-                                      .searchInfoMessage),
-                            ),
-                          if (context
-                              .read<HomeBloc>()
-                              .autoSearchPlaces
-                              .isNotEmpty) ...[
-                            SizedBox(height: size.width * 0.03),
-                            autoSearchPlacesWidget(context, size)
-                          ]
-                        ],
-                      ),
+                                      .add(AddStopEvent());
+                                },
+                                // child: Icon(
+                                //   Icons.add_outlined,
+                                //   color: Theme.of(context).primaryColor,
+                                // ),
+                                child: MyText(
+                                    text:
+                                        AppLocalizations.of(context)!.addStop,
+                                    textStyle: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .primaryColorDark,
+                                            fontWeight: FontWeight.w600)),
+                              ),
+                            )
+                          : const SizedBox(width: 1)
+                    ],
+                    bottom: PreferredSize(
+                      preferredSize: Size(
+                          size.width,
+                          (context.read<HomeBloc>().addressList.length == 2)
+                              ? size.width * 0.3
+                              : (context
+                                          .read<HomeBloc>()
+                                          .addressList
+                                          .length ==
+                                      3)
+                                  ? size.width * 0.4
+                                  : size.width * 0.55),
+                      child: buildLocationSelect(context, size),
                     ),
-                    bottomSheet: buildSelectFromMap(size, context),
-                    bottomNavigationBar: (!context
-                            .read<HomeBloc>()
-                            .addressList
-                            .any((element) => element.address.isEmpty))
-                        ? Padding(
-                            padding: EdgeInsets.fromLTRB(8, 8, 8,
-                                MediaQuery.of(context).viewInsets.bottom + 8),
-                            child: CustomButton(
-                              buttonName: AppLocalizations.of(context)!.done,
-                              buttonColor: context
-                                      .read<HomeBloc>()
-                                      .addressList
-                                      .any((element) => element.address.isEmpty)
-                                  ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.2)
-                                  : Theme.of(context).primaryColor,
-                              onTap: () {
-                                log("done clickkkk");
-                                if (!context.read<HomeBloc>().addressList.any(
-                                    (element) => element.address.isEmpty)) {
-                                  context.read<HomeBloc>().add(
-                                      ConfirmRideAddressEvent(
-                                          rideType: widget.arg.isOutstationRide
-                                              ? 'outstation'
-                                              : 'taxi',
-                                          addressList: context
-                                              .read<HomeBloc>()
-                                              .addressList));
-                                }
-                              },
-                            ))
-                        : null,
                   ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (context
+                            .read<HomeBloc>()
+                            .searchInfoMessage
+                            .isEmpty) ...[
+                          SizedBox(height: size.width * 0.03),
+                          if (context.read<HomeBloc>().userData != null)
+                            buildFavoriteLocations(
+                                context,
+                                context
+                                    .read<HomeBloc>()
+                                    .userData!
+                                    .favouriteLocations
+                                    .data,
+                                size),
+                          SizedBox(height: size.width * 0.03),
+                          if (context
+                              .read<HomeBloc>()
+                              .recentSearchPlaces
+                              .isNotEmpty) ...[
+                            if (context
+                                    .read<HomeBloc>()
+                                    .recentRoutes
+                                    .isNotEmpty &&
+                                context.read<HomeBloc>().recentRoutes.any(
+                                    (element) =>
+                                        element.transportType ==
+                                        widget.arg.transportType))
+                              buildRecentRoutes(context, size),
+                            SizedBox(height: size.width * 0.02),
+                            buildRecentSearchLocations(context, size)
+                          ],
+                        ],
+                        if (context
+                            .read<HomeBloc>()
+                            .searchInfoMessage
+                            .isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16, top: 16),
+                            child: MyText(
+                                text: context
+                                    .read<HomeBloc>()
+                                    .searchInfoMessage),
+                          ),
+                        if (context
+                            .read<HomeBloc>()
+                            .autoSearchPlaces
+                            .isNotEmpty) ...[
+                          SizedBox(height: size.width * 0.03),
+                          autoSearchPlacesWidget(context, size)
+                        ]
+                      ],
+                    ),
+                  ),
+                  bottomSheet: buildSelectFromMap(size, context),
+                  bottomNavigationBar: (!context
+                          .read<HomeBloc>()
+                          .addressList
+                          .any((element) => element.address.isEmpty))
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(8, 8, 8,
+                              MediaQuery.of(context).viewInsets.bottom + 8),
+                          child: CustomButton(
+                            buttonName: AppLocalizations.of(context)!.done,
+                            buttonColor: context
+                                    .read<HomeBloc>()
+                                    .addressList
+                                    .any((element) => element.address.isEmpty)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : Theme.of(context).primaryColor,
+                            onTap: () {
+                              log("done clickkkk");
+                              if (!context.read<HomeBloc>().addressList.any(
+                                  (element) => element.address.isEmpty)) {
+                                context.read<HomeBloc>().add(
+                                    ConfirmRideAddressEvent(
+                                        rideType: widget.arg.isOutstationRide
+                                            ? 'outstation'
+                                            : 'taxi',
+                                        addressList: context
+                                            .read<HomeBloc>()
+                                            .addressList));
+                              }
+                            },
+                          ))
+                      : null,
                 ),
               ),
             );

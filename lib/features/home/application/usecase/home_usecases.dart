@@ -38,7 +38,7 @@ class HomeUsecase {
   }
 
   Future<Either<Failure, dynamic>> getAddressFromLatLng({
-    required double lat,
+    required double lat, 
     required double lng,
     required String mapType,
   }) async {

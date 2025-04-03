@@ -9,7 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
-import 'package:kororyde_user/features/home/presentation/pages/coshare_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_on_going_rides.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_page_shimmer.dart';
 import 'package:latlong2/latlong.dart' as fmlt;
@@ -110,32 +111,46 @@ class _HomePageContentState extends State<HomePageContent>
                                   "")))
                   ? bodyMapBuilder(context, size)
                   : HomePageShimmer(size: size),
-              // floatingActionButton: FloatingActionButton.extended(
-              //   backgroundColor: AppColors.primary,
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => CosharePage(),
-              //       ),
-              //     );
-              //   },
-              //   label: const Text(
-              //     "Co Share",
-              //     style: TextStyle(
-              //       color: Colors.white,
-              //       fontWeight: FontWeight.w600,
-              //     ),
-              //   ),
-              //   icon: SvgPicture.asset(
-              //     "assets/svg/rentalIcon.svg",
-              //     colorFilter: ColorFilter.mode(
-              //       Colors.white,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   tooltip: 'CoShare',
-              // ),
+              floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    CosharePage.routeName,
+                    arguments: DestinationPageArguments(
+                        title: context.read<HomeBloc>().selectedServiceType == 0
+                            ? 'Taxi'
+                            : 'Delivery',
+                        pickupAddress: context.read<HomeBloc>().currentLocation,
+                        pickupLatLng: context.read<HomeBloc>().currentLatLng,
+                        // dropAddress: 'state.dropAddress',
+                        // dropLatLng: 'state.dropLatLng',
+                        userData: context.read<HomeBloc>().userData!,
+                        pickUpChange: false,
+                        transportType:
+                            context.read<HomeBloc>().selectedServiceType == 0
+                                ? 'taxi'
+                                : 'delivery',
+                        isOutstationRide: false,
+                        mapType: context.read<HomeBloc>().mapType),
+                  );
+                },
+                label: const Text(
+                  "Co Share",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                icon: SvgPicture.asset(
+                  "assets/svg/sendParcel.svg",
+                  colorFilter: ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                tooltip: 'CoShare',
+              ),
             ),
           ),
         );
@@ -812,7 +827,7 @@ class _HomePageContentState extends State<HomePageContent>
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/png/ride.png',
+                            'assets/png/rideIcon.png',
                             // colorFilter:
                             //     ColorFilter.mode(Colors.blue, BlendMode.srcIn),
                             height: size.width * 0.10,
@@ -860,7 +875,7 @@ class _HomePageContentState extends State<HomePageContent>
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/png/delivery.png',
+                            'assets/png/deliveryIcon.png',
                             height: size.width * 0.10,
                           ),
                           const SizedBox(height: 10),
@@ -898,7 +913,7 @@ class _HomePageContentState extends State<HomePageContent>
                       child: Column(
                         children: [
                           Image.asset(
-                            'assets/png/rental.png',
+                            'assets/png/rentalIcon.png',
                             height: size.width * 0.11,
                           ),
                           const SizedBox(height: 10),
