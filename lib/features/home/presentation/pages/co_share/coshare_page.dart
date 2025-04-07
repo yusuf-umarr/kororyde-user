@@ -63,65 +63,189 @@ class _CosharePageState extends State<CosharePage> {
             Navigator.pushNamedAndRemoveUntil(
                 context, AuthPage.routeName, (route) => false);
             await AppSharedPreference.setLoginStatus(false);
-          }
-          // else if (state is AddOrEditAddressState) {
-          //   if (!context
-          //       .read<HomeBloc>()
-          //       .addressList
-          //       .any((element) => element.address.isEmpty)) {
-          //     context.read<HomeBloc>().add(ConfirmRideAddressEvent(
-          //         rideType: widget.arg.isOutstationRide ? 'outstation' : 'taxi',
-          //         addressList: context.read<HomeBloc>().addressList));
-          //   }
-          // }
-
-          else if (state is ConfirmRideAddressState) {
-            //TODO===================go available ride page
+          } else if (state is SelectFromMapState) {
+            Navigator.pushNamed(context, ConfirmLocationPage.routeName,
+                    arguments: ConfirmLocationPageArguments(
+                        userData: widget.arg.userData,
+                        isPickupEdit: state.isPickUpEdit,
+                        isEditAddress: false,
+                        mapType: widget.arg.mapType,
+                        transportType: context.read<HomeBloc>().transportType))
+                .then(
+              (value) {
+                if (value != null) {
+                  if (!context.mounted) return;
+                  final address = value as AddressModel;
+                  final homeBloc = context.read<HomeBloc>();
+                  if (context.read<HomeBloc>().transportType.toLowerCase() ==
+                      'delivery') {
+                    showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      enableDrag: false,
+                      isScrollControlled: true,
+                      barrierColor: Theme.of(context).shadowColor,
+                      builder: (_) {
+                        return BlocProvider.value(
+                          value: homeBloc,
+                          child: LeaveInstructions(
+                            address: address,
+                            isReceiveParcel:
+                                widget.arg.title == 'Receive Parcel',
+                            name: widget.arg.userData.name,
+                            number: widget.arg.userData.mobile,
+                            transportType: widget.arg.transportType,
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    context.read<HomeBloc>().add(AddOrEditStopAddressEvent(
+                          isPickUpEdit: state.isPickUpEdit,
+                          choosenAddressIndex:
+                              context.read<HomeBloc>().choosenAddressIndex,
+                          newAddress: address,
+                        ));
+                  }
+                }
+              },
+            );
+          } else if (state is RecentSearchPlaceSelectState) {
+            if (context.read<HomeBloc>().transportType.toLowerCase() ==
+                'delivery') {
+              final homeBloc = context.read<HomeBloc>();
+              showModalBottomSheet(
+                context: context,
+                isDismissible: true,
+                enableDrag: true,
+                isScrollControlled: true,
+                barrierColor: Theme.of(context).shadowColor,
+                builder: (_) {
+                  return PopScope(
+                    canPop: false,
+                    child: BlocProvider.value(
+                      value: homeBloc,
+                      child: LeaveInstructions(
+                        address: state.address,
+                        isReceiveParcel: widget.arg.title == 'Receive Parcel',
+                        name: widget.arg.userData.name,
+                        number: widget.arg.userData.mobile,
+                        transportType: widget.arg.transportType,
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              context.read<HomeBloc>().addressList[
+                  context.read<HomeBloc>().choosenAddressIndex] = state.address;
+              context
+                  .read<HomeBloc>()
+                  .addressTextControllerList[
+                      context.read<HomeBloc>().choosenAddressIndex]
+                  .text = state.address.address;
+              if (!context
+                  .read<HomeBloc>()
+                  .addressList
+                  .any((element) => element.address.isEmpty)) {
+                context.read<HomeBloc>().add(ConfirmRideAddressEvent(
+                    rideType:
+                        widget.arg.isOutstationRide ? 'outstation' : 'taxi',
+                    addressList: context.read<HomeBloc>().addressList));
+              }
+            }
+          } else if (state is AddOrEditAddressState) {
+            if (!context
+                .read<HomeBloc>()
+                .addressList
+                .any((element) => element.address.isEmpty)) {
+              context.read<HomeBloc>().add(ConfirmRideAddressEvent(
+                  rideType: widget.arg.isOutstationRide ? 'outstation' : 'taxi',
+                  addressList: context.read<HomeBloc>().addressList));
+            }
+          } else if (state is ReceiverDetailsState) {
+            final homeBloc = context.read<HomeBloc>();
+            showModalBottomSheet(
+              context: context,
+              isDismissible: true,
+              enableDrag: true,
+              isScrollControlled: true,
+              barrierColor: Theme.of(context).shadowColor,
+              builder: (_) {
+                return BlocProvider.value(
+                  value: homeBloc,
+                  child: LeaveInstructions(
+                      address: state.address,
+                      transportType: widget.arg.transportType,
+                      isReceiveParcel: widget.arg.title == 'Receive Parcel',
+                      name: widget.arg.userData.name,
+                      number: widget.arg.userData.mobile),
+                );
+              },
+            );
+          } else if (state is SelectContactDetailsState) {
+            final homeBloc = context.read<HomeBloc>();
+            context.read<HomeBloc>().isMyself = false;
+            showModalBottomSheet(
+              context: context,
+              isDismissible: true,
+              enableDrag: true,
+              useRootNavigator: true,
+              isScrollControlled: true,
+              builder: (_) {
+                return BlocProvider.value(
+                  value: homeBloc,
+                  child: const SelectFromContactList(),
+                );
+              },
+            );
+          } else if (state is ConfirmRideAddressState) {
             log("ConfirmRideAddressState ----in destination");
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
               log("ConfirmRideAddressState --000--in destination");
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
               context.read<HomeBloc>().nearByVechileSubscription = null;
             }
-            Navigator.pushNamed(
-              context,
-              AvailableCoshareRidePage.routeName,
-              arguments: BookingPageArguments(
-                  picklat: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lat
-                      .toString(),
-                  picklng: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lng
-                      .toString(),
-                  droplat: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lat
-                      .toString(),
-                  droplng: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lng
-                      .toString(),
-                  userData: widget.arg.userData,
-                  transportType: widget.arg.transportType,
-                  pickupAddressList: context.read<HomeBloc>().pickupAddressList,
-                  stopAddressList: context.read<HomeBloc>().stopAddressList,
-                  title: widget.arg.title,
-                  polyString: '',
-                  distance: '',
-                  duration: '',
-                  isOutstationRide: widget.arg.isOutstationRide,
-                  mapType: widget.arg.mapType),
-            );
+            // Navigator.pushNamed(
+            //   context,
+            //   BookingPage.routeName,
+            //   arguments: BookingPageArguments(
+            //       picklat: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lat
+            //           .toString(),
+            //       picklng: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lng
+            //           .toString(),
+            //       droplat: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lat
+            //           .toString(),
+            //       droplng: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lng
+            //           .toString(),
+            //       userData: widget.arg.userData,
+            //       transportType: widget.arg.transportType,
+            //       pickupAddressList: context.read<HomeBloc>().pickupAddressList,
+            //       stopAddressList: context.read<HomeBloc>().stopAddressList,
+            //       title: widget.arg.title,
+            //       polyString: '',
+            //       distance: '',
+            //       duration: '',
+            //       isOutstationRide: widget.arg.isOutstationRide,
+            //       mapType: widget.arg.mapType),
+            // );
+            log("ConfirmRideAddressState ---11111-in destination");
           } else if (state is RecentRouteSelectState) {
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
@@ -129,7 +253,7 @@ class _CosharePageState extends State<CosharePage> {
             }
             Navigator.pushNamed(
               context,
-              AvailableCoshareRidePage.routeName,
+              BookingPage.routeName,
               arguments: BookingPageArguments(
                   picklat: context
                       .read<HomeBloc>()
@@ -166,179 +290,126 @@ class _CosharePageState extends State<CosharePage> {
                   isOutstationRide: widget.arg.isOutstationRide,
                   mapType: widget.arg.mapType),
             );
-          } else if (state is ServiceNotAvailableState) {
-            showDialog(
-              context: context,
-              builder: (_) {
-                return AlertDialog(
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Align(
-                          alignment:
-                              context.read<HomeBloc>().textDirection == 'rtl'
-                                  ? Alignment.centerLeft
-                                  : Alignment.centerRight,
-                          child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(
-                                Icons.cancel_outlined,
-                                color: Theme.of(context).primaryColor,
-                              ))),
-                      Center(
-                        child: MyText(
-                            text: state.message,
-                            // AppLocalizations.of(context)!.serviceNotAvailable,
-                            maxLines: 4),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    Center(
-                      child: CustomButton(
-                        buttonName: AppLocalizations.of(context)!.okText,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )
-                  ],
-                );
-              },
-            );
           }
         },
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Scaffold(
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  leadingWidth: size.width * 0.2,
-                  surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-                  leading: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-                    child: NavigationIconWidget(
-                      onTap: () {
-                        // Navigator.pop(context);
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new_rounded,
-                          size: 18, color: Theme.of(context).primaryColorDark),
-                      isShadowWidget: true,
+            return Directionality(
+              textDirection: context.read<HomeBloc>().textDirection == 'rtl'
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      "Join Co share",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                      ),
+                    ),
+                    automaticallyImplyLeading: false,
+                    leadingWidth: size.width * 0.2,
+                    surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                    leading: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 3),
+                      child: NavigationIconWidget(
+                        onTap: () {
+                          // Navigator.pop(context);
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(Icons.arrow_back_ios_new_rounded,
+                            size: 18,
+                            color: Theme.of(context).primaryColorDark),
+                        isShadowWidget: true,
+                      ),
+                    ),
+                    bottom: PreferredSize(
+                      preferredSize: Size(
+                          size.width,
+                          (context.read<HomeBloc>().addressList.length == 2)
+                              ? size.width * 0.3
+                              : (context.read<HomeBloc>().addressList.length ==
+                                      3)
+                                  ? size.width * 0.4
+                                  : size.width * 0.55),
+                      child: buildLocationSelect(context, size),
                     ),
                   ),
-                  title: MyText(
-                      text: "Co Share",
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(
-                              color: Theme.of(context).primaryColorDark,
-                              fontWeight: FontWeight.w600)),
-                  bottom: PreferredSize(
-                    preferredSize: Size(
-                        size.width,
-                        (context.read<HomeBloc>().addressList.length == 2)
-                            ? size.width * 0.3
-                            : (context.read<HomeBloc>().addressList.length == 3)
-                                ? size.width * 0.4
-                                : size.width * 0.55),
-                    child: buildLocationSelect(context, size),
-                  ),
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (context
-                          .read<HomeBloc>()
-                          .searchInfoMessage
-                          .isEmpty) ...[
-                        SizedBox(height: size.width * 0.03),
-                        if (context.read<HomeBloc>().userData != null)
-                          buildFavoriteLocations(
-                              context,
-                              context
-                                  .read<HomeBloc>()
-                                  .userData!
-                                  .favouriteLocations
-                                  .data,
-                              size),
-                        SizedBox(height: size.width * 0.03),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         if (context
                             .read<HomeBloc>()
-                            .recentSearchPlaces
-                            .isNotEmpty) ...[
-                          if (context
-                                  .read<HomeBloc>()
-                                  .recentRoutes
-                                  .isNotEmpty &&
-                              context.read<HomeBloc>().recentRoutes.any(
-                                  (element) =>
-                                      element.transportType ==
-                                      widget.arg.transportType))
-                            buildRecentRoutes(context, size),
-                          SizedBox(height: size.width * 0.02),
-                          buildRecentSearchLocations(context, size)
+                            .searchInfoMessage
+                            .isEmpty) ...[
+                          SizedBox(height: size.width * 0.03),
+                          if (context.read<HomeBloc>().userData != null) ...[
+                            // available ride
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  AvailableRideCard(),
+                                  AvailableRideCard(),
+                                  AvailableRideCard(),
+                                ],
+                              ),
+                            )
+                          ],
                         ],
+                        if (context
+                            .read<HomeBloc>()
+                            .autoSearchPlaces
+                            .isNotEmpty) ...[
+                          SizedBox(height: size.width * 0.03),
+                          autoSearchPlacesWidget(context, size)
+                        ]
                       ],
-                      if (context.read<HomeBloc>().searchInfoMessage.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16, top: 16),
-                          child: MyText(
-                              text: context.read<HomeBloc>().searchInfoMessage),
-                        ),
-                      if (context
-                          .read<HomeBloc>()
-                          .autoSearchPlaces
-                          .isNotEmpty) ...[
-                        SizedBox(height: size.width * 0.03),
-                        autoSearchPlacesWidget(context, size)
-                      ]
-                    ],
+                    ),
                   ),
-                ),
-                // bottomSheet: buildSelectFromMap(size, context),
-                bottomNavigationBar: (!context
-                        .read<HomeBloc>()
-                        .addressList
-                        .any((element) => element.address.isEmpty))
-                    ? Padding(
-                        padding: EdgeInsets.fromLTRB(8, 8, 8,
-                            MediaQuery.of(context).viewInsets.bottom + 8),
-                        child: CustomButton(
-                          buttonName: AppLocalizations.of(context)!.done,
-                          buttonColor: context
+                  // bottomSheet: buildSelectFromMap(size, context),
+                  bottomNavigationBar: (!context
+                          .read<HomeBloc>()
+                          .addressList
+                          .any((element) => element.address.isEmpty))
+                      ? Padding(
+                          padding: EdgeInsets.fromLTRB(8, 8, 8,
+                              MediaQuery.of(context).viewInsets.bottom + 8),
+                          child: CustomButton(
+                            buttonName: AppLocalizations.of(context)!.done,
+                            buttonColor: context
+                                    .read<HomeBloc>()
+                                    .addressList
+                                    .any((element) => element.address.isEmpty)
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2)
+                                : Theme.of(context).primaryColor,
+                            onTap: () {
+                              log("done clickkkk");
+                              if (!context
                                   .read<HomeBloc>()
                                   .addressList
-                                  .any((element) => element.address.isEmpty)
-                              ? Theme.of(context).primaryColor.withOpacity(0.2)
-                              : Theme.of(context).primaryColor,
-                          onTap: () {
-                            log("done clickkkk");
-                            if (!context
-                                .read<HomeBloc>()
-                                .addressList
-                                .any((element) => element.address.isEmpty)) {
-                              context.read<HomeBloc>().add(
-                                  ConfirmRideAddressEvent(
-                                      rideType: widget.arg.isOutstationRide
-                                          ? 'outstation'
-                                          : 'taxi',
-                                      addressList: context
-                                          .read<HomeBloc>()
-                                          .addressList));
-                            }
-                          },
-                        ))
-                    : null,
+                                  .any((element) => element.address.isEmpty)) {
+                                context.read<HomeBloc>().add(
+                                    ConfirmRideAddressEvent(
+                                        rideType: widget.arg.isOutstationRide
+                                            ? 'outstation'
+                                            : 'taxi',
+                                        addressList: context
+                                            .read<HomeBloc>()
+                                            .addressList));
+                              }
+                            },
+                          ))
+                      : null,
+                ),
               ),
             );
           },

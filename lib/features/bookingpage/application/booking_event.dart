@@ -141,9 +141,10 @@ class BookingCancelRequestEvent extends BookingEvent {
   final String requestId;
   final String? reason;
   final bool? timerCancel;
+ final context;
 
   BookingCancelRequestEvent(
-      {required this.requestId, this.reason, this.timerCancel});
+      {required this.requestId, this.reason, this.timerCancel, this.context});
 }
 
 class TripRideCancelEvent extends BookingEvent {

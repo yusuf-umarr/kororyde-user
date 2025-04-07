@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kororyde_user/core/utils/custom_textfield.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
-
+import 'dart:developer' as dev;
 import '../../../../common/common.dart';
 import '../../../../common/pickup_icon.dart';
 import '../../../../core/utils/custom_button.dart';
@@ -9,11 +10,14 @@ import '../../../../core/utils/custom_snack_bar.dart';
 import '../../../../core/utils/custom_text.dart';
 import '../../application/booking_bloc.dart';
 
-Widget biddingPriceOffer(BuildContext context, BookingPageArguments arg) {
+Widget biddingPriceOffer(BuildContext context, BookingPageArguments arg,
+    TextEditingController coShareController) {
   final size = MediaQuery.of(context).size;
 
   return BlocBuilder<BookingBloc, BookingState>(builder: (context, state) {
-    return Container(
+    return 
+    ///////////
+    Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.only(
@@ -247,45 +251,318 @@ Widget biddingPriceOffer(BuildContext context, BookingPageArguments arg) {
                         (arg.transportType == 'delivery' &&
                             context.read<BookingBloc>().selectedGoodsTypeId !=
                                 0)) {
-                      context.read<BookingBloc>().add(BiddingCreateRequestEvent(
-                          userData: arg.userData,
-                          vehicleData: context.read<BookingBloc>().isMultiTypeVechiles
-                              ? context.read<BookingBloc>().sortedEtaDetailsList[context
-                                  .read<BookingBloc>()
-                                  .selectedVehicleIndex]
-                              : context.read<BookingBloc>().etaDetailsList[context
-                                  .read<BookingBloc>()
-                                  .selectedVehicleIndex],
-                          pickupAddressList: arg.pickupAddressList,
-                          dropAddressList: arg.stopAddressList,
-                          selectedTransportType: arg.transportType,
-                          paidAt: context.read<BookingBloc>().payAtDrop
-                              ? 'Receiver'
-                              : 'Sender',
-                          selectedPaymentType:
-                              context.read<BookingBloc>().selectedPaymentType,
-                          scheduleDateTime:
-                              context.read<BookingBloc>().scheduleDateTime,
-                          goodsTypeId: context
-                              .read<BookingBloc>()
-                              .selectedGoodsTypeId
-                              .toString(),
-                          goodsQuantity: context
-                              .read<BookingBloc>()
-                              .goodsQtyController
-                              .text,
-                          offeredRideFare: context
-                              .read<BookingBloc>()
-                              .farePriceController
-                              .text,
-                          polyLine: context.read<BookingBloc>().polyLine,
-                          isPetAvailable:
-                              context.read<BookingBloc>().petPreference,
-                          isLuggageAvailable:
-                              context.read<BookingBloc>().luggagePreference,
-                          isOutstationRide: arg.isOutstationRide,
-                          isRoundTrip: context.read<BookingBloc>().isRoundTrip,
-                          scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
+                      dev.log("--- bidding about to create request");
+
+                      //===start/============/
+                      showModalBottomSheet<void>(
+                        isScrollControlled: true,
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50),
+                              topRight: Radius.circular(50)),
+                        ),
+                        builder: (_) {
+                          return Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20)
+                                    .copyWith(top: 40),
+                                height: size.height * 0.3,
+                                child: Column(
+                                  children: [
+                                    MyText(
+                                      text: "Do you want to Co-Share?",
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 20),
+                                    MyText(
+                                      text:
+                                          "With Co-Share, you can carry other passengers\nalong your route",
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w400),
+                                    ),
+                                    SizedBox(
+                                      height: size.height * 0.03,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey),
+                                            onPressed: () {
+                                              // Navigator.of(context).pop();
+
+                                              context.read<BookingBloc>().add(BiddingCreateRequestEvent(
+                                                  userData: arg.userData,
+                                                  vehicleData: context
+                                                          .read<BookingBloc>()
+                                                          .isMultiTypeVechiles
+                                                      ? context.read<BookingBloc>().sortedEtaDetailsList[context
+                                                          .read<BookingBloc>()
+                                                          .selectedVehicleIndex]
+                                                      : context.read<BookingBloc>().etaDetailsList[context
+                                                          .read<BookingBloc>()
+                                                          .selectedVehicleIndex],
+                                                  pickupAddressList:
+                                                      arg.pickupAddressList,
+                                                  dropAddressList:
+                                                      arg.stopAddressList,
+                                                  selectedTransportType:
+                                                      arg.transportType,
+                                                  paidAt: context.read<BookingBloc>().payAtDrop
+                                                      ? 'Receiver'
+                                                      : 'Sender',
+                                                  selectedPaymentType: context
+                                                      .read<BookingBloc>()
+                                                      .selectedPaymentType,
+                                                  scheduleDateTime: context
+                                                      .read<BookingBloc>()
+                                                      .scheduleDateTime,
+                                                  goodsTypeId: context
+                                                      .read<BookingBloc>()
+                                                      .selectedGoodsTypeId
+                                                      .toString(),
+                                                  goodsQuantity: context
+                                                      .read<BookingBloc>()
+                                                      .goodsQtyController
+                                                      .text,
+                                                  offeredRideFare: context
+                                                      .read<BookingBloc>()
+                                                      .farePriceController
+                                                      .text,
+                                                  polyLine: context
+                                                      .read<BookingBloc>()
+                                                      .polyLine,
+                                                  isPetAvailable: context.read<BookingBloc>().petPreference,
+                                                  isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
+                                                  isOutstationRide: arg.isOutstationRide,
+                                                  isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                                                  scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
+                                            },
+                                            child: Text(
+                                              "Skip",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 30),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    AppColors.primary),
+                                            onPressed: () {
+                                              //second popup modal
+                                              Navigator.of(context).pop();
+                                              showModalBottomSheet<void>(
+                                                isScrollControlled: true,
+                                                context: context,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  50),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  50)),
+                                                ),
+                                                builder: (_) {
+                                                  return Stack(
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        20)
+                                                            .copyWith(top: 40),
+                                                        height: MediaQuery.of(
+                                                                        context)
+                                                                    .viewInsets
+                                                                    .bottom ==
+                                                                0
+                                                            ? size.height * 0.3
+                                                            : size.height * 0.6,
+                                                        child: Column(
+                                                          children: [
+                                                            MyText(
+                                                              text:
+                                                                  "How many people would you like to Co-share with?",
+                                                              textStyle: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyLarge!
+                                                                  .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 20),
+                                                            CustomTextField(
+                                                              controller:
+                                                                  coShareController,
+                                                              hintText:
+                                                                  "Type here",
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                            ),
+                                                            SizedBox(
+                                                              height:
+                                                                  size.height *
+                                                                      0.03,
+                                                            ),
+                                                            SizedBox(
+                                                                height: 20),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        backgroundColor:
+                                                                            AppColors.primary),
+                                                                    onPressed:
+                                                                        () {
+                                                                      context.read<BookingBloc>().add(BiddingCreateRequestEvent(
+                                                                          userData: arg
+                                                                              .userData,
+                                                                          vehicleData: context.read<BookingBloc>().isMultiTypeVechiles
+                                                                              ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex]
+                                                                              : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex],
+                                                                          pickupAddressList: arg.pickupAddressList,
+                                                                          dropAddressList: arg.stopAddressList,
+                                                                          selectedTransportType: arg.transportType,
+                                                                          paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender',
+                                                                          selectedPaymentType: context.read<BookingBloc>().selectedPaymentType,
+                                                                          scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
+                                                                          goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
+                                                                          goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
+                                                                          offeredRideFare: context.read<BookingBloc>().farePriceController.text,
+                                                                          polyLine: context.read<BookingBloc>().polyLine,
+                                                                          isPetAvailable: context.read<BookingBloc>().petPreference,
+                                                                          isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
+                                                                          isOutstationRide: arg.isOutstationRide,
+                                                                          isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                                                                          scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
+                                                                    },
+                                                                    child: Text(
+                                                                      "Proceed",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        right: 20,
+                                                        top: 20,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Icon(
+                                                            Icons
+                                                                .cancel_outlined,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Text(
+                                              "Yes",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                right: 20,
+                                top: 20,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      );
+                      //===end======//
+
+                      // context.read<BookingBloc>().add(BiddingCreateRequestEvent(
+                      //     userData: arg.userData,
+                      //     vehicleData: context.read<BookingBloc>().isMultiTypeVechiles
+                      //         ? context.read<BookingBloc>().sortedEtaDetailsList[context
+                      //             .read<BookingBloc>()
+                      //             .selectedVehicleIndex]
+                      //         : context.read<BookingBloc>().etaDetailsList[context
+                      //             .read<BookingBloc>()
+                      //             .selectedVehicleIndex],
+                      //     pickupAddressList: arg.pickupAddressList,
+                      //     dropAddressList: arg.stopAddressList,
+                      //     selectedTransportType: arg.transportType,
+                      //     paidAt: context.read<BookingBloc>().payAtDrop
+                      //         ? 'Receiver'
+                      //         : 'Sender',
+                      //     selectedPaymentType:
+                      //         context.read<BookingBloc>().selectedPaymentType,
+                      //     scheduleDateTime:
+                      //         context.read<BookingBloc>().scheduleDateTime,
+                      //     goodsTypeId: context
+                      //         .read<BookingBloc>()
+                      //         .selectedGoodsTypeId
+                      //         .toString(),
+                      //     goodsQuantity: context
+                      //         .read<BookingBloc>()
+                      //         .goodsQtyController
+                      //         .text,
+                      //     offeredRideFare: context
+                      //         .read<BookingBloc>()
+                      //         .farePriceController
+                      //         .text,
+                      //     polyLine: context.read<BookingBloc>().polyLine,
+                      //     isPetAvailable:
+                      //         context.read<BookingBloc>().petPreference,
+                      //     isLuggageAvailable:
+                      //         context.read<BookingBloc>().luggagePreference,
+                      //     isOutstationRide: arg.isOutstationRide,
+                      //     isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                      //     scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
                     } else {
                       showToast(
                           message: AppLocalizations.of(context)!

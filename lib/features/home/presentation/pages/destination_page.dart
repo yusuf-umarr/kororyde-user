@@ -36,7 +36,7 @@ class DestinationPage extends StatefulWidget {
 
 class _DestinationPageState extends State<DestinationPage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final size = MediaQuery.of(context).size;
     return builderWidget(size);
   }

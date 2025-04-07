@@ -111,46 +111,46 @@ class _HomePageContentState extends State<HomePageContent>
                                   "")))
                   ? bodyMapBuilder(context, size)
                   : HomePageShimmer(size: size),
-              floatingActionButton: FloatingActionButton.extended(
-                backgroundColor: AppColors.primary,
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    CosharePage.routeName,
-                    arguments: DestinationPageArguments(
-                        title: context.read<HomeBloc>().selectedServiceType == 0
-                            ? 'Taxi'
-                            : 'Delivery',
-                        pickupAddress: context.read<HomeBloc>().currentLocation,
-                        pickupLatLng: context.read<HomeBloc>().currentLatLng,
-                        // dropAddress: 'state.dropAddress',
-                        // dropLatLng: 'state.dropLatLng',
-                        userData: context.read<HomeBloc>().userData!,
-                        pickUpChange: false,
-                        transportType:
-                            context.read<HomeBloc>().selectedServiceType == 0
-                                ? 'taxi'
-                                : 'delivery',
-                        isOutstationRide: false,
-                        mapType: context.read<HomeBloc>().mapType),
-                  );
-                },
-                label: const Text(
-                  "Co Share",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                icon: SvgPicture.asset(
-                  "assets/svg/sendParcel.svg",
-                  colorFilter: ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                tooltip: 'CoShare',
-              ),
+              // floatingActionButton: FloatingActionButton.extended(
+              //   backgroundColor: AppColors.primary,
+              //   onPressed: () {
+              //     Navigator.pushNamed(
+              //       context,
+              //       CosharePage.routeName,
+              //       arguments: DestinationPageArguments(
+              //           title: context.read<HomeBloc>().selectedServiceType == 0
+              //               ? 'Taxi'
+              //               : 'Delivery',
+              //           pickupAddress: context.read<HomeBloc>().currentLocation,
+              //           pickupLatLng: context.read<HomeBloc>().currentLatLng,
+              //           // dropAddress: 'state.dropAddress',
+              //           // dropLatLng: 'state.dropLatLng',
+              //           userData: context.read<HomeBloc>().userData!,
+              //           pickUpChange: false,
+              //           transportType:
+              //               context.read<HomeBloc>().selectedServiceType == 0
+              //                   ? 'taxi'
+              //                   : 'delivery',
+              //           isOutstationRide: false,
+              //           mapType: context.read<HomeBloc>().mapType),
+              //     );
+              //   },
+              //   label: const Text(
+              //     "Join CoShare",
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              //   icon: SvgPicture.asset(
+              //     "assets/svg/sendParcel.svg",
+              //     colorFilter: ColorFilter.mode(
+              //       Colors.white,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   tooltip: 'CoShare',
+              // ),
             ),
           ),
         );
@@ -529,6 +529,48 @@ class _HomePageContentState extends State<HomePageContent>
                     ],
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              right: 10,
+              top: size.height * 0.2,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    CosharePage.routeName,
+                    arguments: DestinationPageArguments(
+                        title: context.read<HomeBloc>().selectedServiceType == 0
+                            ? 'Taxi'
+                            : 'Delivery',
+                        pickupAddress: context.read<HomeBloc>().currentLocation,
+                        pickupLatLng: context.read<HomeBloc>().currentLatLng,
+                        // dropAddress: 'state.dropAddress',
+                        // dropLatLng: 'state.dropLatLng',
+                        userData: context.read<HomeBloc>().userData!,
+                        pickUpChange: false,
+                        transportType:
+                            context.read<HomeBloc>().selectedServiceType == 0
+                                ? 'taxi'
+                                : 'delivery',
+                        isOutstationRide: false,
+                        mapType: context.read<HomeBloc>().mapType),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.primary,
+                  ),
+                  child: const Text(
+                    "Join CoShare",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
             ),
             // Locate Me

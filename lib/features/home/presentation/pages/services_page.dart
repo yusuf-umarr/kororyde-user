@@ -216,7 +216,7 @@ class _ServicesPageState extends State<ServicesPage> {
                               ),
                               const SizedBox(height: 10),
                               MyText(
-                                text: 'Payment',
+                                text: 'Bill payment',
                                 // text: 'Delivery',
                                 textStyle: Theme.of(context)
                                     .textTheme

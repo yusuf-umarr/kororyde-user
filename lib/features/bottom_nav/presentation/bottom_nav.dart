@@ -13,6 +13,7 @@ import 'package:kororyde_user/features/auth/presentation/pages/auth_page.dart';
 import 'package:kororyde_user/features/bill_payment/presentation/customer_wallet.dart';
 import 'package:kororyde_user/features/bookingpage/presentation/page/booking_page.dart';
 import 'package:kororyde_user/features/bookingpage/presentation/page/trip_summary_page.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/show_page.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/stop_address_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/confirm_location_page.dart';
@@ -147,13 +148,18 @@ class _HomePageState extends State<HomePage>
                   context.read<HomeBloc>().add(GetUserDetailsEvent());
                 },
               );
-            } else if (state is UserOnTripState &&
-                state.tripData.acceptedAt == '') {
+            } else if (state is UserOnTripState
+
+                // &&
+                //  state.tripData.acceptedAt == ''
+                ) {
               if (context.read<HomeBloc>().nearByVechileSubscription != null) {
                 context.read<HomeBloc>().nearByVechileSubscription?.cancel();
                 context.read<HomeBloc>().nearByVechileSubscription = null;
               }
               dev.log("BookingPage.routeName ---1");
+
+              //  if (context.mounted)
 
               Navigator.pushNamedAndRemoveUntil(
                 context,
@@ -219,7 +225,7 @@ class _HomePageState extends State<HomePage>
                     isOutstationRide: false,
                     mapType: context.read<HomeBloc>().mapType),
               );
-            }  else if (state is RecentSearchPlaceSelectState) {
+            } else if (state is RecentSearchPlaceSelectState) {
               context.read<HomeBloc>().add(ServiceLocationVerifyEvent(
                   address: [state.address], rideType: state.transportType));
             } else if (state is ConfirmRideAddressState) {
@@ -330,7 +336,7 @@ class _HomePageState extends State<HomePage>
                   }
                 },
               );
-            } else if (state is RideWithoutDestinationState) {  
+            } else if (state is RideWithoutDestinationState) {
               Navigator.pushNamed(context, ConfirmLocationPage.routeName,
                       arguments: ConfirmLocationPageArguments(
                           userData: context.read<HomeBloc>().userData!,
@@ -511,7 +517,7 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
                     }),
-                   Builder(builder: (context) {
+                    Builder(builder: (context) {
                       return BlocProvider.value(
                         value: homeBloc,
                         child: Opacity(
@@ -551,15 +557,13 @@ class _HomePageState extends State<HomePage>
                                 }
                                 return Center(
                                   child: Text(""),
-                                ); 
+                                );
                               },
                             ),
                           ),
                         ),
                       );
                     }),
-                   
-                  
                   ],
                 );
               });
@@ -584,8 +588,8 @@ class _HomePageState extends State<HomePage>
                       context.read<BottomNavCubit>().setSelectedIndex(index);
                       final homeBloc = context.read<HomeBloc>();
 
-                      if (index == 3 ||index == 4) {
-                        if (homeBloc.state is !HomeUserDataState) {
+                      if (index == 3 || index == 4) {
+                        if (homeBloc.state is! HomeUserDataState) {
                           final userData = homeBloc.userData;
                           homeBloc
                               .add(UpdateUserDataEvent(userData: userData!));
@@ -621,16 +625,14 @@ class _HomePageState extends State<HomePage>
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        icon: Icons.currency_exchange, 
+                        icon: Icons.currency_exchange,
                         text: 'Payment',
-                      
                       ),
                       GButton(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         icon: Icons.account_circle,
                         text: 'Profile',
-                   
                       ),
                     ],
                   );

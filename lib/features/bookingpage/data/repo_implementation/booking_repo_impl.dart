@@ -73,7 +73,7 @@ class BookingRepositoryImpl implements BookingRepository {
           dropAddressList: dropAddressList,
           isOutstationRide: isOutstationRide,
           isWithoutDestinationRide: isWithoutDestinationRide);
-      log('ETA RESPONSE  etaRequestApi eta ---here: ${response.data}');
+      // log('ETA RESPONSE  etaRequestApi eta ---here: ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -119,7 +119,7 @@ class BookingRepositoryImpl implements BookingRepository {
         promoCode: promoCode,
       );
 
-      dev.log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
+      // dev.log('RENTAL ETA RESPONSE vehicle list : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -169,6 +169,7 @@ class BookingRepositoryImpl implements BookingRepository {
   }) async {
     dynamic requestResponseModel;
     try {
+     
       Response response = await _bookingApi.createRequestApi(
         userData: userData,
         vehicleData: vehicleData,
@@ -193,7 +194,8 @@ class BookingRepositoryImpl implements BookingRepository {
         isRoundTrip: isRoundTrip,
         scheduleDateTimeForReturn: scheduleDateTimeForReturn,
       );
-   
+      // dev.log("---BiddingCreat===:${response.data}===");
+
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {
@@ -225,7 +227,7 @@ class BookingRepositoryImpl implements BookingRepository {
     try {
       Response response = await _bookingApi.cancelRequestApi(
           requestId: requestId, reason: reason, timerCancel: timerCancel);
-      //printWrapped('Cancel Request Response : ${response.data}');
+      log('Cancel Request Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

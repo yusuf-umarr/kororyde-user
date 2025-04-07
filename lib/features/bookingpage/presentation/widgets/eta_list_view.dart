@@ -139,8 +139,8 @@ Widget etaListViewWidget(Size size, BuildContext context,
                           MyText(
                             text:
                                 context.watch<BookingBloc>().showBiddingVehicles
-                                    ? 'Bidding'
-                                    : 'Negotiable',
+                                    ? 'Negotiable'
+                                    : 'Fixed rate',
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
@@ -151,9 +151,7 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                         ? AppColors.primary
                                         : AppColors.green),
                           ),
-
                           const SizedBox(width: 10),
-
                           CustomSwitch(
                             initialValue: context
                                 .watch<BookingBloc>()
@@ -162,7 +160,7 @@ Widget etaListViewWidget(Size size, BuildContext context,
                               context.read<BookingBloc>().add(
                                     SelectBiddingOrDemandEvent(
                                       selectedTypeEta:
-                                          value ? 'Bidding' : 'On Demand',
+                                          value ? 'On Demand' : 'Bidding',
                                       isBidding: value,
                                     ),
                                   );
@@ -174,20 +172,14 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                   );
                             },
                           ),
-                        
                         ],
                       ),
                   ],
                 ),
-
-              
-              
               ],
             ),
           ),
         ),
-
-      
         SizedBox(height: size.width * 0.05),
       ],
       if (arg.isWithoutDestinationRide != null && arg.isWithoutDestinationRide!)
@@ -431,9 +423,11 @@ Widget etaListViewWidget(Size size, BuildContext context,
                   .bodyMedium!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-            if ((!context.read<BookingBloc>().showBiddingVehicles ||
-                    !context.read<BookingBloc>().isMultiTypeVechiles) &&
-                arg.userData.showRideLaterFeature)
+            // if ((context.read<BookingBloc>().showBiddingVehicles ||
+            //         context.read<BookingBloc>().isMultiTypeVechiles) &&
+            //     arg.userData.showRideLaterFeature)
+
+            if (context.read<BookingBloc>().showBiddingVehicles)
               InkWell(
                 onTap: () {
                   showModalBottomSheet(

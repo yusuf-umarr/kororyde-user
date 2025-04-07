@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kororyde_user/common/tobitmap.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -74,7 +75,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   bool showPaymentChange = false;
   bool payAtDrop = false;
   bool isBottomDisabled = false;
-  bool showBiddingVehicles = true;
+  bool showBiddingVehicles = false;
   bool isEtaFilter = false;
   bool filterSuccess = false;
   bool isPop = false;
@@ -727,6 +728,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         if (count <= 0) {
           normalRideTimer?.cancel();
           add(NoDriversEvent());
+          dev.log("-- NoDriversEvent 1");
           isNormalRideSearching = false;
           isBiddingRideSearching = false;
           add(BookingCancelRequestEvent(
@@ -740,6 +742,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         if (count <= 0) {
           biddingRideSearchTimer?.cancel();
           add(NoDriversEvent());
+                    dev.log("-- NoDriversEvent 2");
+
           isNormalRideSearching = false;
           isBiddingRideSearching = false;
           add(BookingCancelRequestEvent(
@@ -1006,7 +1010,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         .handleError((onError) {
       etaDurationStream?.cancel();
     }).listen((event) async {
-    dev.  log('nearByStreamStart Listening');
+      dev.log('nearByStreamStart Listening');
       if (nearByEtaVechileList.isEmpty) {
         dev.log("nearByEtaVechileList is  not empty==========");
 
@@ -1133,12 +1137,15 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
           isBiddingRideSearching = false;
           if (mapType == 'google_map') {
             if (googleMapController != null) {
-              googleMapController!
-                  .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                target: LatLng(event.pickupAddressList.first.lat,
-                    event.pickupAddressList.first.lng),
-                zoom: 17.0,
-              ),),);
+              googleMapController!.animateCamera(
+                CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(event.pickupAddressList.first.lat,
+                        event.pickupAddressList.first.lng),
+                    zoom: 17.0,
+                  ),
+                ),
+              );
             }
           } else {
             if (fmController != null) {
@@ -1170,8 +1177,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         if (error.message == 'logout') {
           emit(LogoutState());
         }
-      },
-      (success) {
+
+        //TODO//cancel start here (this is temporary)
         requestData == null;
         isTripStart = false;
         isNormalRideSearching = false;
@@ -1202,6 +1209,45 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         rideStreamStart = null;
         driverDataStream = null;
         emit(BookingLoadingStopState());
+        dev.log("---booking canceled======");
+
+        ////cancel end
+      },
+      (success) {
+        requestData == null;
+        isTripStart = false;
+        isNormalRideSearching = false;
+        isBiddingRideSearching = false;
+        emit(BookingUpdateState());
+        if (requestData != null) {
+          if (requestData!.isBidRide == 1) {
+            FirebaseDatabase.instance
+                .ref('bid-meta/${requestData!.id}')
+                .remove();
+            if (biddingRequestStream?.isPaused == false ||
+                biddingRequestStream != null) {
+              biddingRequestStream?.cancel();
+            }
+            // emit(BookingRequestCancelState());
+          }
+          FirebaseDatabase.instance
+              .ref('requests')
+              .child(requestData!.id)
+              .update({'cancelled_by_user': true});
+        }
+        requestStreamStart?.cancel();
+        rideStreamUpdate?.cancel();
+        rideStreamStart?.cancel();
+        driverDataStream?.cancel();
+        requestStreamStart = null;
+        rideStreamUpdate = null;
+        rideStreamStart = null;
+        driverDataStream = null;
+        emit(BookingLoadingStopState());
+        dev.log("---booking canceled======");
+        // Naviga
+
+        emit(BookingRequestCancelState());
       },
     );
   }
@@ -2013,7 +2059,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> biddingCreateRequest(
       BiddingCreateRequestEvent event, Emitter<BookingState> emit) async {
-    dev.log("BiddingCreateRequestEvent======");
+    dev.log("---BiddingCreateRequestEvent======");
     isLoading = true;
     final data = await serviceLocator<BookingUsecase>().createRequest(
         userData: event.userData,
@@ -2046,6 +2092,8 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         scheduleDateTimeForReturn: event.scheduleDateTimeForReturn);
     data.fold(
       (error) {
+        dev.log("---BiddingCreateRequestEvent failed");
+
         isLoading = false;
         if (error.message == 'logout') {
           emit(LogoutState());
@@ -2055,6 +2103,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         }
       },
       (success) {
+        dev.log("---BiddingCreateRequestEvent is sucesss");
         isLoading = false;
         requestData = OnTripRequestData.fromJson(success["data"]);
         FirebaseDatabase.instance
@@ -2139,8 +2188,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> biddingFareUpdate(
       BiddingFareUpdateEvent event, Emitter<BookingState> emit) async {
-
-        dev.log("biddingFareUpdate called-==================");
+    dev.log("biddingFareUpdate called-==================");
     isLoading = true;
     await FirebaseDatabase.instance
         .ref()

@@ -523,7 +523,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           ));
         }
       }
-      dev.log("UserOnTripState----1");
+      dev.log("---UserOnTripState--has data:${tripData.acceptedAt}--1");
       emit(UserOnTripState(tripData: tripData));
     }
   }
@@ -694,12 +694,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 pickup: false,
               ));
             }
-          }
-
-          dev.log("UserOnTripState---2");
-          if (!isClosed) {
+             dev.log("UserOnTripState---2--has data${tripData.acceptedAt}");
+            //TODO---this is also temporary
+              if (!isClosed) {
             emit(UserOnTripState(tripData: tripData));
           }
+          }
+
+          // dev.log("UserOnTripState---2--has data${tripData.acceptedAt}");
+          // if (!isClosed) {
+          //   emit(UserOnTripState(tripData: tripData));
+          // }
         } else if (userData!.hasOngoingRide) {
           isMultipleRide = true;
           add(GetOnGoingRidesEvent());
@@ -904,10 +909,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             }
           }
           emit(HomeLoadingStopState());
-          add(UpdateLocationEvent(
+         if (!isClosed){
+              add(UpdateLocationEvent(
               latLng: currentLatLng,
               isFromHomePage: event.isFromHomePage,
               mapType: mapType));
+
+          }
+
+      
         } else {
           Position? position = await Geolocator.getLastKnownPosition();
           if (position != null) {
