@@ -551,44 +551,66 @@ class _BookingPageState extends State<BookingPage>
                                                                     context)
                                                                 .pop();
 
-                                                            context.read<BookingBloc>().add(BiddingCreateRequestEvent(
-                                                                userData: widget
-                                                                    .arg
-                                                                    .userData,
-                                                                vehicleData: context.read<BookingBloc>().isMultiTypeVechiles
-                                                                    ? context.read<BookingBloc>().sortedEtaDetailsList[context
-                                                                        .read<
-                                                                            BookingBloc>()
-                                                                        .selectedVehicleIndex]
-                                                                    : context.read<BookingBloc>().etaDetailsList[context
-                                                                        .read<
-                                                                            BookingBloc>()
-                                                                        .selectedVehicleIndex],
-                                                                pickupAddressList: widget
-                                                                    .arg
-                                                                    .pickupAddressList,
-                                                                dropAddressList: widget
-                                                                    .arg
-                                                                    .stopAddressList,
-                                                                selectedTransportType: widget
-                                                                    .arg
-                                                                    .transportType,
-                                                                paidAt: context.read<BookingBloc>().payAtDrop
-                                                                    ? 'Receiver'
-                                                                    : 'Sender',
-                                                                selectedPaymentType: context
-                                                                    .read<BookingBloc>()
-                                                                    .selectedPaymentType,
-                                                                scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
-                                                                goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
-                                                                goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
-                                                                offeredRideFare: context.read<BookingBloc>().farePriceController.text,
-                                                                polyLine: context.read<BookingBloc>().polyLine,
-                                                                isPetAvailable: context.read<BookingBloc>().petPreference,
-                                                                isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
-                                                                isOutstationRide: widget.arg.isOutstationRide,
-                                                                isRoundTrip: context.read<BookingBloc>().isRoundTrip,
-                                                                scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
+                                                                  context.read<BookingBloc>().add(
+                                                                                        BiddingCreateRequestEvent(
+                                                                                          userData: widget.arg.userData,
+                                                                                          vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex],
+                                                                                          pickupAddressList: widget.arg.pickupAddressList,
+                                                                                          dropAddressList: widget.arg.stopAddressList,
+                                                                                          selectedTransportType: widget.arg.transportType,
+                                                                                          paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender',
+                                                                                          selectedPaymentType: context.read<BookingBloc>().selectedPaymentType,
+                                                                                          scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
+                                                                                          goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
+                                                                                          goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
+                                                                                          offeredRideFare: context.read<BookingBloc>().farePriceController.text,
+                                                                                          polyLine: context.read<BookingBloc>().polyLine,
+                                                                                          isPetAvailable: context.read<BookingBloc>().petPreference,
+                                                                                          isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
+                                                                                          isOutstationRide: widget.arg.isOutstationRide,
+                                                                                          isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                                                                                          scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn,
+                                                                                        ),
+                                                                                      );
+
+                                                            // context.read<BookingBloc>().add((
+                                                            //     userData: widget
+                                                            //         .arg
+                                                            //         .userData,
+                                                            //     vehicleData: context.read<BookingBloc>().isMultiTypeVechiles
+                                                            //         ? context.read<BookingBloc>().sortedEtaDetailsList[context
+                                                            //             .read<
+                                                            //                 BookingBloc>()
+                                                            //             .selectedVehicleIndex]
+                                                            //         : context.read<BookingBloc>().etaDetailsList[context
+                                                            //             .read<
+                                                            //                 BookingBloc>()
+                                                            //             .selectedVehicleIndex],
+                                                            //     pickupAddressList: widget
+                                                            //         .arg
+                                                            //         .pickupAddressList,
+                                                            //     dropAddressList: widget
+                                                            //         .arg
+                                                            //         .stopAddressList,
+                                                            //     selectedTransportType: widget
+                                                            //         .arg
+                                                            //         .transportType,
+                                                            //     paidAt: context.read<BookingBloc>().payAtDrop
+                                                            //         ? 'Receiver'
+                                                            //         : 'Sender',
+                                                            //     selectedPaymentType: context
+                                                            //         .read<BookingBloc>()
+                                                            //         .selectedPaymentType,
+                                                            //     scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
+                                                            //     goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
+                                                            //     goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
+                                                            //     offeredRideFare: context.read<BookingBloc>().farePriceController.text,
+                                                            //     polyLine: context.read<BookingBloc>().polyLine,
+                                                            //     isPetAvailable: context.read<BookingBloc>().petPreference,
+                                                            //     isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
+                                                            //     isOutstationRide: widget.arg.isOutstationRide,
+                                                            //     isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                                                            //     scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
                                                           },
                                                           child: Text(
                                                             "Skip",
