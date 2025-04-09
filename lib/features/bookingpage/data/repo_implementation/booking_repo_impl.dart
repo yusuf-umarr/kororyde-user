@@ -166,10 +166,11 @@ class BookingRepositoryImpl implements BookingRepository {
     required bool isOutstationRide,
     required bool isRoundTrip,
     required String scheduleDateTimeForReturn,
+    required dynamic coShareMaxSeats,
+    required bool isCoShare,
   }) async {
     dynamic requestResponseModel;
     try {
-     
       Response response = await _bookingApi.createRequestApi(
         userData: userData,
         vehicleData: vehicleData,
@@ -193,6 +194,8 @@ class BookingRepositoryImpl implements BookingRepository {
         isOutstationRide: isOutstationRide,
         isRoundTrip: isRoundTrip,
         scheduleDateTimeForReturn: scheduleDateTimeForReturn,
+        coShareMaxSeats: coShareMaxSeats,
+        isCoShare: isCoShare,
       );
       // dev.log("---BiddingCreat===:${response.data}===");
 

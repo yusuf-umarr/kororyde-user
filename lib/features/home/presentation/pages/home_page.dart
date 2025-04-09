@@ -816,39 +816,28 @@ class _HomePageContentState extends State<HomePageContent>
         Row(
           children: [
             MyText(
-              text: 'Our services', //AppLocalizations.of(context)!.service,
+              text: 'Our services',
               textStyle: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                context.read<BottomNavCubit>().setSelectedIndex(1);
-              },
-              child: MyText(
-                text: 'See all', //AppLocalizations.of(context)!.service,
-                textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: AppColors.primary,
-                    ),
-              ),
             ),
           ],
         ),
         SizedBox(height: size.width * 0.06),
-        Row(
-          children: [
-            if (context.read<HomeBloc>().userData != null &&
-                (context
-                            .read<HomeBloc>()
-                            .userData!
-                            .enableModulesForApplications ==
-                        'taxi' ||
-                    context
-                            .read<HomeBloc>()
-                            .userData!
-                            .enableModulesForApplications ==
-                        'both'))
-              Expanded(
-                child: InkWell(
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              if (context.read<HomeBloc>().userData != null &&
+                  (context
+                              .read<HomeBloc>()
+                              .userData!
+                              .enableModulesForApplications ==
+                          'taxi' ||
+                      context
+                              .read<HomeBloc>()
+                              .userData!
+                              .enableModulesForApplications ==
+                          'both'))
+                InkWell(
                   onTap: () {
                     context
                         .read<HomeBloc>()
@@ -861,18 +850,24 @@ class _HomePageContentState extends State<HomePageContent>
                     child: Container(
                       // height: size.width * 0.19,
                       // width: size.width * 0.21,
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          Image.asset(
-                            'assets/png/rideIcon.png',
-                            // colorFilter:
-                            //     ColorFilter.mode(Colors.blue, BlendMode.srcIn),
-                            height: size.width * 0.10,
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.serviceGreen),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 15),
+                            child: Image.asset(
+                              'assets/png/rideIcon.png',
+                              height: size.width * 0.07,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           MyText(
@@ -887,21 +882,19 @@ class _HomePageContentState extends State<HomePageContent>
                     ),
                   ),
                 ),
-              ),
-            const SizedBox(width: 20),
-            if (context.read<HomeBloc>().userData != null &&
-                (context
-                            .read<HomeBloc>()
-                            .userData!
-                            .enableModulesForApplications ==
-                        'delivery' ||
-                    context
-                            .read<HomeBloc>()
-                            .userData!
-                            .enableModulesForApplications ==
-                        'both'))
-              Expanded(
-                child: InkWell(
+              const SizedBox(width: 20),
+              if (context.read<HomeBloc>().userData != null &&
+                  (context
+                              .read<HomeBloc>()
+                              .userData!
+                              .enableModulesForApplications ==
+                          'delivery' ||
+                      context
+                              .read<HomeBloc>()
+                              .userData!
+                              .enableModulesForApplications ==
+                          'both'))
+                InkWell(
                   onTap: () {
                     context
                         .read<HomeBloc>()
@@ -934,12 +927,10 @@ class _HomePageContentState extends State<HomePageContent>
                     ),
                   ),
                 ),
-              ),
-            const SizedBox(width: 20),
-            if (context.read<HomeBloc>().userData != null &&
-                (context.read<HomeBloc>().userData!.showRentalRide))
-              Expanded(
-                child: InkWell(
+              const SizedBox(width: 20),
+              if (context.read<HomeBloc>().userData != null &&
+                  (context.read<HomeBloc>().userData!.showRentalRide))
+                InkWell(
                   onTap: () {
                     context
                         .read<HomeBloc>()
@@ -971,8 +962,43 @@ class _HomePageContentState extends State<HomePageContent>
                     ),
                   ),
                 ),
-              ),
-          ],
+              const SizedBox(width: 20),
+              if (context.read<HomeBloc>().userData != null &&
+                  (context.read<HomeBloc>().userData!.showRentalRide))
+                InkWell(
+                  onTap: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
+                  },
+                  child: Card(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            'assets/png/rentalIcon.png',
+                            height: size.width * 0.11,
+                          ),
+                          const SizedBox(height: 10),
+                          MyText(
+                            text: AppLocalizations.of(context)!.rental,
+                            textStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ],
     );

@@ -62,6 +62,8 @@ abstract class BookingRepository {
     required bool isOutstationRide,
     required bool isRoundTrip,
     required String scheduleDateTimeForReturn,
+    required dynamic coShareMaxSeats,
+    required bool isCoShare,
   });
 
   // createRequest

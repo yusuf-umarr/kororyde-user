@@ -53,6 +53,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   List<fmlt.LatLng> fmpoly = [];
   late DraggableScrollableController _draggableScrollableController;
 
+  bool isCoShare = false;
+  double coShareMaxSeats = 0;
+
   dynamic vsync;
   DraggableScrollableController get draggableScrollableController =>
       _draggableScrollableController;
@@ -227,6 +230,48 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     on<DetailViewUpdateEvent>(enableDetailsViewFunction);
     // on<FilterApplyEvent>(filterEtaDetails);
     on<WalletPageReUpdateEvents>(walletPageReUpdate);
+    on<EnableCoShareEvent>(enableCoshare);
+    on<MaxCoShareSeatEvent>(maxCoshareSeat);
+    on<AdjustMaxSeatEvent>(increaseMaxSeat);
+  }
+
+  FutureOr<void> enableCoshare(
+      EnableCoShareEvent event, Emitter<BookingState> emit) async {
+    isCoShare = event.isCoShare;
+
+    log("--isCoShare here:$isCoShare");
+  }
+
+  FutureOr<void> maxCoshareSeat(
+      MaxCoShareSeatEvent event, Emitter<BookingState> emit) async {
+    coShareMaxSeats = event.coShareMaxSeats;
+
+    log("--coShareMaxSeats here:$coShareMaxSeats");
+  }
+
+  // FutureOr<void> increaseMaxSeat(
+  //     AdjustMaxSeatEvent event, Emitter<BookingState> emit) async {
+  //   coShareMaxSeats++;
+
+  //   log("--coShareMaxSeats count:$coShareMaxSeats");
+  // }
+
+  FutureOr<void> increaseMaxSeat(
+    AdjustMaxSeatEvent event,
+    Emitter<BookingState> emit,
+  ) async {
+    if (event.isAdd) {
+      if (coShareMaxSeats < 3) coShareMaxSeats++;
+    } else {
+      coShareMaxSeats =
+          coShareMaxSeats > 1 ? coShareMaxSeats - 1 : 1; // Just as an example
+    }
+
+    log("--coShareMaxSeats count:$coShareMaxSeats");
+
+    //  emit(BookingUpdateState());
+
+    emit(BookingUpdatedState(coShareMaxSeats: coShareMaxSeats));
   }
 
   void etaScrollingToMin(double targetMinChildSize) {
@@ -742,7 +787,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         if (count <= 0) {
           biddingRideSearchTimer?.cancel();
           add(NoDriversEvent());
-                    dev.log("-- NoDriversEvent 2");
+          dev.log("-- NoDriversEvent 2");
 
           isNormalRideSearching = false;
           isBiddingRideSearching = false;
@@ -1084,35 +1129,38 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     isLoading = true;
     emit(BookingUpdateState());
     final data = await serviceLocator<BookingUsecase>().createRequest(
-        userData: event.userData,
-        vehicleData: event.vehicleData,
-        pickupAddressList: event.pickupAddressList,
-        dropAddressList: event.dropAddressList,
-        selectedTransportType: event.selectedTransportType,
-        paidAt: event.paidAt,
-        selectedPaymentType: event.selectedPaymentType,
-        scheduleDateTime: event.scheduleDateTime,
-        isEtaRental: event.isRentalRide,
-        isBidRide: false,
-        goodsTypeId: event.goodsTypeId,
-        goodsQuantity:
-            event.goodsQuantity.isEmpty ? 'Loose' : event.goodsQuantity,
-        offeredRideFare: "",
-        polyLine: event.polyLine,
-        isPetAvailable: event.isPetAvailable,
-        isLuggageAvailable: event.isLuggageAvailable,
-        isAirport: ((event.pickupAddressList.first.isAirportLocation != null &&
-                    event.pickupAddressList.first.isAirportLocation!) ||
-                (event.dropAddressList.any((element) =>
-                    (element.isAirportLocation != null &&
-                        element.isAirportLocation!))))
-            ? true
-            : false,
-        isParcel: (event.selectedTransportType == 'delivery') ? true : false,
-        packageId: selectedPackageId,
-        isOutstationRide: false,
-        isRoundTrip: false,
-        scheduleDateTimeForReturn: '');
+      userData: event.userData,
+      vehicleData: event.vehicleData,
+      pickupAddressList: event.pickupAddressList,
+      dropAddressList: event.dropAddressList,
+      selectedTransportType: event.selectedTransportType,
+      paidAt: event.paidAt,
+      selectedPaymentType: event.selectedPaymentType,
+      scheduleDateTime: event.scheduleDateTime,
+      isEtaRental: event.isRentalRide,
+      isBidRide: false,
+      goodsTypeId: event.goodsTypeId,
+      goodsQuantity:
+          event.goodsQuantity.isEmpty ? 'Loose' : event.goodsQuantity,
+      offeredRideFare: "",
+      polyLine: event.polyLine,
+      isPetAvailable: event.isPetAvailable,
+      isLuggageAvailable: event.isLuggageAvailable,
+      isAirport: ((event.pickupAddressList.first.isAirportLocation != null &&
+                  event.pickupAddressList.first.isAirportLocation!) ||
+              (event.dropAddressList.any((element) =>
+                  (element.isAirportLocation != null &&
+                      element.isAirportLocation!))))
+          ? true
+          : false,
+      isParcel: (event.selectedTransportType == 'delivery') ? true : false,
+      packageId: selectedPackageId,
+      isOutstationRide: false,
+      isRoundTrip: false,
+      scheduleDateTimeForReturn: '',
+      isCoShare: false,
+      coShareMaxSeats: 0,
+    );
     data.fold(
       (error) {
         isLoading = false;
@@ -2062,34 +2110,37 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
     dev.log("---BiddingCreateRequestEvent======");
     isLoading = true;
     final data = await serviceLocator<BookingUsecase>().createRequest(
-        userData: event.userData,
-        vehicleData: event.vehicleData,
-        pickupAddressList: event.pickupAddressList,
-        dropAddressList: event.dropAddressList,
-        selectedTransportType: event.selectedTransportType,
-        paidAt: event.paidAt,
-        selectedPaymentType: event.selectedPaymentType,
-        scheduleDateTime: event.scheduleDateTime,
-        isEtaRental: false,
-        isBidRide: true,
-        goodsTypeId: event.goodsTypeId,
-        goodsQuantity:
-            event.goodsQuantity.isEmpty ? 'Loose' : event.goodsQuantity,
-        offeredRideFare: event.offeredRideFare,
-        polyLine: event.polyLine,
-        isPetAvailable: event.isPetAvailable,
-        isLuggageAvailable: event.isLuggageAvailable,
-        isAirport: ((event.pickupAddressList.first.isAirportLocation != null &&
-                    event.pickupAddressList.first.isAirportLocation!) ||
-                (event.dropAddressList.any((element) =>
-                    (element.isAirportLocation != null &&
-                        element.isAirportLocation!))))
-            ? true
-            : false,
-        isParcel: (event.selectedTransportType == 'delivery') ? true : false,
-        isOutstationRide: event.isOutstationRide,
-        isRoundTrip: event.isRoundTrip,
-        scheduleDateTimeForReturn: event.scheduleDateTimeForReturn);
+      userData: event.userData,
+      vehicleData: event.vehicleData,
+      pickupAddressList: event.pickupAddressList,
+      dropAddressList: event.dropAddressList,
+      selectedTransportType: event.selectedTransportType,
+      paidAt: event.paidAt,
+      selectedPaymentType: event.selectedPaymentType,
+      scheduleDateTime: event.scheduleDateTime,
+      isEtaRental: false,
+      isBidRide: true,
+      goodsTypeId: event.goodsTypeId,
+      goodsQuantity:
+          event.goodsQuantity.isEmpty ? 'Loose' : event.goodsQuantity,
+      offeredRideFare: event.offeredRideFare,
+      polyLine: event.polyLine,
+      isPetAvailable: event.isPetAvailable,
+      isLuggageAvailable: event.isLuggageAvailable,
+      isAirport: ((event.pickupAddressList.first.isAirportLocation != null &&
+                  event.pickupAddressList.first.isAirportLocation!) ||
+              (event.dropAddressList.any((element) =>
+                  (element.isAirportLocation != null &&
+                      element.isAirportLocation!))))
+          ? true
+          : false,
+      isParcel: (event.selectedTransportType == 'delivery') ? true : false,
+      isOutstationRide: event.isOutstationRide,
+      isRoundTrip: event.isRoundTrip,
+      scheduleDateTimeForReturn: event.scheduleDateTimeForReturn,
+      isCoShare: isCoShare,
+      coShareMaxSeats: coShareMaxSeats,
+    );
     data.fold(
       (error) {
         dev.log("---BiddingCreateRequestEvent failed");

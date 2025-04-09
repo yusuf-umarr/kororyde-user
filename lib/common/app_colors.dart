@@ -71,5 +71,15 @@ class AppColors {
   static const Color whiteText = Color(0xFFFFFFFF);
   static const Color blackText = Color(0xFF000000);
   static const Color purple = Color(0xFF4D0099);
+
   static const Color orange = Color(0xFFB35F00);
+
+  //service
+   static const Color serviceGreen = Color(0xFF609400);
+   static const Color serviceYellow = Color(0xFFFFD700);
+   static const Color servicePurple = Color(0xFF5700C2);
+   static const Color serviceRed = Color(0xFFC20000);
+   static const Color serviceBrown = Color(0xFFCD7F32);
+  //#609400 green //#FFD700 yellow //purple #5700C2 blue #2D7CD0 red #C20000 //brown #CD7F32
+
 }

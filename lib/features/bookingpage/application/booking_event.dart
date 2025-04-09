@@ -119,6 +119,7 @@ class BookingCreateRequestEvent extends BookingEvent {
   final bool isLuggageAvailable;
   final String paidAt;
 
+
   BookingCreateRequestEvent({
     required this.userData,
     required this.vehicleData,
@@ -134,6 +135,7 @@ class BookingCreateRequestEvent extends BookingEvent {
     required this.isPetAvailable,
     required this.isLuggageAvailable,
     required this.paidAt,
+
   });
 }
 
@@ -209,6 +211,8 @@ class BiddingCreateRequestEvent extends BookingEvent {
   final bool isOutstationRide;
   final bool isRoundTrip;
   final String scheduleDateTimeForReturn;
+    final bool isCoShare;
+  final dynamic coShareMaxSeats;
 
   BiddingCreateRequestEvent({
     required this.userData,
@@ -228,6 +232,8 @@ class BiddingCreateRequestEvent extends BookingEvent {
     required this.isOutstationRide,
     required this.isRoundTrip,
     required this.scheduleDateTimeForReturn,
+    this.isCoShare=false,
+    this.coShareMaxSeats=0,
   });
 }
 
@@ -344,6 +350,21 @@ class DetailViewUpdateEvent extends BookingEvent {
   final bool detailView;
 
   DetailViewUpdateEvent(this.detailView);
+}
+class EnableCoShareEvent extends BookingEvent {
+  final bool isCoShare;
+
+  EnableCoShareEvent({required this.isCoShare});
+}
+class MaxCoShareSeatEvent extends BookingEvent {
+  final dynamic coShareMaxSeats;
+
+  MaxCoShareSeatEvent({required this.coShareMaxSeats});
+}
+class AdjustMaxSeatEvent extends BookingEvent {
+  final bool isAdd;
+
+  AdjustMaxSeatEvent({required this.isAdd});
 }
 
 class FilterApplyEvent extends BookingEvent {

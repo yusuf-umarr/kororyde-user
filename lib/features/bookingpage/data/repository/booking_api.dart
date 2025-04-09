@@ -85,7 +85,7 @@ class BookingApi {
             if (stopList.isNotEmpty) 'stops': jsonEncode(stopList),
             if (isOutstationRide) 'is_out_station': '1',
           }));
-      log("post eta===== response :${response}");
+      // log("post eta===== response :${response}");
       return response;
     } catch (e) {
       //debugPrint(e.toString());
@@ -144,9 +144,12 @@ class BookingApi {
     bool? isAirport,
     bool? isParcel,
     String? packageId,
+    required dynamic coShareMaxSeats,
+    required bool isCoShare,
   }) async {
     try {
-      dev.log("selectedTransportType:${selectedTransportType}");
+      dev.log("--isCoShare:${isCoShare}");
+      dev.log("--coShareMaxSeats:${coShareMaxSeats}");
       final token = await AppSharedPreference.getToken();
       Response response = await DioProviderImpl().post(
         (selectedTransportType == 'taxi')
@@ -221,8 +224,20 @@ class BookingApi {
           if (isOutstationRide && isRoundTrip) 'is_round_trip': '1',
           if (isOutstationRide && isRoundTrip)
             'return_time': scheduleDateTimeForReturn,
+          if(isCoShare) 'is_co_share': isCoShare,
+         
+          if (isCoShare && coShareMaxSeats > 0)
+            'co_share_max_seats': coShareMaxSeats
         }),
       );
+
+      /*
+       'is_co_share': isCoShare,
+          'co_share_max_seats': coShareMaxSeats
+
+           if (isCoShare && coShareMaxSeats > 0)
+            'co_share_max_seats': coShareMaxSeats
+      */
       // log(" cre8 pickupAddressList[0].lat :${pickupAddressList[0].lat}");
       // log(" cre8 pickupAddressList[0].lng :${pickupAddressList[0].lng}");
       // log(" cre8 pickupAddressList[0].address :${pickupAddressList[0].address}");
@@ -249,7 +264,7 @@ class BookingApi {
       // 'is_round_trip': '1',
       //'is_out_station': '1',
 
-      log("createRequest=====:${response}");
+      log("--createRequest=====:${response}");
       return response;
     } catch (e) {
       //debugPrint(e.toString());

@@ -120,3 +120,14 @@ class WalletPageReUpdateStates extends BookingState {
       required this.currencySymbol,
       required this.money});
 }
+
+
+// abstract class BookingState {}
+
+// class BookingInitial extends BookingState {}
+
+class BookingUpdatedState extends BookingState {
+  final double coShareMaxSeats;
+
+  BookingUpdatedState({required this.coShareMaxSeats});
+}

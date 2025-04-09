@@ -85,6 +85,8 @@ class BookingUsecase {
     required bool isOutstationRide,
     required bool isRoundTrip,
     required String scheduleDateTimeForReturn,
+    required bool isCoShare,
+    required dynamic coShareMaxSeats,
   }) async {
     return _bookingRepository.createRequest(
       userData: userData,
@@ -109,6 +111,8 @@ class BookingUsecase {
       isOutstationRide :isOutstationRide,
       isRoundTrip: isRoundTrip,
       scheduleDateTimeForReturn: scheduleDateTimeForReturn,
+      isCoShare: isCoShare,
+      coShareMaxSeats: coShareMaxSeats,
     );
   }
 
