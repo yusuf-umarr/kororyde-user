@@ -43,15 +43,23 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
           ),
         ),
         title: MyText(
-            text: "Available ride",
-            textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                color: Theme.of(context).primaryColorDark,
-                fontWeight: FontWeight.w500)),
+          text: "Available co-sharing rides",
+          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(context).primaryColorDark,
+              fontWeight: FontWeight.w500),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0).copyWith(top: size.height * 0.05),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
+            MyText(
+              text: "17 co-sharing rides are available at the moment",
+              textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: AppColors.black.withOpacity(0.5),
+                  ),
+            ),
+            SizedBox(height: size.height * 0.05),
             AvailableRideCard(),
             AvailableRideCard(),
             AvailableRideCard(),
@@ -73,123 +81,109 @@ class AvailableRideCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => RideDetailPage()));
-        // showModalBottomSheet(
-        //     context: context,
-        //     isScrollControlled: true,
-        //     builder: (_) {
-        //       return BlocProvider.value(
-        //           value: BlocProvider.of<HomeBloc>(context),
-        //           child:
 
-        //           );
-        //     });
+          Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<HomeBloc>(),
+                          child: RideDetailPage(isRequest: false),
+                        ),
+                      ),);
+        
+
+
+        
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20),
         width: size.width,
-        height: size.height * 0.125,
+        // height: size.height * 0.125,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             color: AppColors.grey4.withOpacity(0.2)),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-                width: size.width * 0.22,
-                child: Image.asset("assets/png/rideIcon.png")),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyText(
-                    text: "Toyotal Camry (Black)",
-                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Theme.of(context).primaryColorDark,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12),
-                  ),
-                  MyText(
-                    text: "Francis Adeoti",
-                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset("assets/png/airplaneSeat.png"),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: MyText(
-                          text: "2 seats available",
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12),
-                        ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MyText(
+                      text: "Abiola John",
+                      textStyle:
+                          Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                color: Theme.of(context).primaryColorDark,
+                                fontWeight: FontWeight.w500,
+                              ),
+                    ),
+                    MyText(
+                      text: "Toyota Camry (Black)",
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(
+                              color: Colors.black.withOpacity(0.5),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset("assets/svg/airplaneSeat.svg"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5),
+                      child: MyText(
+                        text: "2 seats available",
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyText(
-                    text: "10m. away",
-                    textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                        fontSize: 12),
-                  ),
-                  MyText(
-                    text: "Yab0003",
-                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13),
-                  ),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15),
+                MyText(
+                  text: "Ride destination",
+                  textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Colors.black.withOpacity(0.5),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: SvgPicture.asset("assets/svg/destinationAddr.svg"),
+                    ),
+                    Expanded(
+                      child: MyText(
+                        text:
+                            "Elegushi Royal beach, Lekki Elegushi Royal beach, Lekki",
+                        textStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.black,
+                                ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     MyText(
-            //       text: "10mins away",
-            //       textStyle: Theme.of(context)
-            //           .textTheme
-            //           .bodySmall!
-            //           .copyWith(
-            //               color: Colors.grey,
-            //               fontWeight: FontWeight.w400,
-            //               fontSize: 12),
-            //     ),
-            //     MyText(
-            //       text: "20,000",
-            //       textStyle:
-            //           Theme.of(context).textTheme.bodySmall!.copyWith(
-            //                 color: AppColors.primary,
-            //                 fontWeight: FontWeight.w500,
-            //                 fontSize: 12,
-            //               ),
-            //     ),
-            //   ],
-            // )
           ],
         ),
       ),

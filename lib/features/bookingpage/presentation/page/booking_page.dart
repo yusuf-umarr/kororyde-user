@@ -496,8 +496,8 @@ class _BookingPageState extends State<BookingPage>
                                       context: context,
                                       shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(50),
-                                            topRight: Radius.circular(50)),
+                                            topLeft: Radius.circular(15),
+                                            topRight: Radius.circular(15)),
                                       ),
                                       builder: (_) {
                                         return BlocProvider.value(
@@ -699,10 +699,10 @@ class _BookingPageState extends State<BookingPage>
                                                                           .only(
                                                                     topLeft: Radius
                                                                         .circular(
-                                                                            20),
+                                                                            15),
                                                                     topRight: Radius
                                                                         .circular(
-                                                                      20,
+                                                                      15,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -771,7 +771,7 @@ class _BookingPageState extends State<BookingPage>
                                                                                           ),
                                                                                         ),
                                                                                         child: Icon(
-                                                                                          Icons.add,
+                                                                                          Icons.remove,
                                                                                           color: Colors.red,
                                                                                         ),
                                                                                       ),
@@ -794,7 +794,7 @@ class _BookingPageState extends State<BookingPage>
                                                                                         //     );
 
                                                                                         setState(() {
-                                                                                          if(coShareMaxSeats <3)coShareMaxSeats++;
+                                                                                          if (coShareMaxSeats < 3) coShareMaxSeats++;
                                                                                         });
                                                                                       },
                                                                                       child: Container(
@@ -833,12 +833,12 @@ class _BookingPageState extends State<BookingPage>
                                                                                         style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
                                                                                         //#609400 green //#FFD700 yellow //purple #5700C2 blue #2D7CD0 red #C20000 //brown #CD7F32
                                                                                         onPressed: () {
-                                                                                          // context.read<BookingBloc>().add(
-                                                                                          // MaxCoShareSeatEvent(
-                                                                                          //   coShareMaxSeats: double.parse(context.read<BookingBloc>().coShareMaxSeats),
-                                                                                          // ),
+                                                                                          context.read<BookingBloc>().add(
+                                                                                          MaxCoShareSeatEvent(
+                                                                                            coShareMaxSeats: coShareMaxSeats,
+                                                                                          ),
 
-                                                                                          // );
+                                                                                          );
                                                                                           context.read<BookingBloc>().add(
                                                                                                 BiddingCreateRequestEvent(
                                                                                                   userData: widget.arg.userData,
@@ -3762,47 +3762,6 @@ class _BookingPageState extends State<BookingPage>
           ],
         ),
       ),
-    );
-  }
-}
-
-class DropdownExample extends StatefulWidget {
-  final Function(String) onchanged;
-
-  const DropdownExample({
-    super.key,
-    required this.onchanged,
-  });
-
-  @override
-  _DropdownExampleState createState() => _DropdownExampleState();
-}
-
-class _DropdownExampleState extends State<DropdownExample> {
-  String? selectedValue;
-  List<String> items = [
-    '1',
-    '2',
-    '3',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: selectedValue,
-      hint: Text('Select seat'),
-      onChanged: (String? newValue) {
-        setState(() {
-          selectedValue = newValue;
-          widget.onchanged(selectedValue!);
-        });
-      },
-      items: items.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
     );
   }
 }

@@ -80,101 +80,97 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: enabled,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      obscureText: obscureText,
-      // obscuringCharacter: '*',
-      cursorColor: cursorColor,
-      readOnly: readOnly!,
-      focusNode: focusNode,
-      onChanged: onChange,
-      onTap: onTap,
-      validator: validator,
-      onFieldSubmitted: onSubmitted,
-      textAlign: textAlign,
-      style: style ??
-          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                overflow: TextOverflow.ellipsis,
-              ),
-      maxLength: maxLength,
-      autofocus: autofocus!,
-      decoration: InputDecoration(
-        isDense: dense ?? true,
-        suffix: suffix,
-        suffixIcon: suffixIcon,
-        contentPadding: contentPadding ??
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-        hintText: hintText,
-        hintStyle: hintTextStyle ??
-            Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).hintColor),
-        filled: filled ?? true,
-        fillColor: fillColor ?? Theme.of(context).scaffoldBackgroundColor,
-        errorStyle: TextStyle(
-          color: AppColors.red.withOpacity(0.8),
-          fontWeight: FontWeight.bold,
-          fontSize: 13,
-        ),
-        labelText: labelText,
-        labelStyle: labelStyle ??
-            Theme.of(context).textTheme.labelLarge!.copyWith(
-                fontSize: 17.5,
-                color: Theme.of(context).disabledColor,
-                fontWeight: FontWeight.w500),
-        floatingLabelBehavior: labelBehavior ?? FloatingLabelBehavior.always,
-        suffixIconConstraints: suffixConstraints,
-        focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AppColors.errorLight.withOpacity(0.8), width: 1),
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
-        errorBorder: focusedBorder ??
-            OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.errorLight.withOpacity(0.5),
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-        focusedBorder: focusedBorder ??
-            OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).hintColor, width: 1),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-        enabledBorder: enabledBorder ??
-            OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.8),
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-        disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).hintColor,
-            width: 1,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child: TextFormField(
+        enabled: enabled,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        obscureText: obscureText,
+        // obscuringCharacter: '*',
+        cursorColor: cursorColor,
+        readOnly: readOnly!,
+        focusNode: focusNode,
+        onChanged: onChange,
+        onTap: onTap,
+        validator: validator,
+        onFieldSubmitted: onSubmitted,
+        textAlign: textAlign,
+        style: style ??
+            Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  overflow: TextOverflow.ellipsis,
+                ),
+        maxLength: maxLength,
+        autofocus: autofocus!,
+        decoration: InputDecoration(
+          isDense: dense ?? true,
+          suffix: suffix,
+          suffixIcon: suffixIcon,
+          contentPadding: contentPadding ??
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+          hintText: hintText,
+          hintStyle: hintTextStyle ??
+              Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).hintColor),
+          filled: filled ?? true,
+          fillColor: fillColor ?? Colors.grey.withOpacity(0.2),
+          errorStyle: TextStyle(
+            color: AppColors.red.withOpacity(0.8),
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
           ),
-          borderRadius: BorderRadius.circular(borderRadius),
+          labelText: labelText,
+          labelStyle: labelStyle ??
+              Theme.of(context).textTheme.labelLarge!.copyWith(
+                  fontSize: 17.5,
+                  color: Theme.of(context).disabledColor,
+                  fontWeight: FontWeight.w500),
+          floatingLabelBehavior: labelBehavior ?? FloatingLabelBehavior.always,
+          suffixIconConstraints: suffixConstraints,
+          // Remove all borders
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+          // focusedErrorBorder: OutlineInputBorder(
+          //   borderSide: BorderSide.none,
+          //   borderRadius: BorderRadius.circular(borderRadius),
+          // ),
+          // errorBorder: focusedBorder ??
+          //     OutlineInputBorder(
+          //       borderSide: BorderSide(
+          //         color: AppColors.errorLight.withOpacity(0.5),
+          //         width: 1,
+          //       ),
+          //       borderRadius: BorderRadius.circular(borderRadius),
+          //     ),
+          // focusedBorder: focusedBorder ??
+          //     OutlineInputBorder(
+          //       borderSide: BorderSide.none,
+          //       borderRadius: BorderRadius.circular(borderRadius),
+          //     ),
+          // enabledBorder: enabledBorder ??
+          //     OutlineInputBorder(
+          //       borderSide: BorderSide.none,
+          //       borderRadius: BorderRadius.circular(borderRadius),
+          //     ),
+          // disabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide.none,
+          //   borderRadius: BorderRadius.circular(borderRadius),
+          // ),
+          prefixIconConstraints: prefixConstraints,
+          prefixIcon: prefixIcon,
         ),
-        prefixIconConstraints: prefixConstraints,
-        prefixIcon: prefixIcon,
-        // constraints: BoxConstraints(
-        //   maxWidth: double.infinity,
-        //   minHeight: MediaQuery.of(context).size.width * 0.1,
-        //   maxHeight: MediaQuery.of(context).size.width * 0.1,
-        // ),
+        inputFormatters: inputFormatters,
+        maxLines: maxLine == 0 ? null : maxLine,
+        textInputAction: textInputAction ?? TextInputAction.done,
+        controller: controller,
+        keyboardType: keyboardType ?? TextInputType.multiline,
       ),
-      inputFormatters: inputFormatters,
-      maxLines: maxLine == 0 ? null : maxLine,
-      textInputAction: textInputAction ?? TextInputAction.done,
-      controller: controller,
-      keyboardType: keyboardType ?? TextInputType.multiline,
     );
   }
 }

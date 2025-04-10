@@ -54,7 +54,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   late DraggableScrollableController _draggableScrollableController;
 
   bool isCoShare = false;
-  double coShareMaxSeats = 0;
+  dynamic coShareMaxSeats;
 
   dynamic vsync;
   DraggableScrollableController get draggableScrollableController =>

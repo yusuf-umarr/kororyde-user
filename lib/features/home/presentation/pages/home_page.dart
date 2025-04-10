@@ -7,9 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:flutter_svg/svg.dart';
 import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
+import 'package:kororyde_user/features/bill_payment/presentation/customer_wallet.dart';
+import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
 import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_on_going_rides.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_page_shimmer.dart';
@@ -564,7 +567,118 @@ class _HomePageContentState extends State<HomePageContent>
                     color: AppColors.primary,
                   ),
                   child: const Text(
-                    "Join CoShare",
+                    "Join\nCoShare",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 10,
+              top: size.height * 0.2,
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    isScrollControlled: true,
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(
+                          15,
+                        ),
+                      ),
+                    ),
+                    builder: (_) {
+                      return BlocProvider.value(
+                        value: context.read<HomeBloc>(),
+                        child: StatefulBuilder(builder: (context, setState) {
+                          return Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10)
+                                    .copyWith(top: 20),
+                                height: size.height * 0.6,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          MyText(
+                                            text: "Incoming co-share",
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Divider(),
+                                      SizedBox(height: 20),
+                                      IncomingRequestCard(),
+                                      IncomingRequestCard(),
+                                      IncomingRequestCard(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: 20,
+                                top: 20,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        }),
+                      );
+                      // );
+                    },
+                  );
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   CosharePage.routeName,
+                  //   arguments: DestinationPageArguments(
+                  //       title: context.read<HomeBloc>().selectedServiceType == 0
+                  //           ? 'Taxi'
+                  //           : 'Delivery',
+                  //       pickupAddress: context.read<HomeBloc>().currentLocation,
+                  //       pickupLatLng: context.read<HomeBloc>().currentLatLng,
+                  //       // dropAddress: 'state.dropAddress',
+                  //       // dropLatLng: 'state.dropLatLng',
+                  //       userData: context.read<HomeBloc>().userData!,
+                  //       pickUpChange: false,
+                  //       transportType:
+                  //           context.read<HomeBloc>().selectedServiceType == 0
+                  //               ? 'taxi'
+                  //               : 'delivery',
+                  //       isOutstationRide: false,
+                  //       mapType: context.read<HomeBloc>().mapType),
+                  // );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: AppColors.primary,
+                  ),
+                  child: const Text(
+                    "CoShare\nrequests",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -848,25 +962,26 @@ class _HomePageContentState extends State<HomePageContent>
                   },
                   child: Card(
                     child: Container(
-                      // height: size.width * 0.19,
-                      // width: size.width * 0.21,
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: AppColors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
                           Container(
+                            width: size.width * 0.22,
+                            height: size.height * 0.09,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: AppColors.serviceGreen),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 15),
+                              horizontal: 8,
+                            ),
                             child: Image.asset(
                               'assets/png/rideIcon.png',
-                              height: size.width * 0.07,
+                              height: size.width * 0.05,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -902,16 +1017,27 @@ class _HomePageContentState extends State<HomePageContent>
                   },
                   child: Card(
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          Image.asset(
-                            'assets/png/deliveryIcon.png',
-                            height: size.width * 0.10,
+                          Container(
+                            width: size.width * 0.22,
+                            height: size.height * 0.09,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.serviceYellow),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            child: Image.asset(
+                              'assets/png/deliveryIcon.png',
+                              height: size.width * 0.05,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           MyText(
@@ -938,16 +1064,27 @@ class _HomePageContentState extends State<HomePageContent>
                   },
                   child: Card(
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          Image.asset(
-                            'assets/png/rentalIcon.png',
-                            height: size.width * 0.11,
+                          Container(
+                            width: size.width * 0.22,
+                            height: size.height * 0.09,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.servicePurple),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            child: Image.asset(
+                              'assets/png/rentalIcon.png',
+                              height: size.width * 0.05,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           MyText(
@@ -967,26 +1104,85 @@ class _HomePageContentState extends State<HomePageContent>
                   (context.read<HomeBloc>().userData!.showRentalRide))
                 InkWell(
                   onTap: () {
-                    context
-                        .read<HomeBloc>()
-                        .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<HomeBloc>(),
+                          child: CustomerWalletScreen(),
+                        ),
+                      ),
+                    );
                   },
                   child: Card(
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
-                          Image.asset(
-                            'assets/png/rentalIcon.png',
-                            height: size.width * 0.11,
+                          Container(
+                            width: size.width * 0.22,
+                            height: size.height * 0.09,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.serviceRed),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            child: Image.asset(
+                              'assets/png/invest.png',
+                              height: size.width * 0.11,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           MyText(
-                            text: AppLocalizations.of(context)!.rental,
+                            text: "Bill payment",
+                            textStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 20),
+              if (context.read<HomeBloc>().userData != null &&
+                  (context.read<HomeBloc>().userData!.showRentalRide))
+                InkWell(
+                  onTap: () {},
+                  child: Card(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: size.width * 0.22,
+                            height: size.height * 0.09,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: AppColors.serviceBrown),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                            ),
+                            child: Image.asset(
+                              'assets/png/advertIcon.png',
+                              height: size.width * 0.11,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          MyText(
+                            text: "Advertise",
                             textStyle:
                                 Theme.of(context).textTheme.bodySmall!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -1529,5 +1725,606 @@ class _HomePageContentState extends State<HomePageContent>
         },
       ),
     );
+  }
+}
+
+class IncomingRequestCard extends StatefulWidget {
+  const IncomingRequestCard({
+    super.key,
+  });
+
+  @override
+  State<IncomingRequestCard> createState() => _IncomingRequestCardState();
+}
+
+class _IncomingRequestCardState extends State<IncomingRequestCard> {
+  final TextEditingController _offerController =
+      TextEditingController(text: '100');
+  int coShareMaxSeats = 100;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey.withOpacity(
+          0.1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.asset(
+                  "assets/images/default_profile.png",
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyText(
+                    text: "Adam thomas",
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: SvgPicture.asset("assets/svg/sourceAddr.svg"),
+                      ),
+                      MyText(
+                        text: "Eligushi lekki thomas",
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child:
+                            SvgPicture.asset("assets/svg/destinationAddr.svg"),
+                      ),
+                      MyText(
+                        text: "Eligushi lekki thomas",
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<HomeBloc>(),
+                          child: RideDetailPage(isRequest: true),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.primary.withOpacity(0.1)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: AppColors.primary,
+                        ),
+                        Text(
+                          "View profile",
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 11,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.primary.withOpacity(0.1)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.chat,
+                          color: AppColors.primary,
+                        ),
+                        Text(
+                          "Message",
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 11,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      isScrollControlled: true,
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(
+                            15,
+                          ),
+                        ),
+                      ),
+                      builder: (_) {
+                        final Size size = MediaQuery.of(context).size;
+                        return BlocProvider.value(
+                          value: context.read<HomeBloc>(),
+                          child: StatefulBuilder(builder: (context, setState) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10)
+                                      .copyWith(top: 20),
+                                  height: size.height * 0.35,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            MyText(
+                                              text: "Adam's offer",
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Divider(),
+                                        SizedBox(height: 20),
+                                        MyText(
+                                          text: "Adam Thomas offers to pay",
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 10),
+                                        MyText(
+                                          text: "#5,000",
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontSize: 22,
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(height: 30),
+                                        Container(
+                                          width: size.width,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 12.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    showModalBottomSheet<void>(
+                                                      isScrollControlled: true,
+                                                      context: context,
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                          topRight:
+                                                              Radius.circular(
+                                                            15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      builder: (_) {
+                                                        return BlocProvider
+                                                            .value(
+                                                          value: context
+                                                              .read<HomeBloc>(),
+                                                          child:
+                                                              declineOfferMethod(
+                                                                  size),
+                                                        );
+                                                        // );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      color: Colors.grey
+                                                          .withOpacity(0.6),
+                                                    ),
+                                                    child:
+                                                        Text("Decline offer"),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 20),
+                                                InkWell(
+                                                  onTap: () {
+                                                    showModalBottomSheet<void>(
+                                                      isScrollControlled: true,
+                                                      context: context,
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  15),
+                                                          topRight:
+                                                              Radius.circular(
+                                                            15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      builder: (_) {
+                                                        return BlocProvider
+                                                            .value(
+                                                          value: context
+                                                              .read<HomeBloc>(),
+                                                          child:
+                                                              acceptOfferMethod(
+                                                                  size),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      color: AppColors.primary,
+                                                    ),
+                                                    child: Text(
+                                                      "Accept offer",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 20,
+                                  top: 20,
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Icon(
+                                      Icons.cancel_outlined,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          }),
+                        );
+                        // );
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.primary.withOpacity(0.1)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.currency_exchange,
+                          color: AppColors.primary,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            "Offer",
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 11,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  StatefulBuilder declineOfferMethod(Size size) {
+    return StatefulBuilder(builder: (context, setState) {
+      return Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+            height: MediaQuery.of(context).viewInsets.bottom == 0
+                ? size.height * 0.4
+                : size.height * 0.8,
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    MyText(
+                      text: "Your offer",
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                // SizedBox(height: 10),
+                Row(
+                  children: [
+                    MyText(
+                      text: "Re negotiate your offer with Adam Thomas",
+                      textStyle:
+                          Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontWeight.w400,
+                              ),
+                    ),
+                  ],
+                ),
+                Divider(),
+                SizedBox(height: 30),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        width: size.width * 0.20,
+                        child: Center(
+                          child: TextFormField(
+                            controller: _offerController,
+                            onChanged: (val) {
+                              setState(() {
+                                final parsedVal = int.tryParse(val);
+                                if (parsedVal != null) {
+                                  coShareMaxSeats = parsedVal;
+                                  _offerController.text = parsedVal.toString();
+                                }
+                              });
+                            },
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                            ),
+                          ),
+                        )),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (coShareMaxSeats > 100) coShareMaxSeats -= 100;
+                          _offerController.text = coShareMaxSeats.toString();
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.red),
+                          color: Colors.red.withOpacity(
+                            0.4,
+                          ),
+                        ),
+                        child: Text(
+                          "-100",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          coShareMaxSeats += 100;
+                          _offerController.text = coShareMaxSeats.toString();
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.green),
+                          color: Colors.green.withOpacity(
+                            0.4,
+                          ),
+                        ),
+                        child: Text(
+                          "+100",
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: size.height * 0.025,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary),
+                        onPressed: () {},
+                        child: Text(
+                          "Send offer",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 20,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.cancel_outlined,
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
+      );
+    });
+  }
+
+  StatefulBuilder acceptOfferMethod(Size size) {
+    return StatefulBuilder(builder: (context, setState) {
+      return Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+            height: size.height * 0.38,
+            child: Column(
+              children: [
+                Image.asset("assets/png/accept.png"),
+                SizedBox(height: 20),
+                MyText(
+                  text: "You've accepted Adam's offer and he has been notified",
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                      ),
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                  buttonName: "Go Home",
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, HomePage.routeName, (route) => false);
+                  },
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 20,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.cancel_outlined,
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
+      );
+    });
   }
 }
