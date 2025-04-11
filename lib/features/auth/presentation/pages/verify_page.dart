@@ -295,30 +295,60 @@ class _VerifyPageState extends State<VerifyPage>
           ],
         ),
         const SizedBox(height: 10),
-        CustomTextField(
-          hintTextStyle: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              color: Colors.black.withOpacity(0.6)),
-          borderRadius: 20,
-          controller: context.read<AuthBloc>().passwordController,
-          filled: true,
-          obscureText: !context.read<AuthBloc>().showPassword,
-          hintText: AppLocalizations.of(context)!.enterYourPassword,
-          suffixIcon: InkWell(
-            onTap: () {
-              context.read<AuthBloc>().add(ShowPasswordIconEvent(
-                  showPassword: context.read<AuthBloc>().showPassword));
-            },
-            child: !context.read<AuthBloc>().showPassword
-                ? const Icon(
-                    Icons.visibility_off_outlined,
-                    color: AppColors.primary,
-                  )
-                : const Icon(
-                    Icons.visibility,
-                    color: AppColors.primary,
-                  ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  hintTextStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black.withOpacity(0.6)),
+                  borderRadius: 20,
+                  controller: context.read<AuthBloc>().passwordController,
+                  filled: false,
+                  obscureText: !context.read<AuthBloc>().showPassword,
+                  hintText: AppLocalizations.of(context)!.enterYourPassword,
+                  // suffixIcon: InkWell(
+                  //   onTap: () {
+                  //     context.read<AuthBloc>().add(ShowPasswordIconEvent(
+                  //         showPassword: context.read<AuthBloc>().showPassword));
+                  //   },
+                  //   child: !context.read<AuthBloc>().showPassword
+                  //       ? const Icon(
+                  //           Icons.visibility_off_outlined,
+                  //           color: AppColors.primary,
+                  //         )
+                  //       : const Icon(
+                  //           Icons.visibility,
+                  //           color: AppColors.primary,
+                  //         ),
+                  // ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: InkWell(
+                  onTap: () {
+                    context.read<AuthBloc>().add(ShowPasswordIconEvent(
+                        showPassword: context.read<AuthBloc>().showPassword));
+                  },
+                  child: !context.read<AuthBloc>().showPassword
+                      ? const Icon(
+                          Icons.visibility_off_outlined,
+                          color: AppColors.primary,
+                        )
+                      : const Icon(
+                          Icons.visibility,
+                          color: AppColors.primary,
+                        ),
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 10),

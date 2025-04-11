@@ -23,6 +23,10 @@ class ApiEndpoints {
   static String userDetails = 'api/v1/user';
   static String recentRoutes = 'api/v1/request/list-recent-searches';
 
+  //co-share
+  static String getAllCoShareTrip =  'api/coshare/requests';
+
+
   //notifications
   static String notification = 'api/v1/notifications/get-notification';
   static String deleteNotification = 'api/v1/notifications/delete-notification';

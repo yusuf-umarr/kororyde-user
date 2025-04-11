@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
@@ -43,6 +44,39 @@ class HomeRepositoryImpl implements HomeRepository {
         } else {
           userDetailsResponseModel =
               UserDetailResponseModel.fromJson(response.data);
+        }
+      }
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(userDetailsResponseModel);
+  }
+
+  @override
+  Future<Either<Failure, AllCoShareTripModel>> getAllCoShareTrip(
+      {String? requestId}) async {
+    AllCoShareTripModel userDetailsResponseModel;
+    try {
+      Response response = await _homeApi.getAllCoShareTripApi();
+      // log("--getAllCoShareTripApi response res----:${response.data}");
+
+      if (response.data == null || response.data == '') {
+        return Left(GetDataFailure(message: 'User bad request'));
+      } else if (response.data.toString().contains('error')) {
+        return Left(GetDataFailure(message: response.data['error']));
+      } else {
+        if (response.statusCode == 400) {
+          return Left(GetDataFailure(message: response.data["message"]));
+        } else if (response.statusCode == 401) {
+          return Left(GetDataFailure(message: 'logout'));
+        } else if (response.statusCode == 429) {
+          return Left(GetDataFailure(message: 'Too many attempts'));
+        } else {
+          userDetailsResponseModel =
+              AllCoShareTripModel.fromJson(response.data);
         }
       }
     } on FetchDataException catch (e) {
@@ -97,6 +131,39 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
+  Future<Either<Failure, dynamic>> joinACoShareTrip({
+    required String tripRequestId,
+    required String pickupAddress,
+    required String destinationAddress,
+    required dynamic proposedAmount,
+    dynamic pickUpLat,
+    dynamic pickUpLong,
+    dynamic destinationLat,
+    dynamic destinationLong,
+  }) async {
+    dynamic response;
+    try {
+      response = await _homeApi.joinACoShareTripApi(
+        tripRequestId: tripRequestId,
+        pickupAddress: pickupAddress,
+        destinationAddress: destinationAddress,
+        proposedAmount: proposedAmount,
+        pickUpLat: pickUpLat,
+        pickUpLong: pickUpLong,
+        destinationLat: destinationLat,
+        destinationLong: destinationLong,
+      );
+      log('--join co share  Response : $response');
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(response);
+  }
+
+  @override
   Future<Either<Failure, dynamic>> getAutoCompletePlaceLatLng(
       {required String placeId}) async {
     LatLng placesResponse;
@@ -124,7 +191,7 @@ class HomeRepositoryImpl implements HomeRepository {
       final response = await _homeApi.getAddressFromLatLng(
           lat: lat, lng: lng, mapType: mapType);
       //printWrapped('Place Address Response : $response');
- 
+
       placesResponse = (mapType == 'google_map')
           ? response.data['results'][0]['formatted_address']
           : response.data['display_name'];
@@ -201,15 +268,13 @@ class HomeRepositoryImpl implements HomeRepository {
     required String rideType,
     required List<AddressModel> address,
   }) async {
-   
-   
     dynamic res;
     try {
       Response response = await _homeApi.serviceLocationVerifyApi(
         rideType: rideType,
         address: address,
       );
-      // log('Service Available Response : ${response.data}'); 
+      // log('Service Available Response : ${response.data}');
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
       } else if (response.data.toString().contains('error')) {

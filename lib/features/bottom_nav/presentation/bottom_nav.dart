@@ -46,7 +46,8 @@ class _HomePageState extends State<HomePage>
     return BlocProvider(
       create: (context) => HomeBloc()
         ..add(GetDirectionEvent())
-        ..add(GetUserDetailsEvent()), //method the fetch user data
+        ..add(GetUserDetailsEvent()) ,//method the fetch user data
+        // ..add(GetAllCoShareTripEvent()),
       child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) async {
           try {

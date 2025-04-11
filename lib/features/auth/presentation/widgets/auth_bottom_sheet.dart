@@ -129,7 +129,6 @@ class AuthBottomSheetState extends State<AuthBottomSheet>
                 Form(
                   key: widget.formKey,
                   child: CustomTextField(
-                    
                     borderRadius: 15,
                     controller: widget.emailOrMobile,
                     filled: true,

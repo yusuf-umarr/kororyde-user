@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:kororyde_user/db/app_database.dart';
+import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
@@ -58,6 +59,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<GlobalKey> focusNodeKeys = [];
 
   UserDetail? userData;
+  // AllCoShareTripModel? allCoShareTripData;
+  List<CoShareTripData>? allCoShareTripData;
   UserDetail? user;
   List<String> serviceTypeImages = [
     AppImages.taxiSv,
@@ -124,18 +127,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   StreamSubscription<DatabaseEvent>? nearByVechileSubscription;
   Map myBearings = {};
 
-  
-
   HomeBloc() : super(HomeInitialState()) {
-
-  on<UpdateUserDataEvent>((event, emit) {
-  emit(HomeUserDataState(userData: event.userData));
-});
+    on<UpdateUserDataEvent>((event, emit) {
+      emit(HomeUserDataState(userData: event.userData));
+    });
     // update
     on<UpdateEvent>((event, emit) => emit(HomeUpdateState()));
     on<GetDirectionEvent>(getDirection);
     // HomePage
     on<GetUserDetailsEvent>(getUserDetails);
+
+    //co-share
+    on<GetAllCoShareTripEvent>(getAllCoShareTrip);
 
     on<GoogleControllAssignEvent>(assignController);
     on<GetLocationPermissionEvent>(getLocationPermission);
@@ -183,7 +186,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (index) => GlobalKey(),
     );
 
-    //  add(UpdateUserDataEvent(userData: userData)); 
+    //  add(UpdateUserDataEvent(userData: userData));
   }
 
   Future<void> streamRequest(
@@ -609,8 +612,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (success) async {
         userData = success.data;
         user = success.data;
-         emit(HomeUserDataState(userData: userData!));
-        // dev.log("UserData====: ${userData!.name}"); // Add
+        emit(HomeUserDataState(userData: userData!));
+        // dev.log("--UserData==id==: ${userData!.id}");
+
+        await AppSharedPreference.setUserId(userData!.id.toString());
+        //  var userId =  await AppSharedPreference.getUserId();
+
+        //     dev.log("--get-UserData==id==: ${userId}");
 
         if (mapType.isEmpty) {
           mapType = success.data.mapType;
@@ -694,17 +702,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 pickup: false,
               ));
             }
-             dev.log("UserOnTripState---2--has data${tripData.acceptedAt}");
+            dev.log("UserOnTripState---2--has data${tripData.acceptedAt}");
             //TODO---this is also temporary
-              if (!isClosed) {
-            emit(UserOnTripState(tripData: tripData));
+            if (!isClosed) {
+              emit(UserOnTripState(tripData: tripData));
+            }
           }
-          }
-
-          // dev.log("UserOnTripState---2--has data${tripData.acceptedAt}");
-          // if (!isClosed) {
-          //   emit(UserOnTripState(tripData: tripData));
-          // }
         } else if (userData!.hasOngoingRide) {
           isMultipleRide = true;
           add(GetOnGoingRidesEvent());
@@ -726,142 +729,65 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     add(InitScrollPositionEvent());
   }
 
-//   FutureOr<void> getUser(GetUserEvent event, Emitter<HomeState> emit) async {
-//     dev.log("getUser  called====");
-//     // emit(HomeLoadingStartState());
-//     // textDirection = await AppSharedPreference.getLanguageDirection();
-//     // final val = await AppSharedPreference.getRecentSearchPlaces();
+  FutureOr<void> getAllCoShareTrip(
+      GetAllCoShareTripEvent event, Emitter<HomeState> emit) async {
+    final data = await serviceLocator<HomeUsecase>().allCoShareTrip();
 
-//     // if (val.isNotEmpty) {
-//     //   List<dynamic> decodedList = jsonDecode(val);
-//     //   List<AddressModel> decodedData =
-//     //       decodedList.map((item) => AddressModel.fromJson(item)).toList();
-//     //   recentSearchPlaces = decodedData;
-//     // }
-//     final data = await serviceLocator<HomeUsecase>().userDetails();
-//     // emit(HomeLoadingStopState()); //TODO:: temporary
-//     // // log("user data res:--=====${data}");
-//     await data.fold(
-//       (error) {
-//         //debugPrint(error.toString());
-//         if (error.message == 'logout') {
-//           emit(LogoutState());
-//         } else {
-//           emit(HomeLoadingStopState());
-//         }
-//       },
-//       (success) async {
-//         userData = success.data;
+    await data.fold(
+      (error) {
+        //debugPrint(error.toString());
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) async {
+       try {
+         allCoShareTripData = success.data;
+         
+       } catch (e) {
+          dev.log("--catch err allchose trip:$e");
+         
+       }
 
-// /*
-//         if (mapType.isEmpty) {
-//           mapType = success.data.mapType;
-//           await AppSharedPreference.setMapType(mapType);
-//         }
-//         if (mapType != 'google_map') {
-//           if ((userData!.onTripRequest == null ||
-//                   userData!.onTripRequest == "") ||
-//               (userData!.metaRequest == null || userData!.metaRequest == "")) {
-//             add(LocateMeEvent(mapType: mapType));
-//           }
-//         }
-//         if (userData!.enableModulesForApplications == 'taxi' ||
-//             userData!.enableModulesForApplications == 'both') {
-//           selectedServiceType = 0;
-//           choosenTransportType = 0;
-//         } else if (userData!.enableModulesForApplications == 'delivery') {
-//           selectedServiceType = 1;
-//           choosenTransportType = 1;
-//         }
+        dev.log("--allchose trip:${allCoShareTripData!.first.requestNumber}");
 
-//         favAddressList = success.data.favouriteLocations.data;
-//         if ((userData!.onTripRequest != null &&
-//                 userData!.onTripRequest != "") ||
-//             (userData!.metaRequest != null && userData!.metaRequest != "")) {
-//           OnTripRequestData tripData = userData!.onTripRequest != ""
-//               ? userData!.onTripRequest.data
-//               : userData!.metaRequest.data;
-//           pickupAddressList.clear();
-//           pickupAddressList.add(AddressModel(
-//               orderId: '1',
-//               address: tripData.pickAddress,
-//               lat: double.parse(tripData.pickLat),
-//               lng: double.parse(tripData.pickLng),
-//               name: (tripData.userDetail != null)
-//                   ? tripData.userDetail!.data.name
-//                   : '',
-//               number: (tripData.userDetail != null)
-//                   ? tripData.userDetail!.data.mobile
-//                   : '',
-//               isAirportLocation:
-//                   (tripData.pickAddress.toLowerCase().contains('airport'))
-//                       ? true
-//                       : false,
-//               pickup: true));
-//           if (tripData.requestStops.data.isNotEmpty) {
-//             for (var i = 0; i < tripData.requestStops.data.length; i++) {
-//               stopAddressList.add(AddressModel(
-//                 orderId: '${i + 2}',
-//                 address: tripData.requestStops.data[i].address,
-//                 lat: tripData.requestStops.data[i].latitude,
-//                 lng: tripData.requestStops.data[i].longitude,
-//                 name: tripData.requestStops.data[i].pocName,
-//                 number: tripData.requestStops.data[i].pocMobile,
-//                 isAirportLocation: (tripData.requestStops.data[i].address
-//                         .toLowerCase()
-//                         .contains('airport'))
-//                     ? true
-//                     : false,
-//                 instructions: tripData.requestStops.data[i].pocInstruction,
-//                 pickup: false,
-//               ));
-//             }
-//           } else {
-//             if (tripData.dropLat.isNotEmpty && tripData.dropLng.isNotEmpty) {
-//               stopAddressList.add(AddressModel(
-//                 orderId: '2',
-//                 address: tripData.dropAddress,
-//                 lat: double.parse(tripData.dropLat),
-//                 lng: double.parse(tripData.dropLng),
-//                 isAirportLocation:
-//                     (tripData.dropAddress.toLowerCase().contains('airport'))
-//                         ? true
-//                         : false,
-//                 name: (tripData.userDetail != null)
-//                     ? tripData.userDetail!.data.name
-//                     : '',
-//                 number: (tripData.userDetail != null)
-//                     ? tripData.userDetail!.data.mobile
-//                     : '',
-//                 pickup: false,
-//               ));
-//             }
-//           }
-//           emit(UserOnTripState(tripData: tripData));
-//         } else if (userData!.hasOngoingRide) {
-//           isMultipleRide = true;
-//           add(GetOnGoingRidesEvent());
-//           emit(HomeLoadingStopState());
-//         } else {
-//           emit(HomeLoadingStopState());
-//         }
-//         if (success.data.fcmToken.isEmpty) {
-//           await serviceLocator<AccUsecase>().updateDetailsButton(
-//               email: userData!.email,
-//               name: userData!.name,
-//               gender: userData!.gender,
-//               profileImage: '',
-//               updateFcmToken: true);
-//         }
-//         emit(HomeUpdateState());
+        // emit(HomeUpdateState());
+      },
+    );
+  }
 
-//         */
-//       },
-//     );
-//     // add(InitScrollPositionEvent());
-//   }
-// //
-//  Locations
+  FutureOr<void> joinCoShareTrip(
+      JoinCoShareTripEvent event, Emitter<HomeState> emit) async {
+    final data = await serviceLocator<HomeUsecase>().joinCoShareTrip(
+      tripRequestId: event.tripRequestId,
+      pickupAddress: event.pickupAddress,
+      destinationAddress: event.destinationAddress,
+      proposedAmount: event.proposedAmount,
+      pickUpLat: event.pickUpLat,
+      pickUpLong: event.pickUpLong,
+      destinationLat: event.destinationLat,
+      destinationLong: event.destinationLong,
+    );
+
+    await data.fold(
+      (error) {
+        //debugPrint(error.toString());
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) async {
+        allCoShareTripData = success.data;
+
+        // emit(HomeUpdateState());
+      },
+    );
+  }
+
   Future<void> getLocationPermission(
       GetLocationPermissionEvent event, Emitter<HomeState> emit) async {
     if (event.isEditAddress) {
@@ -909,15 +835,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             }
           }
           emit(HomeLoadingStopState());
-         if (!isClosed){
-              add(UpdateLocationEvent(
-              latLng: currentLatLng,
-              isFromHomePage: event.isFromHomePage,
-              mapType: mapType));
-
+          if (!isClosed) {
+            add(UpdateLocationEvent(
+                latLng: currentLatLng,
+                isFromHomePage: event.isFromHomePage,
+                mapType: mapType));
           }
-
-      
         } else {
           Position? position = await Geolocator.getLastKnownPosition();
           if (position != null) {
@@ -995,9 +918,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> updateLocation(
       UpdateLocationEvent event, Emitter<HomeState> emit) async {
     dev.log("updateLocation called=====");
-    if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {
-     
-    }
+    if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {}
     isCameraMoveComplete = false;
     emit(UpdateLocationState());
   }
@@ -1010,7 +931,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(RentalSelectState());
     } else {
       selectedServiceType = event.serviceTypeIndex;
-      emit(ServiceTypeChangeState()); 
+      emit(ServiceTypeChangeState());
     }
   }
 

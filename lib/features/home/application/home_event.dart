@@ -8,6 +8,39 @@ class GetDirectionEvent extends HomeEvent {}
 
 class GetUserDetailsEvent extends HomeEvent {}
 
+class GetAllCoShareTripEvent extends HomeEvent {}
+
+class JoinCoShareTripEvent extends HomeEvent {
+  /*
+   "trip_request_id": "179b382d-ced4-4774-8c22-353cb9179804",
+  "user_id": 3,
+  "pickup_address": "Lagos Main land",
+  "destination_address": "456 jericho Park Avenue",
+  "proposed_amount": 100
+  */
+  final String tripRequestId;
+  final String userId;
+  final String pickupAddress;
+  final String destinationAddress;
+  final dynamic proposedAmount;
+  final dynamic pickUpLat;
+  final dynamic pickUpLong;
+  final dynamic destinationLat;
+  final dynamic destinationLong;
+
+  JoinCoShareTripEvent({
+   required this.tripRequestId,
+   required this.userId,
+   required this.pickupAddress,
+   required this.destinationAddress,
+   required this.proposedAmount,
+    this.pickUpLat,
+    this.pickUpLong,
+    this.destinationLat,
+    this.destinationLong,
+ });
+}
+
 class StreamRequestEvent extends HomeEvent {}
 
 class GetLocationPermissionEvent extends HomeEvent {
@@ -256,7 +289,8 @@ class ServiceLocationVerifyEvent extends HomeEvent {
   final List<AddressModel> address;
   final bool? isFromHomePage;
 
-  ServiceLocationVerifyEvent({required this.rideType, required this.address,this.isFromHomePage});
+  ServiceLocationVerifyEvent(
+      {required this.rideType, required this.address, this.isFromHomePage});
 }
 
 class UpdateUserDataEvent extends HomeEvent {

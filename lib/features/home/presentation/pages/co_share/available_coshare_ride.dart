@@ -9,6 +9,7 @@ import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
+import 'dart:developer';
 
 class AvailableCoshareRidePage extends StatefulWidget {
   static const String routeName = '/availableCoShare';
@@ -23,7 +24,18 @@ class AvailableCoshareRidePage extends StatefulWidget {
 
 class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
   @override
+  void initState() {
+    context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //            context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+
+    log("--get pickup:${widget.arg.picklat}");
+    log("--get available co-share:${context.watch<HomeBloc>().allCoShareTripData}");
+
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -81,19 +93,15 @@ class AvailableRideCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-
-          Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<HomeBloc>(),
-                          child: RideDetailPage(isRequest: false),
-                        ),
-                      ),);
-        
-
-
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: context.read<HomeBloc>(),
+              child: RideDetailPage(isRequest: false),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 20),
@@ -153,40 +161,59 @@ class AvailableRideCard extends StatelessWidget {
                 ),
               ],
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 15),
-                MyText(
-                  text: "Ride destination",
-                  textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: Colors.black.withOpacity(0.5),
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: SvgPicture.asset("assets/svg/destinationAddr.svg"),
-                    ),
-                    Expanded(
-                      child: MyText(
-                        text:
-                            "Elegushi Royal beach, Lekki Elegushi Royal beach, Lekki",
-                        textStyle:
-                            Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                  color: Colors.black,
-                                ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            riderAddrCard(
+              context,
+              title: 'Rider pick-up address',
+              icon: "assets/svg/sourceAddr.svg",
+              adrr: "ikoyi Royal lagos, Lekki",
+            ),
+            riderAddrCard(
+              context,
+              title: 'Rider destination',
+              icon: "assets/svg/destinationAddr.svg",
+              adrr: "Elegushi Royal beach, Lekki Elegushi Royal beach, Lekki",
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Column riderAddrCard(
+    BuildContext context, {
+    required String icon,
+    required String adrr,
+    required String title,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 10),
+        MyText(
+          text: title,
+          textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: Colors.black.withOpacity(0.5),
+              fontWeight: FontWeight.w400,
+              fontSize: 11),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: SvgPicture.asset(icon),
+            ),
+            Expanded(
+              child: MyText(
+                text: adrr,
+                textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

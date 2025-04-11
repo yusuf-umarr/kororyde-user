@@ -24,6 +24,54 @@ class HomeApi {
     }
   }
 
+  Future getAllCoShareTripApi() async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      Response response = await DioProviderImpl().get(
+        ApiEndpoints.getAllCoShareTrip,
+        // queryParams: (requestId != null) ? {"current_ride": requestId} : null,
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+      );
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future joinACoShareTripApi({
+    required String tripRequestId,
+    required String pickupAddress,
+    required String destinationAddress,
+    required dynamic proposedAmount,
+    dynamic pickUpLat,
+    dynamic pickUpLong,
+    dynamic destinationLat,
+    dynamic destinationLong,
+  }) async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      final userId = await AppSharedPreference.getUserId();
+
+      Response response =
+          await DioProviderImpl().post(ApiEndpoints.serviceVerify, headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }, body: {
+        'trip_request_id': tripRequestId,
+        "user_id": userId,
+        "pickup_address": pickupAddress,
+        "destination_address": destinationAddress,
+        "proposed_amount": proposedAmount
+      });
+      dev.log("-- 1-join coshare${response.data}");
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Future getAutocompletePlaces({
     required String input,
     required String mapType,
@@ -185,7 +233,7 @@ class HomeApi {
         'ride_type': rideType,
         'address': [
           {
-            "latitude": 6.57890379,//address[0].lat
+            "latitude": 6.57890379, //address[0].lat
             "longitude": 3.24495855, // address[0].lng
           }
         ],

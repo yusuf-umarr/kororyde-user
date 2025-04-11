@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
   final bool? enabled;
   final double borderRadius;
   final bool? autofocus;
-  const CustomTextField(
+  const CustomTextField( 
       {super.key,
       this.cursorColor,
       required this.controller,

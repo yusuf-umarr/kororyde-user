@@ -60,6 +60,7 @@ class _HomePageContentState extends State<HomePageContent>
     super.didChangeDependencies();
     WidgetsBinding.instance.addObserver(this);
     HomeBloc().nearByVechileCheckStream(context, this);
+    // HomeBloc().GetAllCoShareTripEvent();
   }
 
   @override

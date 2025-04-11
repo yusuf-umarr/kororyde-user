@@ -206,90 +206,189 @@ class _CosharePageState extends State<CosharePage> {
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
               context.read<HomeBloc>().nearByVechileSubscription = null;
             }
-            Navigator.pushNamed(
+            // context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+            Navigator.push(
               context,
-              AvailableCoshareRidePage.routeName,
-              arguments: BookingPageArguments(
-                  picklat: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lat
-                      .toString(),
-                  picklng: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lng
-                      .toString(),
-                  droplat: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lat
-                      .toString(),
-                  droplng: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lng
-                      .toString(),
-                  userData: widget.arg.userData,
-                  transportType: widget.arg.transportType,
-                  pickupAddressList: context.read<HomeBloc>().pickupAddressList,
-                  stopAddressList: context.read<HomeBloc>().stopAddressList,
-                  title: widget.arg.title,
-                  polyString: '',
-                  distance: '',
-                  duration: '',
-                  isOutstationRide: widget.arg.isOutstationRide,
-                  mapType: widget.arg.mapType),
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: context.read<HomeBloc>(),
+                  child: AvailableCoshareRidePage(
+                    arg: BookingPageArguments(
+                        picklat: context
+                            .read<HomeBloc>()
+                            .pickupAddressList
+                            .first
+                            .lat
+                            .toString(),
+                        picklng: context
+                            .read<HomeBloc>()
+                            .pickupAddressList
+                            .first
+                            .lng
+                            .toString(),
+                        droplat: context
+                            .read<HomeBloc>()
+                            .stopAddressList
+                            .last
+                            .lat
+                            .toString(),
+                        droplng: context
+                            .read<HomeBloc>()
+                            .stopAddressList
+                            .last
+                            .lng
+                            .toString(),
+                        userData: widget.arg.userData,
+                        transportType: widget.arg.transportType,
+                        pickupAddressList:
+                            context.read<HomeBloc>().pickupAddressList,
+                        stopAddressList:
+                            context.read<HomeBloc>().stopAddressList,
+                        title: widget.arg.title,
+                        polyString: '',
+                        distance: '',
+                        duration: '',
+                        isOutstationRide: widget.arg.isOutstationRide,
+                        mapType: widget.arg.mapType),
+                  ),
+                ),
+              ),
             );
+
+            // Navigator.pushNamed(
+            //   context,
+            //   AvailableCoshareRidePage.routeName,
+            //   arguments: BookingPageArguments(
+            //       picklat: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lat
+            //           .toString(),
+            //       picklng: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lng
+            //           .toString(),
+            //       droplat: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lat
+            //           .toString(),
+            //       droplng: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lng
+            //           .toString(),
+            //       userData: widget.arg.userData,
+            //       transportType: widget.arg.transportType,
+            //       pickupAddressList: context.read<HomeBloc>().pickupAddressList,
+            //       stopAddressList: context.read<HomeBloc>().stopAddressList,
+            //       title: widget.arg.title,
+            //       polyString: '',
+            //       distance: '',
+            //       duration: '',
+            //       isOutstationRide: widget.arg.isOutstationRide,
+            //       mapType: widget.arg.mapType),
+            // );
             log("ConfirmRideAddressState ---11111-in destination");
           } else if (state is RecentRouteSelectState) {
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
               context.read<HomeBloc>().nearByVechileSubscription?.cancel();
               context.read<HomeBloc>().nearByVechileSubscription = null;
             }
-            Navigator.pushNamed(
+
+            // context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+            Navigator.push(
               context,
-              AvailableCoshareRidePage.routeName,
-              arguments: BookingPageArguments(
-                  picklat: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lat
-                      .toString(),
-                  picklng: context
-                      .read<HomeBloc>()
-                      .pickupAddressList
-                      .first
-                      .lng
-                      .toString(),
-                  droplat: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lat
-                      .toString(),
-                  droplng: context
-                      .read<HomeBloc>()
-                      .stopAddressList
-                      .last
-                      .lng
-                      .toString(),
-                  userData: widget.arg.userData,
-                  transportType: widget.arg.transportType,
-                  pickupAddressList: context.read<HomeBloc>().pickupAddressList,
-                  stopAddressList: context.read<HomeBloc>().stopAddressList,
-                  title: widget.arg.title,
-                  polyString: '',
-                  distance: '',
-                  duration: '',
-                  isOutstationRide: widget.arg.isOutstationRide,
-                  mapType: widget.arg.mapType),
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: context.read<HomeBloc>(),
+                  child: AvailableCoshareRidePage(
+                    arg: BookingPageArguments(
+                        picklat: context
+                            .read<HomeBloc>()
+                            .pickupAddressList
+                            .first
+                            .lat
+                            .toString(),
+                        picklng: context
+                            .read<HomeBloc>()
+                            .pickupAddressList
+                            .first
+                            .lng
+                            .toString(),
+                        droplat: context
+                            .read<HomeBloc>()
+                            .stopAddressList
+                            .last
+                            .lat
+                            .toString(),
+                        droplng: context
+                            .read<HomeBloc>()
+                            .stopAddressList
+                            .last
+                            .lng
+                            .toString(),
+                        userData: widget.arg.userData,
+                        transportType: widget.arg.transportType,
+                        pickupAddressList:
+                            context.read<HomeBloc>().pickupAddressList,
+                        stopAddressList:
+                            context.read<HomeBloc>().stopAddressList,
+                        title: widget.arg.title,
+                        polyString: '',
+                        distance: '',
+                        duration: '',
+                        isOutstationRide: widget.arg.isOutstationRide,
+                        mapType: widget.arg.mapType),
+                  ),
+                ),
+              ),
             );
+
+            // Navigator.pushNamed(
+            //   context,
+            //   AvailableCoshareRidePage.routeName,
+            //   arguments: BookingPageArguments(
+            //       picklat: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lat
+            //           .toString(),
+            //       picklng: context
+            //           .read<HomeBloc>()
+            //           .pickupAddressList
+            //           .first
+            //           .lng
+            //           .toString(),
+            //       droplat: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lat
+            //           .toString(),
+            //       droplng: context
+            //           .read<HomeBloc>()
+            //           .stopAddressList
+            //           .last
+            //           .lng
+            //           .toString(),
+            //       userData: widget.arg.userData,
+            //       transportType: widget.arg.transportType,
+            //       pickupAddressList: context.read<HomeBloc>().pickupAddressList,
+            //       stopAddressList: context.read<HomeBloc>().stopAddressList,
+            //       title: widget.arg.title,
+            //       polyString: '',
+            //       distance: '',
+            //       duration: '',
+            //       isOutstationRide: widget.arg.isOutstationRide,
+            //       mapType: widget.arg.mapType),
+            // );
           } else if (state is ServiceNotAvailableState) {
             showDialog(
               context: context,
@@ -446,51 +545,109 @@ class _CosharePageState extends State<CosharePage> {
                                         .addressList
                                         .any((element) =>
                                             element.address.isEmpty)) {
-                                      Navigator.pushNamed(
+                                      //BlocProvider.value(
+                                      // value: context.read<HomeBloc>(),
+                                      // context
+                                      //     .read<HomeBloc>()
+                                      //     .add(GetAllCoShareTripEvent());
+
+                                      Navigator.push(
                                         context,
-                                        AvailableCoshareRidePage.routeName,
-                                        arguments: BookingPageArguments(
-                                            picklat: context
-                                                .read<HomeBloc>()
-                                                .pickupAddressList
-                                                .first
-                                                .lat
-                                                .toString(),
-                                            picklng: context
-                                                .read<HomeBloc>()
-                                                .pickupAddressList
-                                                .first
-                                                .lng
-                                                .toString(),
-                                            droplat: context
-                                                .read<HomeBloc>()
-                                                .stopAddressList
-                                                .last
-                                                .lat
-                                                .toString(),
-                                            droplng: context
-                                                .read<HomeBloc>()
-                                                .stopAddressList
-                                                .last
-                                                .lng
-                                                .toString(),
-                                            userData: widget.arg.userData,
-                                            transportType:
-                                                widget.arg.transportType,
-                                            pickupAddressList: context
-                                                .read<HomeBloc>()
-                                                .pickupAddressList,
-                                            stopAddressList: context
-                                                .read<HomeBloc>()
-                                                .stopAddressList,
-                                            title: widget.arg.title,
-                                            polyString: '',
-                                            distance: '',
-                                            duration: '',
-                                            isOutstationRide:
-                                                widget.arg.isOutstationRide,
-                                            mapType: widget.arg.mapType),
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: context.read<HomeBloc>(),
+                                            child: AvailableCoshareRidePage(
+                                              arg: BookingPageArguments(
+                                                  picklat: context
+                                                      .read<HomeBloc>()
+                                                      .pickupAddressList
+                                                      .first
+                                                      .lat
+                                                      .toString(),
+                                                  picklng: context
+                                                      .read<HomeBloc>()
+                                                      .pickupAddressList
+                                                      .first
+                                                      .lng
+                                                      .toString(),
+                                                  droplat: context
+                                                      .read<HomeBloc>()
+                                                      .stopAddressList
+                                                      .last
+                                                      .lat
+                                                      .toString(),
+                                                  droplng: context
+                                                      .read<HomeBloc>()
+                                                      .stopAddressList
+                                                      .last
+                                                      .lng
+                                                      .toString(),
+                                                  userData: widget.arg.userData,
+                                                  transportType:
+                                                      widget.arg.transportType,
+                                                  pickupAddressList: context
+                                                      .read<HomeBloc>()
+                                                      .pickupAddressList,
+                                                  stopAddressList: context
+                                                      .read<HomeBloc>()
+                                                      .stopAddressList,
+                                                  title: widget.arg.title,
+                                                  polyString: '',
+                                                  distance: '',
+                                                  duration: '',
+                                                  isOutstationRide: widget
+                                                      .arg.isOutstationRide,
+                                                  mapType: widget.arg.mapType),
+                                            ),
+                                          ),
+                                        ),
                                       );
+
+                                      // Navigator.pushNamed(
+                                      //   context,
+                                      //   AvailableCoshareRidePage.routeName,
+                                      //   arguments: BookingPageArguments(
+                                      //       picklat: context
+                                      //           .read<HomeBloc>()
+                                      //           .pickupAddressList
+                                      //           .first
+                                      //           .lat
+                                      //           .toString(),
+                                      //       picklng: context
+                                      //           .read<HomeBloc>()
+                                      //           .pickupAddressList
+                                      //           .first
+                                      //           .lng
+                                      //           .toString(),
+                                      //       droplat: context
+                                      //           .read<HomeBloc>()
+                                      //           .stopAddressList
+                                      //           .last
+                                      //           .lat
+                                      //           .toString(),
+                                      //       droplng: context
+                                      //           .read<HomeBloc>()
+                                      //           .stopAddressList
+                                      //           .last
+                                      //           .lng
+                                      //           .toString(),
+                                      //       userData: widget.arg.userData,
+                                      //       transportType:
+                                      //           widget.arg.transportType,
+                                      //       pickupAddressList: context
+                                      //           .read<HomeBloc>()
+                                      //           .pickupAddressList,
+                                      //       stopAddressList: context
+                                      //           .read<HomeBloc>()
+                                      //           .stopAddressList,
+                                      //       title: widget.arg.title,
+                                      //       polyString: '',
+                                      //       distance: '',
+                                      //       duration: '',
+                                      //       isOutstationRide:
+                                      //           widget.arg.isOutstationRide,
+                                      //       mapType: widget.arg.mapType),
+                                      // );
                                     }
                                     // log("done clickkkk");
                                     // if (!context

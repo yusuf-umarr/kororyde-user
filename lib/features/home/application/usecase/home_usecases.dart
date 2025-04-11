@@ -7,6 +7,7 @@ import '../../domain/models/stop_address_model.dart';
 import '../../domain/models/user_details_model.dart';
 import '../../domain/repositories/home_repo.dart';
 import 'dart:developer' as dev;
+
 class HomeUsecase {
   final HomeRepository _homeRepository;
 
@@ -15,6 +16,32 @@ class HomeUsecase {
   Future<Either<Failure, UserDetailResponseModel>> userDetails(
       {String? requestId}) async {
     return _homeRepository.getUserDetails(requestId: requestId);
+  }
+
+  Future<Either<Failure, dynamic>> allCoShareTrip() async {
+    return _homeRepository.getAllCoShareTrip();
+  }
+
+  Future<Either<Failure, dynamic>> joinCoShareTrip({
+    required String tripRequestId,
+    required String pickupAddress,
+    required String destinationAddress,
+    required dynamic proposedAmount,
+    dynamic pickUpLat,
+    dynamic pickUpLong,
+    dynamic destinationLat,
+    dynamic destinationLong,
+  }) async {
+    return _homeRepository.joinACoShareTrip(
+      tripRequestId: tripRequestId,
+      pickupAddress: pickupAddress,
+      destinationAddress: destinationAddress,
+      proposedAmount: proposedAmount,
+      pickUpLat:pickUpLat,
+      pickUpLong:pickUpLong,
+      destinationLat:destinationLat,
+      destinationLong:destinationLong,
+    );
   }
 
   Future<Either<Failure, dynamic>> getAutoCompletePlaces({
@@ -38,13 +65,13 @@ class HomeUsecase {
   }
 
   Future<Either<Failure, dynamic>> getAddressFromLatLng({
-    required double lat, 
+    required double lat,
     required double lng,
     required String mapType,
   }) async {
-    var res =_homeRepository.getAddressFromLatLng(
+    var res = _homeRepository.getAddressFromLatLng(
         lat: lat, lng: lng, mapType: mapType);
-        // dev.log(" getAddressFromLatLng:$res");
+    // dev.log(" getAddressFromLatLng:$res");
     return res;
   }
 
