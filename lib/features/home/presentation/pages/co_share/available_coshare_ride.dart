@@ -8,6 +8,7 @@ import 'package:kororyde_user/core/utils/custom_navigation_icon.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
+import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
 import 'dart:developer';
 
@@ -31,10 +32,9 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
 
   @override
   Widget build(BuildContext context) {
-    //            context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+    final bloc = context.watch<HomeBloc>();
 
-    log("--get pickup:${widget.arg.picklat}");
-    log("--get available co-share:${context.watch<HomeBloc>().allCoShareTripData}");
+    log("--get available co-share:${bloc.allCoShareTripData}"); //this retuns null onpon opening the page but later return data
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -46,7 +46,6 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3),
           child: NavigationIconWidget(
             onTap: () {
-              // Navigator.pop(context);
               Navigator.of(context).pop();
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded,
@@ -61,35 +60,55 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
               fontWeight: FontWeight.w500),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            MyText(
-              text: "17 co-sharing rides are available at the moment",
-              textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: AppColors.black.withOpacity(0.5),
-                  ),
+      body: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        if (state is CoShareTripDataLoaded) {
+          return Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: state.data
+                  .map((rider) => AvailableRideCard(
+                        rider: rider,
+                      ))
+                  .toList(),
             ),
-            SizedBox(height: size.height * 0.05),
-            AvailableRideCard(),
-            AvailableRideCard(),
-            AvailableRideCard(),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return Center(child: Text("No Co-Share available at this moment"));
+        }
+      }),
     );
   }
+
+  /*
+  Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                 
+                  SizedBox(height: size.height * 0.05),
+                  AvailableRideCard(),
+                  AvailableRideCard(),
+                  AvailableRideCard(),
+                ],
+              ),
+            ),
+          );
+  */
 }
 
 class AvailableRideCard extends StatelessWidget {
+  final CoShareTripData rider;
   const AvailableRideCard({
     super.key,
+    required this.rider,
   });
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
+    log("image:${rider.user!.profilePicture!}");
 
     return GestureDetector(
       onTap: () {
@@ -110,7 +129,7 @@ class AvailableRideCard extends StatelessWidget {
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColors.grey4.withOpacity(0.2)),
+            color: AppColors.primary.withOpacity(0.1)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -120,13 +139,37 @@ class AvailableRideCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MyText(
-                      text: "Abiola John",
-                      textStyle:
-                          Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                color: Theme.of(context).primaryColorDark,
-                                fontWeight: FontWeight.w500,
-                              ),
+                    Row(
+                      children: [
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child:
+                                // rider.user!.profilePicture != null
+                                //     ? Image.network(
+                                //         rider.user!.profilePicture!,
+                                //         height: 30,
+                                //         width: 30,
+                                //       )
+                                //     :
+                                Image.asset(
+                              "assets/images/defaultImg.png",
+                              height: 30,
+                              width: 30,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: MyText(
+                            text: rider.user!.name!,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Theme.of(context).primaryColorDark,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                      ],
                     ),
                     MyText(
                       text: "Toyota Camry (Black)",
@@ -136,26 +179,46 @@ class AvailableRideCard extends StatelessWidget {
                           .copyWith(
                               color: Colors.black.withOpacity(0.5),
                               fontWeight: FontWeight.w400,
-                              fontSize: 12),
+                              fontSize: 11),
                     ),
                   ],
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset("assets/svg/airplaneSeat.svg"),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: MyText(
-                        text: "2 seats available",
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset("assets/svg/airplaneSeat.svg"),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: MyText(
+                            text: "2 seats available",
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 11),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // SvgPicture.asset("assets/svg/socialDistance.svg"),
+                        MyText(
+                          text: "2km away",
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -163,16 +226,27 @@ class AvailableRideCard extends StatelessWidget {
             ),
             riderAddrCard(
               context,
-              title: 'Rider pick-up address',
+              title: 'Pick-up address',
               icon: "assets/svg/sourceAddr.svg",
-              adrr: "ikoyi Royal lagos, Lekki",
+              adrr: "ikoyi Royal lagos, Lekki Elegushi Royal beach, ",
             ),
             riderAddrCard(
               context,
-              title: 'Rider destination',
+              title: 'Destination address',
               icon: "assets/svg/destinationAddr.svg",
               adrr: "Elegushi Royal beach, Lekki Elegushi Royal beach, Lekki",
             ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.primary),
+              child: Text(
+                "View detail",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
           ],
         ),
       ),
@@ -188,7 +262,7 @@ class AvailableRideCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         MyText(
           text: title,
           textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(

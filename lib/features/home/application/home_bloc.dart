@@ -60,7 +60,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   UserDetail? userData;
   // AllCoShareTripModel? allCoShareTripData;
-  List<CoShareTripData>? allCoShareTripData;
+  List<CoShareTripData> allCoShareTripData =[];
   UserDetail? user;
   List<String> serviceTypeImages = [
     AppImages.taxiSv,
@@ -735,7 +735,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     await data.fold(
       (error) {
-        //debugPrint(error.toString());
         if (error.message == 'logout') {
           emit(LogoutState());
         } else {
@@ -745,15 +744,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (success) async {
        try {
          allCoShareTripData = success.data;
+          emit(CoShareTripDataLoaded(success.data));
          
        } catch (e) {
           dev.log("--catch err allchose trip:$e");
          
        }
 
-        dev.log("--allchose trip:${allCoShareTripData!.first.requestNumber}");
+        dev.log("--allchose trip:${allCoShareTripData.first.requestNumber}");
 
-        // emit(HomeUpdateState());
       },
     );
   }

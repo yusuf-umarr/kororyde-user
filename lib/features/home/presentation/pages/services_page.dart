@@ -51,7 +51,7 @@ class _ServicesPageState extends State<ServicesPage> {
                     childAspectRatio: 0.8,
                   ),
                   children: [
-                    InkWell(
+                    OurServiceCard(
                       onTap: () {
                         context
                             .read<HomeBloc>()
@@ -60,136 +60,31 @@ class _ServicesPageState extends State<ServicesPage> {
                             .read<HomeBloc>()
                             .add(DestinationSelectEvent(isPickupChange: false));
                       },
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width * 0.22,
-                                height: size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.serviceGreen),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Image.asset(
-                                  'assets/png/rideIcon.png',
-                                  height: size.width * 0.05,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              MyText(
-                                text: AppLocalizations.of(context)!.taxi,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      bg: AppColors.serviceGreen,
+                      title: "Ride",
+                      icon: 'assets/png/rideIcon.png',
                     ),
-                    InkWell(
+                    OurServiceCard(
                       onTap: () {
                         context
                             .read<HomeBloc>()
                             .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
                       },
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width * 0.22,
-                                height: size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.serviceYellow),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Image.asset(
-                                  'assets/png/deliveryIcon.png',
-                                  height: size.width * 0.05,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              MyText(
-                                text: AppLocalizations.of(context)!.delivery,
-                                // text: 'Delivery',
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      bg: AppColors.serviceYellow,
+                      title: "Delievry",
+                      icon: 'assets/png/deliveryIcon.png',
                     ),
-                    InkWell(
+                    OurServiceCard(
                       onTap: () {
                         context
                             .read<HomeBloc>()
                             .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
                       },
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width * 0.22,
-                                height: size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.servicePurple),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Image.asset(
-                                  'assets/png/rentalIcon.png',
-                                  height: size.width * 0.05,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              MyText(
-                                text: AppLocalizations.of(context)!.rental,
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      bg: AppColors.servicePurple,
+                      title: "Rental",
+                      icon: 'assets/png/rentalIcon.png',
                     ),
-                    InkWell(
+                    OurServiceCard(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -201,92 +96,76 @@ class _ServicesPageState extends State<ServicesPage> {
                           ),
                         );
                       },
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width * 0.22,
-                                height: size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.serviceRed),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Image.asset(
-                                  'assets/png/invest.png',
-                                  height: size.width * 0.11,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              MyText(
-                                text: "Bill payment",
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      bg: AppColors.serviceRed,
+                      title: "Bill payment ",
+                      icon: 'assets/png/invest.png',
                     ),
-                    InkWell(
+                    OurServiceCard(
                       onTap: () {},
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: size.width * 0.22,
-                                height: size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: AppColors.serviceBrown),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Image.asset(
-                                  'assets/png/advertIcon.png',
-                                  height: size.width * 0.11,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              MyText(
-                                text: "Advertise",
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      bg: AppColors.serviceBrown,
+                      title: "Adverts",
+                      icon: 'assets/png/advertIcon.png',
                     ),
-                  
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class OurServiceCard extends StatelessWidget {
+  final void Function()? onTap;
+  final Color bg;
+  final String title;
+  final String icon;
+  const OurServiceCard({
+    super.key,
+    this.onTap,
+    required this.bg,
+    required this.title,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        decoration: BoxDecoration(
+          color: bg.withOpacity(0.5), 
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: size.width * 0.22,
+              height: size.height * 0.09,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.white),
+              padding: EdgeInsets.symmetric(
+                horizontal: 8,
+              ),
+              child: Image.asset(
+                icon,
+                height: size.width * 0.05,
+              ),
+            ),
+            const SizedBox(height: 10),
+            MyText(
+              text: title,
+              textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
+                  ),
+            ),
+          ],
         ),
       ),
     );

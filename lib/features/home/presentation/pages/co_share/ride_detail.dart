@@ -281,9 +281,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
         ),
       ),
       bottomSheet: !widget.isRequest
-          ? 
-          
-          Container(
+          ? Container(
               width: size.width,
               decoration: BoxDecoration(color: Colors.white),
               child: Padding(
@@ -322,7 +320,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                           Row(
                                             children: [
                                               MyText(
-                                                text: "Contact main rider",
+                                                text: "Contact passenger",
                                                 textStyle: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge!
@@ -434,15 +432,30 @@ class _RideDetailPageState extends State<RideDetailPage> {
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.grey.withOpacity(0.6),
+                          color: AppColors.primary,
                         ),
-                        child: Text("Contact main rider"),
+                        child: Text(
+                          "Contact passenger",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet<void>(
+                  ],
+                ),
+              ),
+            )
+
+          //
+          : SizedBox.shrink(),
+      ////
+    );
+  }
+}
+
+
+/*
+
+  showModalBottomSheet<void>(
                           isScrollControlled: true,
                           context: context,
                           shape: const RoundedRectangleBorder(
@@ -454,204 +467,197 @@ class _RideDetailPageState extends State<RideDetailPage> {
                             ),
                           ),
                           builder: (_) {
+                            final Size size = MediaQuery.of(context).size;
                             return BlocProvider.value(
-                              value: context.read<BookingBloc>(),
+                              value: context.read<HomeBloc>(),
                               child:
                                   StatefulBuilder(builder: (context, setState) {
                                 return Stack(
                                   children: [
                                     Container(
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 20)
-                                              .copyWith(top: 40),
-                                      height: MediaQuery.of(context)
-                                                  .viewInsets
-                                                  .bottom ==
-                                              0
-                                          ? size.height * 0.4
-                                          : size.height * 0.8,
-                                      child: Column(
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              MyText(
-                                                text: "Your offer",
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          // SizedBox(height: 10),
-                                          Row(
-                                            children: [
-                                              MyText(
-                                                text:
-                                                    "Negotiate how much you'd like to pay",
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
+                                          EdgeInsets.symmetric(horizontal: 10)
+                                              .copyWith(top: 20),
+                                      height: size.height * 0.45,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                MyText(
+                                                  text: "Adam's offer",
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10),
+                                            Divider(),
+                                            SizedBox(height: 20),
+                                            MyText(
+                                              text: "Adam Thomas offers to pay",
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
                                                       fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(),
-                                          SizedBox(height: 30),
-
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    border: Border.all(
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                  width: size.width * 0.20,
-                                                  child: Center(
-                                                    child: TextFormField(
-                                                      controller:
-                                                          _offerController,
-                                                      onChanged: (val) {
-                                                        setState(() {
-                                                          final parsedVal =
-                                                              int.tryParse(val);
-                                                          if (parsedVal !=
-                                                              null) {
-                                                            coShareMaxSeats =
-                                                                parsedVal;
-                                                            _offerController
-                                                                    .text =
-                                                                parsedVal
-                                                                    .toString();
-                                                          }
-                                                        });
+                                                          FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 10),
+                                            MyText(
+                                              text: "#5,000",
+                                              textStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                      fontSize: 22,
+                                                      color: AppColors.primary,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 30),
+                                            Container(
+                                              width: size.width,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 12.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        //decline
                                                       },
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-                                                        enabledBorder:
-                                                            InputBorder.none,
-                                                        focusedBorder:
-                                                            InputBorder.none,
-                                                        disabledBorder:
-                                                            InputBorder.none,
-                                                        errorBorder:
-                                                            InputBorder.none,
-                                                        focusedErrorBorder:
-                                                            InputBorder.none,
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 20,
+                                                                vertical: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          color: AppColors.grey
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                        child: Text(
+                                                            "Decline offer"),
                                                       ),
                                                     ),
-                                                  )),
-                                            ],
-                                          ),
-                                          SizedBox(height: 15),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (coShareMaxSeats > 100)
-                                                      coShareMaxSeats -= 100;
-                                                    _offerController.text =
-                                                        coShareMaxSeats
-                                                            .toString();
-                                                  });
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 5),
-                                                  decoration: BoxDecoration(
+                                                    SizedBox(width: 20),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        showModalBottomSheet<
+                                                            void>(
+                                                          isScrollControlled:
+                                                              true,
+                                                          context: context,
+                                                          shape:
+                                                              const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(15),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                15,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          builder: (_) {
+                                                            return BlocProvider
+                                                                .value(
+                                                              value: context.read<
+                                                                  HomeBloc>(),
+                                                              child:
+                                                                  renegociateMethod(
+                                                                      size),
+                                                            );
+                                                            // );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 20,
+                                                                vertical: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          color: AppColors.grey
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                        child: Text(
+                                                          "Re-negotiate",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                showModalBottomSheet<void>(
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  shape:
+                                                      const RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                    border: Border.all(
-                                                        color: Colors.red),
-                                                    color:
-                                                        Colors.red.withOpacity(
-                                                      0.4,
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(15),
+                                                      topRight: Radius.circular(
+                                                        15,
+                                                      ),
                                                     ),
                                                   ),
-                                                  child: Text(
-                                                    "-100",
-                                                    style: TextStyle(
-                                                        color: Colors.red),
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 20),
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    coShareMaxSeats += 100;
-                                                    _offerController.text =
-                                                        coShareMaxSeats
-                                                            .toString();
-                                                  });
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 5),
-                                                  decoration: BoxDecoration(
+                                                  builder: (_) {
+                                                    return BlocProvider.value(
+                                                      value: context
+                                                          .read<HomeBloc>(),
+                                                      child: acceptOfferMethod(
+                                                          size),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                width: size.width,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 10),
+                                                decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            5),
-                                                    border: Border.all(
-                                                        color: Colors.green),
-                                                    color: Colors.green
-                                                        .withOpacity(
-                                                      0.4,
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    "+100",
-                                                    style: TextStyle(
-                                                        color: Colors.green),
-                                                  ),
+                                                            20),
+                                                    color: AppColors.primary),
+                                                child: Text(
+                                                  "Accpet offer",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: size.height * 0.025,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          backgroundColor:
-                                                              AppColors
-                                                                  .primary),
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    "Send offer",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     Positioned(
@@ -674,28 +680,4 @@ class _RideDetailPageState extends State<RideDetailPage> {
                             // );
                           },
                         );
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.primary,
-                        ),
-                        child: Text(
-                          "Join ride",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-        
-        //
-          : SizedBox.shrink(),
-      ////
-    );
-  }
-}
+*/
