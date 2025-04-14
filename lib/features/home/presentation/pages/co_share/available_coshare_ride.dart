@@ -171,16 +171,16 @@ class AvailableRideCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    MyText(
-                      text: "Toyota Camry (Black)",
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(
-                              color: Colors.black.withOpacity(0.5),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11),
-                    ),
+                    // MyText(
+                    //   text: "Toyota Camry (Black)",
+                    //   textStyle: Theme.of(context)
+                    //       .textTheme
+                    //       .bodySmall!
+                    //       .copyWith(
+                    //           color: Colors.black.withOpacity(0.5),
+                    //           fontWeight: FontWeight.w400,
+                    //           fontSize: 11),
+                    // ),
                   ],
                 ),
                 Column(
@@ -192,7 +192,7 @@ class AvailableRideCard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 2),
                           child: MyText(
-                            text: "2 seats available",
+                            text: "${rider.coShareMaxSeats} seats available",
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -228,14 +228,12 @@ class AvailableRideCard extends StatelessWidget {
               context,
               title: 'Pick-up address',
               icon: "assets/svg/sourceAddr.svg",
-              adrr: "ikoyi Royal lagos, Lekki Elegushi Royal beach, ",
+              adrr: "${rider.requestPlaces![0].pickAddress}",
             ),
-            riderAddrCard(
-              context,
-              title: 'Destination address',
-              icon: "assets/svg/destinationAddr.svg",
-              adrr: "Elegushi Royal beach, Lekki Elegushi Royal beach, Lekki",
-            ),
+            riderAddrCard(context,
+                title: 'Destination address',
+                icon: "assets/svg/destinationAddr.svg",
+                adrr: "${rider.requestPlaces![0].dropAddress}"),
             SizedBox(height: 10),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
