@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:kororyde_user/core/utils/custom_textfield.dart';
@@ -507,12 +508,16 @@ class _BookingPageState extends State<BookingPage>
                                             return Stack(
                                               children: [
                                                 Container(
+                                                  width: size.width,
                                                   padding: EdgeInsets.symmetric(
                                                           horizontal: 20)
                                                       .copyWith(top: 40),
                                                   height: size.height * 0.5,
                                                   child: Column(
                                                     children: [
+                                                      SvgPicture.asset(
+                                                          "assets/svg/tryCosharesvg.svg"),
+                                                      SizedBox(height: 10),
                                                       MyText(
                                                         text: "Try Co-Share",
                                                         textStyle: Theme.of(
@@ -525,28 +530,284 @@ class _BookingPageState extends State<BookingPage>
                                                                         .bold),
                                                       ),
                                                       SizedBox(height: 20),
-                                                      MyText(
-                                                        text:
-                                                            "With Co-Share, you can carry other passengers\nalong your route",
-                                                        textStyle: Theme.of(
-                                                                context)
-                                                            .textTheme
-                                                            .bodyMedium!
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                      Column(
+                                                        children: [
+                                                          MyText(
+                                                            text:
+                                                                "Enjoy a ride with other commuters of your choice\nand pay less with 'co-share'",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            textStyle: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
+                                                        ],
                                                       ),
                                                       SizedBox(
                                                         height:
                                                             size.height * 0.03,
                                                       ),
                                                       SizedBox(height: 20),
-                                                      Column(
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
                                                         children: [
                                                           SizedBox(
                                                             width: size.width *
-                                                                0.8,
+                                                                0.35,
+                                                            child:
+                                                                ElevatedButton(
+                                                              style: ElevatedButton.styleFrom(
+                                                                  backgroundColor:
+                                                                      AppColors
+                                                                          .grey),
+                                                              onPressed: () {
+                                                                //try co-share modal
+                                                                //second popup modal
+
+                                                                log("---is_co_share:true");
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                showModalBottomSheet<
+                                                                    void>(
+                                                                  isScrollControlled:
+                                                                      true,
+                                                                  context:
+                                                                      context,
+                                                                  shape:
+                                                                      const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      topRight:
+                                                                          Radius
+                                                                              .circular(
+                                                                        15,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  builder: (_) {
+                                                                    int coShareMaxSeats =
+                                                                        1;
+                                                                    return BlocProvider
+                                                                        .value(
+                                                                      value: context
+                                                                          .read<
+                                                                              BookingBloc>(),
+                                                                      child: StatefulBuilder(builder:
+                                                                          (context,
+                                                                              setState) {
+                                                                        return Stack(
+                                                                          children: [
+                                                                            Container(
+                                                                              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+                                                                              height: MediaQuery.of(context).viewInsets.bottom == 0 ? size.height * 0.4 : size.height * 0.4,
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      MyText(
+                                                                                        text: "Number of co-sharer(s)",
+                                                                                        textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  SizedBox(height: 10),
+                                                                                  Divider(),
+                                                                                  SizedBox(height: 20),
+                                                                                  MyText(
+                                                                                    text: "How many co-sharer(s) do you want on this trip?",
+                                                                                    textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                                                                          fontWeight: FontWeight.w400,
+                                                                                        ),
+                                                                                  ),
+                                                                                  SizedBox(height: 20),
+
+                                                                                  Row(
+                                                                                    mainAxisSize: MainAxisSize.min,
+                                                                                    children: [
+                                                                                      InkWell(
+                                                                                        onTap: () {
+                                                                                          setState(() {
+                                                                                            if (coShareMaxSeats > 1) coShareMaxSeats--;
+                                                                                          });
+                                                                                          // context.read<BookingBloc>().add(
+                                                                                          //       AdjustMaxSeatEvent(
+                                                                                          //         isAdd: false,
+                                                                                          //       ),
+                                                                                          //     );
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          padding: EdgeInsets.all(2),
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(2),
+                                                                                            border: Border.all(color:coShareMaxSeats ==1? Colors.red.withOpacity(
+                                                                                              0.1,
+                                                                                            ): Colors.red),
+
+                                                                                            color:coShareMaxSeats ==1? Colors.red.withOpacity(
+                                                                                              0.1,
+                                                                                            ):Colors.red.withOpacity(
+                                                                                              0.4,
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Icon(
+                                                                                            Icons.remove,
+                                                                                            color:coShareMaxSeats ==1? Colors.red.withOpacity(0.1):Colors.red,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(width: 10),
+                                                                                      MyText(
+                                                                                        text: "${coShareMaxSeats}", //this is not updating
+                                                                                        textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                                                                              fontWeight: FontWeight.bold,
+                                                                                              fontSize: 20,
+                                                                                            ),
+                                                                                      ),
+                                                                                      SizedBox(width: 10),
+                                                                                      InkWell(
+                                                                                        onTap: () {
+                                                                                          // context.read<BookingBloc>().add(
+                                                                                          //       AdjustMaxSeatEvent(
+                                                                                          //         isAdd: true,
+                                                                                          //       ),
+                                                                                          //     );
+
+                                                                                          setState(() {
+                                                                                            if (coShareMaxSeats < 3) coShareMaxSeats++;
+                                                                                          });
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          padding: EdgeInsets.all(2),
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(2),
+                                                                                            border: Border.all(color:coShareMaxSeats==3? Colors.green.withOpacity(0.1):Colors.green),
+                                                                                            color:coShareMaxSeats==3? Colors.green.withOpacity(
+                                                                                              0.1,
+                                                                                            ):Colors.green.withOpacity(
+                                                                                              0.4,
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Icon(
+                                                                                            Icons.add,
+                                                                                            color:coShareMaxSeats==3? Colors.green.withOpacity(
+                                                                                              0.1,
+                                                                                            ): Colors.green,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  //   DropdownExample(
+                                                                                  //  onchanged:   (val){
+
+                                                                                  //  }
+                                                                                  //   ),
+
+                                                                                  SizedBox(
+                                                                                    height: size.height * 0.025,
+                                                                                  ),
+                                                                                  // SizedBox(
+                                                                                  //     height:
+                                                                                  //         20),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      Expanded(
+                                                                                        child: ElevatedButton(
+                                                                                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                                                                                          //#609400 green //#FFD700 yellow //purple #5700C2 blue #2D7CD0 red #C20000 //brown #CD7F32
+                                                                                          onPressed: () {
+                                                                                            context.read<BookingBloc>().add(
+                                                                                                  MaxCoShareSeatEvent(
+                                                                                                    coShareMaxSeats: coShareMaxSeats,
+                                                                                                  ),
+                                                                                                );
+                                                                                            context.read<BookingBloc>().add(
+                                                                                                  BiddingCreateRequestEvent(
+                                                                                                    userData: widget.arg.userData,
+                                                                                                    vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex],
+                                                                                                    pickupAddressList: widget.arg.pickupAddressList,
+                                                                                                    dropAddressList: widget.arg.stopAddressList,
+                                                                                                    selectedTransportType: widget.arg.transportType,
+                                                                                                    paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender',
+                                                                                                    selectedPaymentType: context.read<BookingBloc>().selectedPaymentType,
+                                                                                                    scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
+                                                                                                    goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
+                                                                                                    goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
+                                                                                                    offeredRideFare: context.read<BookingBloc>().farePriceController.text,
+                                                                                                    polyLine: context.read<BookingBloc>().polyLine,
+                                                                                                    isPetAvailable: context.read<BookingBloc>().petPreference,
+                                                                                                    isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
+                                                                                                    isOutstationRide: widget.arg.isOutstationRide,
+                                                                                                    isRoundTrip: context.read<BookingBloc>().isRoundTrip,
+                                                                                                    scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn,
+                                                                                                  ),
+                                                                                                );
+                                                                                            Navigator.of(context).pop();
+                                                                                            // context.read<BookingBloc>().add(BiddingCreateRequestEvent(userData: widget.arg.userData, vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex], pickupAddressList: widget.arg.pickupAddressList, dropAddressList: widget.arg.stopAddressList, selectedTransportType: widget.arg.transportType, paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender', selectedPaymentType: context.read<BookingBloc>().selectedPaymentType, scheduleDateTime: context.read<BookingBloc>().scheduleDateTime, goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(), goodsQuantity: context.read<BookingBloc>().goodsQtyController.text, offeredRideFare: context.read<BookingBloc>().farePriceController.text, polyLine: context.read<BookingBloc>().polyLine, isPetAvailable: context.read<BookingBloc>().petPreference, isLuggageAvailable: context.read<BookingBloc>().luggagePreference, isOutstationRide: widget.arg.isOutstationRide, isRoundTrip: context.read<BookingBloc>().isRoundTrip, scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
+                                                                                          },
+                                                                                          child: Text(
+                                                                                            "Proceed",
+                                                                                            style: TextStyle(color: Colors.white),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            Positioned(
+                                                                              right: 20,
+                                                                              top: 20,
+                                                                              child: InkWell(
+                                                                                onTap: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                                child: Icon(
+                                                                                  Icons.cancel_outlined,
+                                                                                  color: Colors.red,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        );
+                                                                      }),
+                                                                    );
+                                                                    // );
+                                                                  },
+                                                                );
+                                                              },
+                                                              child: Text(
+                                                                "Try co share",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                              width:
+                                                                  size.width *
+                                                                      0.1),
+                                                          SizedBox(
+                                                            width: size.width *
+                                                                0.35,
                                                             child:
                                                                 ElevatedButton(
                                                               style: ElevatedButton.styleFrom(
@@ -662,247 +923,15 @@ class _BookingPageState extends State<BookingPage>
                                                               },
                                                               child: Text(
                                                                 "Skip",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                              height:
-                                                                  size.height *
-                                                                      0.05),
-                                                          ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    backgroundColor:
-                                                                        AppColors
-                                                                            .grey),
-                                                            onPressed: () {
-                                                              //try co-share modal
-                                                              //second popup modal
-
-                                                              log("---is_co_share:true");
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              showModalBottomSheet<
-                                                                  void>(
-                                                                isScrollControlled:
-                                                                    true,
-                                                                context:
-                                                                    context,
-                                                                shape:
-                                                                    const RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            15),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                      15,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                builder: (_) {
-                                                                  int coShareMaxSeats =
-                                                                      1;
-                                                                  return BlocProvider
-                                                                      .value(
-                                                                    value: context
-                                                                        .read<
-                                                                            BookingBloc>(),
-                                                                    child: StatefulBuilder(builder:
-                                                                        (context,
-                                                                            setState) {
-                                                                      return Stack(
-                                                                        children: [
-                                                                          Container(
-                                                                            padding:
-                                                                                EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
-                                                                            height: MediaQuery.of(context).viewInsets.bottom == 0
-                                                                                ? size.height * 0.4
-                                                                                : size.height * 0.4,
-                                                                            child:
-                                                                                Column(
-                                                                              children: [
-                                                                                Row(
-                                                                                  children: [
-                                                                                    MyText(
-                                                                                      text: "Number of co-sharer",
-                                                                                      textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                SizedBox(height: 10),
-                                                                                Divider(),
-                                                                                SizedBox(height: 20),
-                                                                                MyText(
-                                                                                  text: "How many co-sharer do you want on this trip?",
-                                                                                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                                                                        fontWeight: FontWeight.w400,
-                                                                                      ),
-                                                                                ),
-                                                                                SizedBox(height: 20),
-
-                                                                                Row(
-                                                                                  mainAxisSize: MainAxisSize.min,
-                                                                                  children: [
-                                                                                    InkWell(
-                                                                                      onTap: () {
-                                                                                        setState(() {
-                                                                                          if (coShareMaxSeats > 1) coShareMaxSeats--;
-                                                                                        });
-                                                                                        // context.read<BookingBloc>().add(
-                                                                                        //       AdjustMaxSeatEvent(
-                                                                                        //         isAdd: false,
-                                                                                        //       ),
-                                                                                        //     );
-                                                                                      },
-                                                                                      child: Container(
-                                                                                        padding: EdgeInsets.all(2),
-                                                                                        decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(2),
-                                                                                          border: Border.all(color: Colors.red),
-                                                                                          color: Colors.red.withOpacity(
-                                                                                            0.4,
-                                                                                          ),
-                                                                                        ),
-                                                                                        child: Icon(
-                                                                                          Icons.remove,
-                                                                                          color: Colors.red,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                    SizedBox(width: 10),
-                                                                                    MyText(
-                                                                                      text: "${coShareMaxSeats}", //this is not updating
-                                                                                      textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            fontSize: 20,
-                                                                                          ),
-                                                                                    ),
-                                                                                    SizedBox(width: 10),
-                                                                                    InkWell(
-                                                                                      onTap: () {
-                                                                                        // context.read<BookingBloc>().add(
-                                                                                        //       AdjustMaxSeatEvent(
-                                                                                        //         isAdd: true,
-                                                                                        //       ),
-                                                                                        //     );
-
-                                                                                        setState(() {
-                                                                                          if (coShareMaxSeats < 3) coShareMaxSeats++;
-                                                                                        });
-                                                                                      },
-                                                                                      child: Container(
-                                                                                        padding: EdgeInsets.all(2),
-                                                                                        decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(2),
-                                                                                          border: Border.all(color: Colors.green),
-                                                                                          color: Colors.green.withOpacity(
-                                                                                            0.4,
-                                                                                          ),
-                                                                                        ),
-                                                                                        child: Icon(
-                                                                                          Icons.add,
-                                                                                          color: Colors.green,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                //   DropdownExample(
-                                                                                //  onchanged:   (val){
-
-                                                                                //  }
-                                                                                //   ),
-
-                                                                                SizedBox(
-                                                                                  height: size.height * 0.025,
-                                                                                ),
-                                                                                // SizedBox(
-                                                                                //     height:
-                                                                                //         20),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Expanded(
-                                                                                      child: ElevatedButton(
-                                                                                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-                                                                                        //#609400 green //#FFD700 yellow //purple #5700C2 blue #2D7CD0 red #C20000 //brown #CD7F32
-                                                                                        onPressed: () {
-                                                                                          context.read<BookingBloc>().add(
-                                                                                          MaxCoShareSeatEvent(
-                                                                                            coShareMaxSeats: coShareMaxSeats,
-                                                                                          ),
-
-                                                                                          );
-                                                                                          context.read<BookingBloc>().add(
-                                                                                                BiddingCreateRequestEvent(
-                                                                                                  userData: widget.arg.userData,
-                                                                                                  vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex],
-                                                                                                  pickupAddressList: widget.arg.pickupAddressList,
-                                                                                                  dropAddressList: widget.arg.stopAddressList,
-                                                                                                  selectedTransportType: widget.arg.transportType,
-                                                                                                  paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender',
-                                                                                                  selectedPaymentType: context.read<BookingBloc>().selectedPaymentType,
-                                                                                                  scheduleDateTime: context.read<BookingBloc>().scheduleDateTime,
-                                                                                                  goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(),
-                                                                                                  goodsQuantity: context.read<BookingBloc>().goodsQtyController.text,
-                                                                                                  offeredRideFare: context.read<BookingBloc>().farePriceController.text,
-                                                                                                  polyLine: context.read<BookingBloc>().polyLine,
-                                                                                                  isPetAvailable: context.read<BookingBloc>().petPreference,
-                                                                                                  isLuggageAvailable: context.read<BookingBloc>().luggagePreference,
-                                                                                                  isOutstationRide: widget.arg.isOutstationRide,
-                                                                                                  isRoundTrip: context.read<BookingBloc>().isRoundTrip,
-                                                                                                  scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn,
-                                                                                                ),
-                                                                                              );
-                                                                                          Navigator.of(context).pop();
-                                                                                          // context.read<BookingBloc>().add(BiddingCreateRequestEvent(userData: widget.arg.userData, vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex], pickupAddressList: widget.arg.pickupAddressList, dropAddressList: widget.arg.stopAddressList, selectedTransportType: widget.arg.transportType, paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender', selectedPaymentType: context.read<BookingBloc>().selectedPaymentType, scheduleDateTime: context.read<BookingBloc>().scheduleDateTime, goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(), goodsQuantity: context.read<BookingBloc>().goodsQtyController.text, offeredRideFare: context.read<BookingBloc>().farePriceController.text, polyLine: context.read<BookingBloc>().polyLine, isPetAvailable: context.read<BookingBloc>().petPreference, isLuggageAvailable: context.read<BookingBloc>().luggagePreference, isOutstationRide: widget.arg.isOutstationRide, isRoundTrip: context.read<BookingBloc>().isRoundTrip, scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
-                                                                                        },
-                                                                                        child: Text(
-                                                                                          "Proceed",
-                                                                                          style: TextStyle(color: Colors.white),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          Positioned(
-                                                                            right:
-                                                                                20,
-                                                                            top:
-                                                                                20,
-                                                                            child:
-                                                                                InkWell(
-                                                                              onTap: () {
-                                                                                Navigator.of(context).pop();
-                                                                              },
-                                                                              child: Icon(
-                                                                                Icons.cancel_outlined,
-                                                                                color: Colors.red,
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      );
-                                                                    }),
-                                                                  );
-                                                                  // );
-                                                                },
-                                                              );
-                                                            },
-                                                            child: Text(
-                                                              "Try co share",
-                                                              style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   color: Colors
-                                                                      .white),
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ],

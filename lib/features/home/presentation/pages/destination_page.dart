@@ -36,7 +36,7 @@ class DestinationPage extends StatefulWidget {
 
 class _DestinationPageState extends State<DestinationPage> {
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return builderWidget(size);
   }
@@ -347,8 +347,7 @@ class _DestinationPageState extends State<DestinationPage> {
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
                     leadingWidth: size.width * 0.2,
-                    surfaceTintColor:
-                        Theme.of(context).scaffoldBackgroundColor,
+                    surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
                     leading: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 3),
@@ -371,17 +370,14 @@ class _DestinationPageState extends State<DestinationPage> {
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: InkWell(
                                 onTap: () {
-                                  context
-                                      .read<HomeBloc>()
-                                      .add(AddStopEvent());
+                                  context.read<HomeBloc>().add(AddStopEvent());
                                 },
                                 // child: Icon(
                                 //   Icons.add_outlined,
                                 //   color: Theme.of(context).primaryColor,
                                 // ),
                                 child: MyText(
-                                    text:
-                                        AppLocalizations.of(context)!.addStop,
+                                    text: AppLocalizations.of(context)!.addStop,
                                     textStyle: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -398,10 +394,7 @@ class _DestinationPageState extends State<DestinationPage> {
                           size.width,
                           (context.read<HomeBloc>().addressList.length == 2)
                               ? size.width * 0.3
-                              : (context
-                                          .read<HomeBloc>()
-                                          .addressList
-                                          .length ==
+                              : (context.read<HomeBloc>().addressList.length ==
                                       3)
                                   ? size.width * 0.4
                                   : size.width * 0.55),
@@ -412,6 +405,11 @@ class _DestinationPageState extends State<DestinationPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10)
+                              .copyWith(top: 20),
+                          child: buildSelectFromMap(size, context),
+                        ),
                         if (context
                             .read<HomeBloc>()
                             .searchInfoMessage
@@ -451,9 +449,8 @@ class _DestinationPageState extends State<DestinationPage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 16, top: 16),
                             child: MyText(
-                                text: context
-                                    .read<HomeBloc>()
-                                    .searchInfoMessage),
+                                text:
+                                    context.read<HomeBloc>().searchInfoMessage),
                           ),
                         if (context
                             .read<HomeBloc>()
@@ -465,7 +462,7 @@ class _DestinationPageState extends State<DestinationPage> {
                       ],
                     ),
                   ),
-                  bottomSheet: buildSelectFromMap(size, context),
+                  // bottomSheet: buildSelectFromMap(size, context),
                   bottomNavigationBar: (!context
                           .read<HomeBloc>()
                           .addressList
@@ -485,8 +482,10 @@ class _DestinationPageState extends State<DestinationPage> {
                                 : Theme.of(context).primaryColor,
                             onTap: () {
                               log("done clickkkk");
-                              if (!context.read<HomeBloc>().addressList.any(
-                                  (element) => element.address.isEmpty)) {
+                              if (!context
+                                  .read<HomeBloc>()
+                                  .addressList
+                                  .any((element) => element.address.isEmpty)) {
                                 context.read<HomeBloc>().add(
                                     ConfirmRideAddressEvent(
                                         rideType: widget.arg.isOutstationRide
@@ -1149,7 +1148,7 @@ class _DestinationPageState extends State<DestinationPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             MyText(
-              text: AppLocalizations.of(context)!.recentSearchRoutes,
+              text: 'Recent routes',
               textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Theme.of(context).disabledColor,
                   fontWeight: FontWeight.w600),
@@ -1373,7 +1372,7 @@ class _DestinationPageState extends State<DestinationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MyText(
-                text: AppLocalizations.of(context)!.searchPlaces,
+                text: "Recent places",
                 textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Theme.of(context).disabledColor,
                     fontWeight: FontWeight.w600),

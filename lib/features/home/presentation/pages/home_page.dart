@@ -14,6 +14,8 @@ import 'package:kororyde_user/features/home/domain/models/user_details_model.dar
 import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
 import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/help_page.dart';
+import 'package:kororyde_user/features/home/presentation/widgets/fab_widgets.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_on_going_rides.dart';
 import 'package:kororyde_user/features/home/presentation/widgets/home_page_shimmer.dart';
 import 'package:latlong2/latlong.dart' as fmlt;
@@ -40,6 +42,8 @@ class HomePageContent extends StatefulWidget {
 
 class _HomePageContentState extends State<HomePageContent>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  bool isDialogOpen = false;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // && Platform.isAndroid
@@ -115,6 +119,230 @@ class _HomePageContentState extends State<HomePageContent>
                                   "")))
                   ? bodyMapBuilder(context, size)
                   : HomePageShimmer(size: size),
+              floatingActionButton: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      spreadRadius: 5,
+                      blurRadius: 6,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: FloatingActionButton(
+                  backgroundColor: AppColors.primary,
+                  onPressed: () {
+                    if (isDialogOpen) {
+                      setState(() {
+                        isDialogOpen = false;
+                      });
+                    }
+                    final bloc = context.read<HomeBloc>();
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        final Size size = MediaQuery.of(context).size;
+                        return BlocProvider.value(
+                          value: bloc,
+                          child: Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                  padding: const EdgeInsets.only(bottom: 60),
+                                  height: size.height * 0.9,
+                                  width: size.width,
+                                  alignment: Alignment.bottomRight,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      FABButton(
+                                        iconColor: const Color(0xff1F867D),
+                                        iconBgColor: const Color(0xffB8F5F9),
+                                        icon: Icons.help,
+                                        containerText: 'Help',
+                                        containerWidth: 154,
+                                        onTapped: () {
+                                          Navigator.of(context).pop();
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  BlocProvider.value(
+                                                value: context.read<HomeBloc>(),
+                                                child: HelpPage(),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      FABButton(
+                                        iconColor: const Color(0xff1F867D),
+                                        iconBgColor: const Color(0xffB8F5F9),
+                                        icon: Icons
+                                            .account_balance_wallet_rounded,
+                                        containerText: 'Co-share requests',
+                                        containerWidth: 154,
+                                        onTapped: () {
+                                          Navigator.of(context).pop();
+                                          showModalBottomSheet<void>(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(
+                                                  15,
+                                                ),
+                                              ),
+                                            ),
+                                            builder: (_) {
+                                              return BlocProvider.value(
+                                                value: context.read<HomeBloc>(),
+                                                child: StatefulBuilder(builder:
+                                                    (context, setState) {
+                                                  return Stack(
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        10)
+                                                            .copyWith(top: 20),
+                                                        height:
+                                                            size.height * 0.6,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Column(
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  MyText(
+                                                                    text:
+                                                                        "Incoming co-share",
+                                                                    textStyle: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .bodyLarge!
+                                                                        .copyWith(
+                                                                            fontWeight:
+                                                                                FontWeight.bold),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 10),
+                                                              Divider(),
+                                                              SizedBox(
+                                                                  height: 20),
+                                                              IncomingRequestCard(),
+                                                              IncomingRequestCard(),
+                                                              IncomingRequestCard(),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        right: 20,
+                                                        top: 20,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Icon(
+                                                            Icons
+                                                                .cancel_outlined,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  );
+                                                }),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      FABButton(
+                                        iconColor: const Color(0xff4D0A80),
+                                        iconBgColor: const Color(0xffF3EAFA),
+                                        icon: Icons.people,
+                                        containerText: 'Join Co-share',
+                                        containerWidth: 186,
+                                        onTapped: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  BlocProvider.value(
+                                                value: bloc,
+                                                child: CosharePage(
+                                                  arg: DestinationPageArguments(
+                                                    title:
+                                                        bloc.selectedServiceType ==
+                                                                0
+                                                            ? 'Taxi'
+                                                            : 'Delivery',
+                                                    pickupAddress:
+                                                        bloc.currentLocation,
+                                                    pickupLatLng:
+                                                        bloc.currentLatLng,
+                                                    // dropAddress: state.dropAddress,
+                                                    // dropLatLng: state.dropLatLng,
+                                                    userData: bloc.userData!,
+                                                    pickUpChange: false,
+                                                    transportType:
+                                                        bloc.selectedServiceType ==
+                                                                0
+                                                            ? 'taxi'
+                                                            : 'delivery',
+                                                    isOutstationRide: false,
+                                                    mapType: bloc.mapType,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: size.height * 0.1,
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+
+                    ///floating dialog end///
+                  },
+                  child: Icon(
+                    isDialogOpen ? Icons.close : Icons.add,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+              ),
               // floatingActionButton: FloatingActionButton.extended(
               //   backgroundColor: AppColors.primary,
               //   onPressed: () {
@@ -162,6 +390,231 @@ class _HomePageContentState extends State<HomePageContent>
     );
   }
 
+//   void openDialog() async {
+  // setState(() {
+  //   isDialogOpen = true;
+  // });
+
+//     await showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         final Size size = MediaQuery.of(context).size;
+//         return Dialog(
+//           backgroundColor: Colors.transparent,
+//           child: BlocProvider.value(
+//             value: context.read<HomeBloc>(),
+//             child: InkWell(
+//               onTap: () {
+//                 // Navigator.of(context).pop();
+//               },
+//               child: Container(
+//                   padding: const EdgeInsets.only(bottom: 60),
+//                   height: size.height * 0.9,
+//                   width: size.width,
+//                   alignment: Alignment.bottomRight,
+//                   child: Column(
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       FABButton(
+//                         iconColor: const Color(0xff1F867D),
+//                         iconBgColor: const Color(0xffB8F5F9),
+//                         icon: Icons.help,
+//                         containerText: 'Help',
+//                         containerWidth: 154,
+//                         onTapped: () {
+//                           Navigator.of(context).pop();
+
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (_) => BlocProvider.value(
+//                                 value: context.read<HomeBloc>(),
+//                                 child: HelpPage(),
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                       const SizedBox(
+//                         height: 10,
+//                       ),
+//                       FABButton(
+//                         iconColor: const Color(0xff1F867D),
+//                         iconBgColor: const Color(0xffB8F5F9),
+//                         icon: Icons.account_balance_wallet_rounded,
+//                         containerText: 'Co-share requests',
+//                         containerWidth: 154,
+//                         onTapped: () {
+//                           Navigator.of(context).pop();
+//                           showModalBottomSheet<void>(
+//                             isScrollControlled: true,
+//                             context: context,
+//                             shape: const RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.only(
+//                                 topLeft: Radius.circular(15),
+//                                 topRight: Radius.circular(
+//                                   15,
+//                                 ),
+//                               ),
+//                             ),
+//                             builder: (_) {
+//                               return BlocProvider.value(
+//                                 value: context.read<HomeBloc>(),
+//                                 child: StatefulBuilder(
+//                                     builder: (context, setState) {
+//                                   return Stack(
+//                                     children: [
+//                                       Container(
+//                                         padding:
+//                                             EdgeInsets.symmetric(horizontal: 10)
+//                                                 .copyWith(top: 20),
+//                                         height: size.height * 0.6,
+//                                         child: SingleChildScrollView(
+//                                           child: Column(
+//                                             children: [
+//                                               Row(
+//                                                 children: [
+//                                                   MyText(
+//                                                     text: "Incoming co-share",
+//                                                     textStyle: Theme.of(context)
+//                                                         .textTheme
+//                                                         .bodyLarge!
+//                                                         .copyWith(
+//                                                             fontWeight:
+//                                                                 FontWeight
+//                                                                     .bold),
+//                                                   ),
+//                                                 ],
+//                                               ),
+//                                               SizedBox(height: 10),
+//                                               Divider(),
+//                                               SizedBox(height: 20),
+//                                               IncomingRequestCard(),
+//                                               IncomingRequestCard(),
+//                                               IncomingRequestCard(),
+//                                             ],
+//                                           ),
+//                                         ),
+//                                       ),
+//                                       Positioned(
+//                                         right: 20,
+//                                         top: 20,
+//                                         child: InkWell(
+//                                           onTap: () {
+//                                             Navigator.of(context).pop();
+//                                           },
+//                                           child: Icon(
+//                                             Icons.cancel_outlined,
+//                                             color: Colors.red,
+//                                           ),
+//                                         ),
+//                                       )
+//                                     ],
+//                                   );
+//                                 }),
+//                               );
+//                               // );
+//                             },
+//                           );
+
+//                           // navigate(context, const WalletPage());
+//                         },
+//                       ),
+//                       const SizedBox(
+//                         height: 10,
+//                       ),
+//                       FABButton(
+//                         iconColor: const Color(0xff4D0A80),
+//                         iconBgColor: const Color(0xffF3EAFA),
+//                         icon: Icons.people,
+//                         containerText: 'Join Co-share',
+//                         containerWidth: 186,
+//                         onTapped: () {
+//                           dev.log(
+//                               "--user data:${context.read<HomeBloc>().userData!}");
+//                           // Navigator.push(
+//                           //   context,
+//                           //   MaterialPageRoute(
+//                           //     builder: (_) => BlocProvider.value(
+//                           //       value: context.read<HomeBloc>(),
+//                           //       child: CosharePage(
+//                           //         arg: DestinationPageArguments(
+//                           //             title: context
+//                           //                         .read<HomeBloc>()
+//                           //                         .selectedServiceType ==
+//                           //                     0
+//                           //                 ? 'Taxi'
+//                           //                 : 'Delivery',
+//                           //             pickupAddress: context
+//                           //                 .read<HomeBloc>()
+//                           //                 .currentLocation,
+//                           //             pickupLatLng:
+//                           //                 context.read<HomeBloc>().currentLatLng,
+//                           //             // dropAddress: state.dropAddress,
+//                           //             // dropLatLng: state.dropLatLng,
+//                           //             userData:
+//                           //                 context.read<HomeBloc>().userData!,
+//                           //             pickUpChange: false,
+//                           //             transportType: context
+//                           //                         .read<HomeBloc>()
+//                           //                         .selectedServiceType ==
+//                           //                     0
+//                           //                 ? 'taxi'
+//                           //                 : 'delivery',
+//                           //             isOutstationRide: false,
+//                           //             mapType: context.read<HomeBloc>().mapType),
+//                           //       ),
+//                           //     ),
+//                           //   ),
+//                           // );
+//                           // Navigator.pushNamed(
+//                           //   context,
+//                           //   CosharePage.routeName,
+//                           //   arguments: DestinationPageArguments(
+//                           //       title: context
+//                           //                   .read<HomeBloc>()
+//                           //                   .selectedServiceType ==
+//                           //               0
+//                           //           ? 'Taxi'
+//                           //           : 'Delivery',
+//                           //       pickupAddress:
+//                           //           context.read<HomeBloc>().currentLocation,
+//                           //       pickupLatLng:
+//                           //           context.read<HomeBloc>().currentLatLng,
+//                           //       // dropAddress: 'state.dropAddress',
+//                           //       // dropLatLng: 'state.dropLatLng',
+//                           //       userData: context.read<HomeBloc>().userData!,
+//                           //       pickUpChange: false,
+//                           //       transportType: context
+//                           //                   .read<HomeBloc>()
+//                           //                   .selectedServiceType ==
+//                           //               0
+//                           //           ? 'taxi'
+//                           //           : 'delivery',
+//                           //       isOutstationRide: false,
+//                           //       mapType: context.read<HomeBloc>().mapType),
+//                           // );
+//                           // Navigator.of(context).pop();
+//                           // navigate(context, const TherapistPage());
+//                         },
+//                       ),
+//                       SizedBox(
+//                         height: size.height * 0.1,
+//                       )
+//                     ],
+//                   )),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+
+//     setState(() {
+//       isDialogOpen = false;
+//     });
+//   }
+// //
   Widget bodyMapBuilder(BuildContext context, Size size) {
     final screenWidth = size.width;
     return BlocBuilder<HomeBloc, HomeState>(
@@ -535,159 +988,159 @@ class _HomePageContentState extends State<HomePageContent>
                 ],
               ),
             ),
-            Positioned(
-              right: 10,
-              top: size.height * 0.2,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    CosharePage.routeName,
-                    arguments: DestinationPageArguments(
-                        title: context.read<HomeBloc>().selectedServiceType == 0
-                            ? 'Taxi'
-                            : 'Delivery',
-                        pickupAddress: context.read<HomeBloc>().currentLocation,
-                        pickupLatLng: context.read<HomeBloc>().currentLatLng,
-                        // dropAddress: 'state.dropAddress',
-                        // dropLatLng: 'state.dropLatLng',
-                        userData: context.read<HomeBloc>().userData!,
-                        pickUpChange: false,
-                        transportType:
-                            context.read<HomeBloc>().selectedServiceType == 0
-                                ? 'taxi'
-                                : 'delivery',
-                        isOutstationRide: false,
-                        mapType: context.read<HomeBloc>().mapType),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColors.primary,
-                  ),
-                  child: const Text(
-                    "Join\nCoShare",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 10,
-              top: size.height * 0.2,
-              child: InkWell(
-                onTap: () {
-                  showModalBottomSheet<void>(
-                    isScrollControlled: true,
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(
-                          15,
-                        ),
-                      ),
-                    ),
-                    builder: (_) {
-                      return BlocProvider.value(
-                        value: context.read<HomeBloc>(),
-                        child: StatefulBuilder(builder: (context, setState) {
-                          return Stack(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10)
-                                    .copyWith(top: 20),
-                                height: size.height * 0.6,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          MyText(
-                                            text: "Incoming co-share",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10),
-                                      Divider(),
-                                      SizedBox(height: 20),
-                                      IncomingRequestCard(),
-                                      IncomingRequestCard(),
-                                      IncomingRequestCard(),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                right: 20,
-                                top: 20,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Icon(
-                                    Icons.cancel_outlined,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        }),
-                      );
-                      // );
-                    },
-                  );
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   CosharePage.routeName,
-                  //   arguments: DestinationPageArguments(
-                  //       title: context.read<HomeBloc>().selectedServiceType == 0
-                  //           ? 'Taxi'
-                  //           : 'Delivery',
-                  //       pickupAddress: context.read<HomeBloc>().currentLocation,
-                  //       pickupLatLng: context.read<HomeBloc>().currentLatLng,
-                  //       // dropAddress: 'state.dropAddress',
-                  //       // dropLatLng: 'state.dropLatLng',
-                  //       userData: context.read<HomeBloc>().userData!,
-                  //       pickUpChange: false,
-                  //       transportType:
-                  //           context.read<HomeBloc>().selectedServiceType == 0
-                  //               ? 'taxi'
-                  //               : 'delivery',
-                  //       isOutstationRide: false,
-                  //       mapType: context.read<HomeBloc>().mapType),
-                  // );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: AppColors.primary,
-                  ),
-                  child: const Text(
-                    "CoShare\nrequests",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   right: 10,
+            //   top: size.height * 0.2,
+            //   child: InkWell(
+            //     onTap: () {
+            //       Navigator.pushNamed(
+            //         context,
+            //         CosharePage.routeName,
+            //         arguments: DestinationPageArguments(
+            //             title: context.read<HomeBloc>().selectedServiceType == 0
+            //                 ? 'Taxi'
+            //                 : 'Delivery',
+            //             pickupAddress: context.read<HomeBloc>().currentLocation,
+            //             pickupLatLng: context.read<HomeBloc>().currentLatLng,
+            //             // dropAddress: 'state.dropAddress',
+            //             // dropLatLng: 'state.dropLatLng',
+            //             userData: context.read<HomeBloc>().userData!,
+            //             pickUpChange: false,
+            //             transportType:
+            //                 context.read<HomeBloc>().selectedServiceType == 0
+            //                     ? 'taxi'
+            //                     : 'delivery',
+            //             isOutstationRide: false,
+            //             mapType: context.read<HomeBloc>().mapType),
+            //       );
+            //     },
+            //     child: Container(
+            //       padding: EdgeInsets.all(5),
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: AppColors.primary,
+            //       ),
+            //       child: const Text(
+            //         "Join\nCoShare",
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w600,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Positioned(
+            //   left: 10,
+            //   top: size.height * 0.2,
+            //   child: InkWell(
+            //     onTap: () {
+            //       showModalBottomSheet<void>(
+            //         isScrollControlled: true,
+            //         context: context,
+            //         shape: const RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.only(
+            //             topLeft: Radius.circular(15),
+            //             topRight: Radius.circular(
+            //               15,
+            //             ),
+            //           ),
+            //         ),
+            //         builder: (_) {
+            //           return BlocProvider.value(
+            //             value: context.read<HomeBloc>(),
+            //             child: StatefulBuilder(builder: (context, setState) {
+            //               return Stack(
+            //                 children: [
+            //                   Container(
+            //                     padding: EdgeInsets.symmetric(horizontal: 10)
+            //                         .copyWith(top: 20),
+            //                     height: size.height * 0.6,
+            //                     child: SingleChildScrollView(
+            //                       child: Column(
+            //                         children: [
+            //                           Row(
+            //                             children: [
+            //                               MyText(
+            //                                 text: "Incoming co-share",
+            //                                 textStyle: Theme.of(context)
+            //                                     .textTheme
+            //                                     .bodyLarge!
+            //                                     .copyWith(
+            //                                         fontWeight:
+            //                                             FontWeight.bold),
+            //                               ),
+            //                             ],
+            //                           ),
+            //                           SizedBox(height: 10),
+            //                           Divider(),
+            //                           SizedBox(height: 20),
+            //                           IncomingRequestCard(),
+            //                           IncomingRequestCard(),
+            //                           IncomingRequestCard(),
+            //                         ],
+            //                       ),
+            //                     ),
+            //                   ),
+            //                   Positioned(
+            //                     right: 20,
+            //                     top: 20,
+            //                     child: InkWell(
+            //                       onTap: () {
+            //                         Navigator.of(context).pop();
+            //                       },
+            //                       child: Icon(
+            //                         Icons.cancel_outlined,
+            //                         color: Colors.red,
+            //                       ),
+            //                     ),
+            //                   )
+            //                 ],
+            //               );
+            //             }),
+            //           );
+            //           // );
+            //         },
+            //       );
+            //       // Navigator.pushNamed(
+            //       //   context,
+            //       //   CosharePage.routeName,
+            //       //   arguments: DestinationPageArguments(
+            //       //       title: context.read<HomeBloc>().selectedServiceType == 0
+            //       //           ? 'Taxi'
+            //       //           : 'Delivery',
+            //       //       pickupAddress: context.read<HomeBloc>().currentLocation,
+            //       //       pickupLatLng: context.read<HomeBloc>().currentLatLng,
+            //       //       // dropAddress: 'state.dropAddress',
+            //       //       // dropLatLng: 'state.dropLatLng',
+            //       //       userData: context.read<HomeBloc>().userData!,
+            //       //       pickUpChange: false,
+            //       //       transportType:
+            //       //           context.read<HomeBloc>().selectedServiceType == 0
+            //       //               ? 'taxi'
+            //       //               : 'delivery',
+            //       //       isOutstationRide: false,
+            //       //       mapType: context.read<HomeBloc>().mapType),
+            //       // );
+            //     },
+            //     child: Container(
+            //       padding: EdgeInsets.all(5),
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10),
+            //         color: AppColors.primary,
+            //       ),
+            //       child: const Text(
+            //         "CoShare\nrequests",
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w600,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // Locate Me
             Positioned(
               bottom: size.height * 0.5,
@@ -927,7 +1380,7 @@ class _HomePageContentState extends State<HomePageContent>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: size.width * 0.06),
+        SizedBox(height: size.width * 0.03),
         Row(
           children: [
             MyText(
@@ -936,7 +1389,7 @@ class _HomePageContentState extends State<HomePageContent>
             ),
           ],
         ),
-        SizedBox(height: size.width * 0.06),
+        SizedBox(height: size.width * 0.03),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -961,40 +1414,39 @@ class _HomePageContentState extends State<HomePageContent>
                         .read<HomeBloc>()
                         .add(DestinationSelectEvent(isPickupChange: false));
                   },
-                  child: Card(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: size.width * 0.22,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.serviceGreen),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Image.asset(
-                              'assets/png/rideIcon.png',
-                              height: size.width * 0.05,
-                            ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.serviceGreen.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.22,
+                          height: size.height * 0.09,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                          const SizedBox(height: 10),
-                          MyText(
-                            text: AppLocalizations.of(context)!.taxi,
-                            textStyle:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          child: Image.asset(
+                            'assets/png/rideIcon.png',
+                            height: size.width * 0.05,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 10),
+                        MyText(
+                          text: AppLocalizations.of(context)!.taxi,
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.black),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1016,41 +1468,39 @@ class _HomePageContentState extends State<HomePageContent>
                         .read<HomeBloc>()
                         .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
                   },
-                  child: Card(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: size.width * 0.22,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.serviceYellow),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Image.asset(
-                              'assets/png/deliveryIcon.png',
-                              height: size.width * 0.05,
-                            ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.serviceYellow.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.22,
+                          height: size.height * 0.09,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                          const SizedBox(height: 10),
-                          MyText(
-                            text: AppLocalizations.of(context)!.delivery,
-                            // text: 'Delivery',
-                            textStyle:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          child: Image.asset(
+                            'assets/png/deliveryIcon.png',
+                            height: size.width * 0.05,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 10),
+                        MyText(
+                          text: AppLocalizations.of(context)!.delivery,
+                          // text: 'Delivery',
+                          textStyle:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.black,
+                                  ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1063,40 +1513,38 @@ class _HomePageContentState extends State<HomePageContent>
                         .read<HomeBloc>()
                         .add(ServiceTypeChangeEvent(serviceTypeIndex: 2));
                   },
-                  child: Card(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: size.width * 0.22,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.servicePurple),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Image.asset(
-                              'assets/png/rentalIcon.png',
-                              height: size.width * 0.05,
-                            ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.servicePurple.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.22,
+                          height: size.height * 0.09,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: AppColors.white),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                          const SizedBox(height: 10),
-                          MyText(
-                            text: AppLocalizations.of(context)!.rental,
-                            textStyle:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          child: Image.asset(
+                            'assets/png/rentalIcon.png',
+                            height: size.width * 0.05,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 10),
+                        MyText(
+                          text: AppLocalizations.of(context)!.rental,
+                          textStyle:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.black,
+                                  ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1115,40 +1563,39 @@ class _HomePageContentState extends State<HomePageContent>
                       ),
                     );
                   },
-                  child: Card(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: size.width * 0.22,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.serviceRed),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Image.asset(
-                              'assets/png/invest.png',
-                              height: size.width * 0.11,
-                            ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.serviceRed.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.22,
+                          height: size.height * 0.09,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.white,
                           ),
-                          const SizedBox(height: 10),
-                          MyText(
-                            text: "Bill payment",
-                            textStyle:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                        ],
-                      ),
+                          child: Image.asset(
+                            'assets/png/invest.png',
+                            height: size.width * 0.11,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        MyText(
+                          text: "Bill payment",
+                          textStyle:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.black,
+                                  ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1157,40 +1604,39 @@ class _HomePageContentState extends State<HomePageContent>
                   (context.read<HomeBloc>().userData!.showRentalRide))
                 InkWell(
                   onTap: () {},
-                  child: Card(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: AppColors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: size.width * 0.22,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.serviceBrown),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 8,
-                            ),
-                            child: Image.asset(
-                              'assets/png/advertIcon.png',
-                              height: size.width * 0.11,
-                            ),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.serviceBrown.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width * 0.22,
+                          height: size.height * 0.09,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColors.white,
                           ),
-                          const SizedBox(height: 10),
-                          MyText(
-                            text: "Advertise",
-                            textStyle:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
                           ),
-                        ],
-                      ),
+                          child: Image.asset(
+                            'assets/png/advertIcon.png',
+                            height: size.width * 0.11,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        MyText(
+                          text: "Advertise",
+                          textStyle:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.black,
+                                  ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1582,11 +2028,11 @@ class _HomePageContentState extends State<HomePageContent>
                       .read<HomeBloc>()
                       .recentSearchPlaces
                       .isNotEmpty) ...[
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         MyText(
-                          text: 'Recent place',
+                          text: 'Recent places',
                           textAlign: TextAlign.start,
                           textStyle:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -1601,122 +2047,108 @@ class _HomePageContentState extends State<HomePageContent>
                         height: context.read<HomeBloc>().isSheetAtTop == false
                             ? size.width * 0.01
                             : size.width * 0.02),
-                    SizedBox(
-                      height: size.height * 0.1,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount:
-                            context.read<HomeBloc>().recentSearchPlaces.length >
-                                    2
-                                ? 2
-                                : context
-                                    .read<HomeBloc>()
-                                    .recentSearchPlaces
-                                    .length,
-                        shrinkWrap: true,
-                        // physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context, index) {
-                          final recentPlace = context
-                              .read<HomeBloc>()
-                              .recentSearchPlaces
-                              .reversed
-                              .elementAt(index);
-                          return InkWell(
-                            onTap: () {
-                              if (context
+                    ListView.builder(
+                      itemCount:
+                          context.read<HomeBloc>().recentSearchPlaces.length > 2
+                              ? 2
+                              : context
                                   .read<HomeBloc>()
-                                  .pickupAddressList
-                                  .isNotEmpty) {
-                                if (context
-                                            .read<HomeBloc>()
-                                            .userData!
-                                            .enableModulesForApplications ==
-                                        'both' ||
-                                    context
-                                            .read<HomeBloc>()
-                                            .userData!
-                                            .enableModulesForApplications ==
-                                        'taxi') {
-                                  context.read<HomeBloc>().add(
-                                      RecentSearchPlaceSelectEvent(
-                                          address: recentPlace,
-                                          isPickupSelect: false,
-                                          transportType: 'taxi'));
-                                } else {
-                                  context.read<HomeBloc>().add(
-                                      ServiceTypeChangeEvent(
-                                          serviceTypeIndex: 1));
-                                }
+                                  .recentSearchPlaces
+                                  .length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        final recentPlace = context
+                            .read<HomeBloc>()
+                            .recentSearchPlaces
+                            .reversed
+                            .elementAt(index);
+                        return InkWell(
+                          onTap: () {
+                            if (context
+                                .read<HomeBloc>()
+                                .pickupAddressList
+                                .isNotEmpty) {
+                              if (context
+                                          .read<HomeBloc>()
+                                          .userData!
+                                          .enableModulesForApplications ==
+                                      'both' ||
+                                  context
+                                          .read<HomeBloc>()
+                                          .userData!
+                                          .enableModulesForApplications ==
+                                      'taxi') {
+                                context.read<HomeBloc>().add(
+                                    RecentSearchPlaceSelectEvent(
+                                        address: recentPlace,
+                                        isPickupSelect: false,
+                                        transportType: 'taxi'));
+                              } else {
+                                context.read<HomeBloc>().add(
+                                    ServiceTypeChangeEvent(
+                                        serviceTypeIndex: 1));
                               }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(right: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.primary.withOpacity(0.2),
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                height: size.height * 0.075,
+                                width: size.width * 0.075,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .disabledColor
+                                      .withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.history,
+                                  size: 18,
+                                  color: Theme.of(context)
+                                      .disabledColor
+                                      .withOpacity(0.75),
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: size.height * 0.075,
-                                    width: size.width * 0.075,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.1),
-                                      shape: BoxShape.circle,
+                              SizedBox(width: size.width * 0.025),
+                              SizedBox(
+                                width: size.width * 0.63,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    MyText(
+                                      text: recentPlace.address.split(',')[0],
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                      maxLines: 1,
                                     ),
-                                    alignment: Alignment.center,
-                                    child: Icon(
-                                      Icons.history,
-                                      size: 18,
-                                      color: Theme.of(context)
-                                          .disabledColor
-                                          .withOpacity(0.75),
+                                    MyText(
+                                      text: recentPlace.address,
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                  SizedBox(width: size.width * 0.025),
-                                  SizedBox(
-                                    width: size.width * 0.63,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        MyText(
-                                          text:
-                                              recentPlace.address.split(',')[0],
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                          maxLines: 1,
-                                        ),
-                                        MyText(
-                                          text: recentPlace.address,
-                                          textStyle: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .copyWith(
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                              ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ],
@@ -1905,7 +2337,7 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10)
                                       .copyWith(top: 20),
-                                  height: size.height * 0.35,
+                                  height: size.height * 0.45,
                                   child: SingleChildScrollView(
                                     child: Column(
                                       children: [
@@ -1957,34 +2389,7 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    showModalBottomSheet<void>(
-                                                      isScrollControlled: true,
-                                                      context: context,
-                                                      shape:
-                                                          const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  15),
-                                                          topRight:
-                                                              Radius.circular(
-                                                            15,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      builder: (_) {
-                                                        return BlocProvider
-                                                            .value(
-                                                          value: context
-                                                              .read<HomeBloc>(),
-                                                          child:
-                                                              declineOfferMethod(
-                                                                  size),
-                                                        );
-                                                        // );
-                                                      },
-                                                    );
+                                                    //decline
                                                   },
                                                   child: Container(
                                                     padding:
@@ -1995,8 +2400,8 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               20),
-                                                      color: Colors.grey
-                                                          .withOpacity(0.6),
+                                                      color: AppColors.grey
+                                                          .withOpacity(0.5),
                                                     ),
                                                     child:
                                                         Text("Decline offer"),
@@ -2027,9 +2432,10 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                                                           value: context
                                                               .read<HomeBloc>(),
                                                           child:
-                                                              acceptOfferMethod(
+                                                              renegociateMethod(
                                                                   size),
                                                         );
+                                                        // );
                                                       },
                                                     );
                                                   },
@@ -2042,19 +2448,61 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               20),
-                                                      color: AppColors.primary,
+                                                      color: AppColors.grey
+                                                          .withOpacity(0.5),
                                                     ),
                                                     child: Text(
-                                                      "Accept offer",
+                                                      "Re-negotiate",
                                                       style: TextStyle(
-                                                          color: Colors.white),
+                                                          color: Colors.black),
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        SizedBox(height: 10),
+                                        InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet<void>(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(15),
+                                                  topRight: Radius.circular(
+                                                    15,
+                                                  ),
+                                                ),
+                                              ),
+                                              builder: (_) {
+                                                return BlocProvider.value(
+                                                  value:
+                                                      context.read<HomeBloc>(),
+                                                  child:
+                                                      acceptOfferMethod(size),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: size.width,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: AppColors.primary),
+                                            child: Text(
+                                              "Accpet offer",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -2114,7 +2562,12 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
     );
   }
 
-  StatefulBuilder declineOfferMethod(Size size) {
+  /*
+    
+  
+  */
+
+  StatefulBuilder renegociateMethod(Size size) {
     return StatefulBuilder(builder: (context, setState) {
       return Stack(
         children: [
@@ -2293,6 +2746,55 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                 SizedBox(height: 20),
                 MyText(
                   text: "You've accepted Adam's offer and he has been notified",
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                      ),
+                ),
+                SizedBox(height: 20),
+                CustomButton(
+                  buttonName: "Go Home",
+                  onTap: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, HomePage.routeName, (route) => false);
+                  },
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: 20,
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.cancel_outlined,
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
+      );
+    });
+  }
+
+  StatefulBuilder declineOfferMethod(Size size) {
+    return StatefulBuilder(builder: (context, setState) {
+      return Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+            height: size.height * 0.38,
+            child: Column(
+              children: [
+                Image.asset("assets/png/accept.png"),
+                SizedBox(height: 20),
+                MyText(
+                  text: "You've declined Adam's offer and he has been notified",
                   textAlign: TextAlign.center,
                   maxLines: 4,
                   textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(

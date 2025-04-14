@@ -137,19 +137,11 @@ Widget etaListViewWidget(Size size, BuildContext context,
                       Row(
                         children: [
                           MyText(
-                            text:
-                                context.watch<BookingBloc>().showBiddingVehicles
-                                    ? 'Negotiable'
-                                    : 'Fixed rate',
+                            text: 'Fixed rate',
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
-                                .copyWith(
-                                    color: context
-                                            .watch<BookingBloc>()
-                                            .showBiddingVehicles
-                                        ? AppColors.primary
-                                        : AppColors.green),
+                                .copyWith(color: AppColors.green),
                           ),
                           const SizedBox(width: 10),
                           CustomSwitch(
@@ -171,6 +163,14 @@ Widget etaListViewWidget(Size size, BuildContext context,
                                     thisValue,
                                   );
                             },
+                          ),
+                          const SizedBox(width: 10),
+                          MyText(
+                            text: 'Negotiable',
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: AppColors.primary),
                           ),
                         ],
                       ),

@@ -552,7 +552,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // LocateMe
   Future<void> locateMe(LocateMeEvent event, Emitter<HomeState> emit) async {
-    dev.log("locateMe called=====");
+    dev.log("--locateMe called=====");
     isOnCurrentLocation = true;
     await Permission.location.request();
     PermissionStatus status = await Permission.location.status;
@@ -915,13 +915,61 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void> updateLocation(
+  // Future<void> updateLocation(
+  //     UpdateLocationEvent event, Emitter<HomeState> emit) async {
+  //   dev.log("--updateLocation called=====");
+  //   if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {}
+  //   isCameraMoveComplete = false;
+  //   emit(UpdateLocationState());
+  // }
+
+    Future<void> updateLocation(
       UpdateLocationEvent event, Emitter<HomeState> emit) async {
-    dev.log("updateLocation called=====");
-    if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {}
+    if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {
+      final data = await serviceLocator<HomeUsecase>().getAddressFromLatLng(
+          lat: event.latLng.latitude,
+          lng: event.latLng.longitude,
+          mapType: event.mapType);
+      data.fold((error) {
+        currentLocation = '';
+        pickupAddressController.text = '';
+        emit(HomeUpdateState());
+      }, (success) {
+        if (success.toString().isNotEmpty) {
+          currentLocation = success.toString();
+          if (event.isFromHomePage) {
+            pickupAddressController.text = currentLocation;
+            pickupAddressList.removeWhere((element) => element.pickup == true);
+            pickupAddressList.add(AddressModel(
+                orderId: '1',
+                address: currentLocation,
+                lat: event.latLng.latitude,
+                lng: event.latLng.longitude,
+                name: (userData != null) ? userData!.name : '',
+                number: (userData != null) ? userData!.mobile : '',
+                isAirportLocation:
+                    (currentLocation.toLowerCase().contains('airport'))
+                        ? true
+                        : false,
+                pickup: true));
+            debugPrint('pickup add');
+            add(ServiceLocationVerifyEvent(
+                isFromHomePage: event.isFromHomePage,
+                rideType: 'taxi',
+                address: pickupAddressList));
+            add(StreamRequestEvent());
+          }
+        } else {
+          currentLocation = '';
+          pickupAddressController.text = '';
+        }
+      });
+    }
     isCameraMoveComplete = false;
     emit(UpdateLocationState());
   }
+
+
 
   Future<void> serviceTypeChage(
       ServiceTypeChangeEvent event, Emitter<HomeState> emit) async {
@@ -1197,6 +1245,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> recentSearchPlaceSelect(
       RecentSearchPlaceSelectEvent event, Emitter<HomeState> emit) async {
+
+        dev.log("--RecentSearchPlaceSelectEvent called");
     emit(HomeLoadingStartState());
     autoSearchPlaces.clear();
     searchInfoMessage = '';
@@ -1367,6 +1417,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> confirmAddress(
       ConfirmAddressEvent event, Emitter<HomeState> emit) async {
+        dev.log("--confirmAddress called");
     emit(ConfirmAddressState(
       isDelivery: event.isDelivery,
       isEditAddress: event.isEditAddress,
@@ -1390,6 +1441,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> confirmLocationSearchSelectPlace(
       ConfirmLocationSearchPlaceSelectEvent event,
       Emitter<HomeState> emit) async {
+        dev.log("--ConfirmLocationSearchPlaceSelectEvent called");
     dynamic latLng;
     if ((event.address.lat == 0 || event.address.lat == 0.0) &&
         (event.address.lng == 0 || event.address.lng == 0.0)) {
