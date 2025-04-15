@@ -2526,6 +2526,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
       },
     );
     emit(BookingUpdateState());
+    dev.log("--BookingUpdateState emit");
   }
 
   mapBound(double pickLat, double pickLng, double dropLat, double dropLng,

@@ -54,7 +54,7 @@ class HomeApi {
       final userId = await AppSharedPreference.getUserId();
 
       Response response =
-          await DioProviderImpl().post(ApiEndpoints.serviceVerify, headers: {
+          await DioProviderImpl().post(ApiEndpoints.joinCoShareTrip, headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }, body: {
@@ -62,9 +62,9 @@ class HomeApi {
         "user_id": userId,
         "pickup_address": pickupAddress,
         "destination_address": destinationAddress,
-        "proposed_amount": proposedAmount
+        "proposed_amount": 0
       });
-      dev.log("-- 1-join coshare${response.data}");
+      dev.log("-- 1-join coshare trip response${response.data}");
       return response;
     } catch (e) {
       //debugPrint(e.toString());

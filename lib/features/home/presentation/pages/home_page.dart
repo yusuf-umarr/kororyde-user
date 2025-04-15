@@ -12,6 +12,7 @@ import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/cosharer_detail.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
 import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/help_page.dart';
@@ -165,8 +166,9 @@ class _HomePageContentState extends State<HomePageContent>
                                         CrossAxisAlignment.start,
                                     children: [
                                       FABButton(
-                                        iconColor: const Color(0xff1F867D),
-                                        iconBgColor: const Color(0xffB8F5F9),
+                                        iconColor: AppColors.primary,
+                                        iconBgColor:
+                                            AppColors.primary.withOpacity(0.1),
                                         icon: Icons.help,
                                         containerText: 'Help',
                                         containerWidth: 154,
@@ -209,191 +211,205 @@ class _HomePageContentState extends State<HomePageContent>
                                               ),
                                             ),
                                             builder: (_) {
-                                              return BlocProvider.value(
-                                                value: context.read<HomeBloc>(),
-                                                child: StatefulBuilder(builder:
-                                                    (context, setState) {
-                                                  return Stack(
-                                                    children: [
-                                                      Container(
-                                                        padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        10)
-                                                            .copyWith(top: 20),
-                                                        height:
-                                                            size.height * 0.6,
-                                                        child:
-                                                            SingleChildScrollView(
-                                                          child: Column(
-                                                            children: [
-                                                              Row(
-                                                                children: [
-                                                                  MyText(
-                                                                    text:
-                                                                        "Manage Co-Share",
-                                                                    textStyle: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .bodyLarge!
-                                                                        .copyWith(
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 10),
-                                                              Divider(),
+                                              return
 
-                                                              SizedBox(
-                                                                  height: 10),
+                                                  // BlocProvider.value(
+                                                  //   value: context.read<HomeBloc>(),
+                                                  //   child:
 
-                                                              //co-share higlight/
-                                                              Row(
-                                                                children: [
-                                                                  Expanded(
+                                                  StatefulBuilder(builder:
+                                                      (context, setState) {
+                                                return Stack(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      10)
+                                                              .copyWith(
+                                                                  top: 20),
+                                                      height: size.height * 0.6,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                MyText(
+                                                                  text:
+                                                                      "Manage Co-Share",
+                                                                  textStyle: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyLarge!
+                                                                      .copyWith(
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Divider(),
+
+                                                            SizedBox(
+                                                                height: 10),
+
+                                                            //co-share higlight/
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(4),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        color: AppColors
+                                                                            .primary
+                                                                            .withOpacity(0.1)),
                                                                     child:
-                                                                        Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              4),
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              5),
-                                                                          color: AppColors
-                                                                              .primary
-                                                                              .withOpacity(0.1)),
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          Text(
-                                                                            "Expected Co-Sharers: ",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 9,
-                                                                            ),
+                                                                        Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "Expected Co-Sharers: ",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                9,
                                                                           ),
-                                                                          Text(
-                                                                            "5",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 11,
-                                                                            ),
+                                                                        ),
+                                                                        Text(
+                                                                          "5",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                11,
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          10),
-                                                                  Expanded(
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(4),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        color: AppColors
+                                                                            .primary
+                                                                            .withOpacity(0.1)),
                                                                     child:
-                                                                        Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              4),
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              5),
-                                                                          color: AppColors
-                                                                              .primary
-                                                                              .withOpacity(0.1)),
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          Text(
-                                                                            "Confirmed Co-Sharers: ",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 9,
-                                                                            ),
+                                                                        Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "Confirmed Co-Sharers: ",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                9,
                                                                           ),
-                                                                          Text(
-                                                                            "2",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 11,
-                                                                            ),
+                                                                        ),
+                                                                        Text(
+                                                                          "2",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                11,
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          10),
-                                                                  Expanded(
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(4),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                5),
+                                                                        color: AppColors
+                                                                            .primary
+                                                                            .withOpacity(0.1)),
                                                                     child:
-                                                                        Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              4),
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                              5),
-                                                                          color: AppColors
-                                                                              .primary
-                                                                              .withOpacity(0.1)),
-                                                                      child:
-                                                                          Column(
-                                                                        children: [
-                                                                          Text(
-                                                                            "Total Requests: ",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 9,
-                                                                            ),
+                                                                        Column(
+                                                                      children: [
+                                                                        Text(
+                                                                          "Total Requests: ",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                9,
                                                                           ),
-                                                                          Text(
-                                                                            "7",
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: AppColors.primary,
-                                                                              fontSize: 11,
-                                                                            ),
+                                                                        ),
+                                                                        Text(
+                                                                          "7",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                AppColors.primary,
+                                                                            fontSize:
+                                                                                11,
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 20),
-                                                              IncomingRequestCard(),
-                                                              IncomingRequestCard(),
-                                                              IncomingRequestCard(),
-                                                            ],
-                                                          ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 20),
+                                                            IncomingRequestCard(),
+                                                            IncomingRequestCard(),
+                                                            IncomingRequestCard(),
+                                                          ],
                                                         ),
                                                       ),
-                                                      Positioned(
-                                                        right: 20,
-                                                        top: 20,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: Icon(
-                                                            Icons
-                                                                .cancel_outlined,
-                                                            color: Colors.red,
-                                                          ),
+                                                    ),
+                                                    Positioned(
+                                                      right: 20,
+                                                      top: 20,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Icon(
+                                                          Icons.cancel_outlined,
+                                                          color: Colors.red,
                                                         ),
-                                                      )
-                                                    ],
-                                                  );
-                                                }),
-                                              );
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              });
                                             },
                                           );
                                         },
@@ -2220,7 +2236,7 @@ class _IncomingRequestCardState extends State<IncomingRequestCard> {
                           MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
                               value: context.read<HomeBloc>(),
-                              child: RideDetailPage(isRequest: true),
+                              child: CosharerDetail(isRequest: true),
                             ),
                           ),
                         );

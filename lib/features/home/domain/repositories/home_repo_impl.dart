@@ -61,7 +61,6 @@ class HomeRepositoryImpl implements HomeRepository {
     AllCoShareTripModel userDetailsResponseModel;
     try {
       Response response = await _homeApi.getAllCoShareTripApi();
-      // log("--getAllCoShareTripApi response res----:${response.data}");
 
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));

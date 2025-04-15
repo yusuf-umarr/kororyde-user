@@ -3,65 +3,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/common/app_colors.dart';
-import 'package:kororyde_user/common/app_constants.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
-import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
-import 'dart:developer';
 
-class RideDetailPage extends StatefulWidget {
+class CosharerDetail extends StatefulWidget {
   final bool isRequest;
-  final String pickUpAddr;
-  final String dropOffAddr;
-  final double pickUpLat;
-  final double pickUpLong;
-  final double dropOffLat;
-  final double dropOffLong;
-  final CoShareTripData rider;
-  const RideDetailPage({
+  // final String pickUpAddr;
+  // final String dropOffAddr;
+  // final double pickUpLat;
+  // final double pickUpLong;
+  // final double dropOffLat;
+  // final double dropOffLong;
+  // final CoShareTripData rider;
+  const CosharerDetail({
     super.key,
     required this.isRequest,
-    required this.pickUpAddr,
-    required this.dropOffAddr,
-    required this.pickUpLat,
-    required this.pickUpLong,
-    required this.dropOffLat,
-    required this.dropOffLong,
-    required this.rider,
+    // required this.pickUpAddr,
+    // required this.dropOffAddr,
+    // required this.pickUpLat,
+    // required this.pickUpLong,
+    // required this.dropOffLat,
+    // required this.dropOffLong,
+    // required this.rider,
   });
 
   @override
-  State<RideDetailPage> createState() => _RideDetailPageState();
+  State<CosharerDetail> createState() => _CosharerDetailState();
 }
 
-class _RideDetailPageState extends State<RideDetailPage> {
+class _CosharerDetailState extends State<CosharerDetail> {
   final TextEditingController _offerController =
       TextEditingController(text: '100');
   int coShareMaxSeats = 100;
-
-  @override
-  void initState() {
-    addPoly();
-    super.initState();
-  }
-
-  addPoly() {
-    final bloc = context.read<BookingBloc>();
-
-    bloc.add(PolylineEvent(
-      isInitCall: true,
-      // arg: event.arg,
-      pickLat: widget.pickUpLat,
-      pickLng: widget.pickUpLong,
-      dropLat: widget.rider.requestPlaces![0].dropLat!,
-      dropLng: widget.rider.requestPlaces![0].dropLng!,
-      stops: [],
-      pickAddress: widget.pickUpAddr,
-      dropAddress: widget.rider.requestPlaces![0].dropAddress!,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -163,7 +137,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: MyText(
-                                      text: "${widget.rider.user!.name!}",
+                                      text: "Francis Adeoti",
                                       textStyle: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -204,19 +178,16 @@ class _RideDetailPageState extends State<RideDetailPage> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Expanded(
-                                child: MyText(
-                                  text: "${widget.pickUpAddr}",
-                                  maxLines: 4,
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12),
-                                ),
+                              MyText(
+                                text: "42 adebola st, surulere, lagos",
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12),
                               ),
                             ],
                           ),
@@ -245,20 +216,16 @@ class _RideDetailPageState extends State<RideDetailPage> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Expanded(
-                                child: MyText(
-                                  text:
-                                      "${widget.rider.requestPlaces![0].dropAddress}",
-                                  maxLines: 3,
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12),
-                                ),
+                              MyText(
+                                text: "Elegushi Royal, lekki,",
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12),
                               ),
                             ],
                           ),
@@ -266,7 +233,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                       ),
                       SizedBox(height: 20),
                       MyText(
-                        text: "${widget.rider.user!.name}'s location",
+                        text: "francis's location",
                         textStyle: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -280,62 +247,47 @@ class _RideDetailPageState extends State<RideDetailPage> {
                 ),
 
                 ////google map///
-                /////
-                BlocBuilder<BookingBloc, BookingState>(
-                    builder: (context, state) {
-                  // log("--marker list:${context.read<BookingBloc>().markerList}");
-                  // log("--polylines:${context.read<BookingBloc>().polylines}");
-
-                  if (state is BookingUpdateState) {
-                    return Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.42),
-                      child: SizedBox(
-                        height: size.height * 0.5,
-                        width: size.width,
-                        child: GoogleMap(
-                          // gestureRecognizers: {
-                          //   Factory<OneSequenceGestureRecognizer>(
-                          //     () => EagerGestureRecognizer(),
-                          //   ),
-                          // },
-                          onMapCreated: (GoogleMapController controller) {
-                            context.read<BookingBloc>().googleMapController =
-                                controller;
-                          },
-                          compassEnabled: false,
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(
-                                AppConstants.currentLocations.latitude,
-                                AppConstants.currentLocations.longitude),
-                            zoom: 15.0,
-                          ),
-                          onCameraMove: (CameraPosition position) async {},
-                          onCameraIdle: () async {},
-                          minMaxZoomPreference:
-                              const MinMaxZoomPreference(0, 20),
-                          buildingsEnabled: false,
-                          zoomControlsEnabled: false,
-                          myLocationEnabled: (context
-                                      .read<BookingBloc>()
-                                      .isNormalRideSearching ||
-                                  context
-                                      .read<BookingBloc>()
-                                      .isBiddingRideSearching ||
-                                  (context.read<BookingBloc>().requestData !=
-                                      null))
-                              ? false
-                              : true,
-                          myLocationButtonEnabled: false,
-
-                          markers:
-                              Set.from(context.read<BookingBloc>().markerList),
-                          polylines: context.read<BookingBloc>().polylines,
-                        ),
+                Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.40),
+                  child: SizedBox(
+                    height: size.height * 0.5,
+                    width: size.width,
+                    child: GoogleMap(
+                      // gestureRecognizers: {
+                      //   Factory<OneSequenceGestureRecognizer>(
+                      //     () => EagerGestureRecognizer(),
+                      //   ),
+                      // },
+                      onMapCreated: (GoogleMapController controller) {
+                        context.read<BookingBloc>().googleMapController =
+                            controller;
+                      },
+                      compassEnabled: false,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(
+                          8.5373, //   AppConstants.currentLocations.latitude,
+                          4.5444,
+                        ), //    AppConstants.currentLocations.longitude),
+                        zoom: 15.0,
                       ),
-                    );
-                  }
-                  return SizedBox.shrink();
-                }),
+                      onCameraMove: (CameraPosition position) async {},
+                      onCameraIdle: () async {},
+                      minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
+                      buildingsEnabled: false,
+                      zoomControlsEnabled: false,
+                      myLocationEnabled: (context
+                                  .read<BookingBloc>()
+                                  .isNormalRideSearching ||
+                              context
+                                  .read<BookingBloc>()
+                                  .isBiddingRideSearching ||
+                              (context.read<BookingBloc>().requestData != null))
+                          ? false
+                          : true,
+                      myLocationButtonEnabled: false,
+                    ),
+                  ),
+                ),
                 ////google map///
                 // Align(
                 //   alignment: Alignment.bottomCenter,
@@ -358,15 +310,6 @@ class _RideDetailPageState extends State<RideDetailPage> {
                   children: [
                     InkWell(
                       onTap: () {
-                        final bloc = context.read<HomeBloc>();
-                        bloc.add(JoinCoShareTripEvent(
-                          destinationAddress: widget.dropOffAddr,
-                          pickupAddress: widget.pickUpAddr,
-                          pickUpLat: widget.pickUpLat,
-                          pickUpLong: widget.pickUpLong,
-                          tripRequestId: widget.rider.id!,
-                          proposedAmount: 0,
-                        ));
                         showModalBottomSheet<void>(
                           isScrollControlled: true,
                           context: context,

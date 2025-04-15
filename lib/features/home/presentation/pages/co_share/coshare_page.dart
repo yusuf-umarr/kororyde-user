@@ -521,151 +521,161 @@ class _CosharePageState extends State<CosharePage> {
                               SizedBox(height: size.width * 0.02),
                             // buildRecentSearchLocations(context, size)
                             Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    8,
-                                    8,
-                                    8,
-                                    MediaQuery.of(context).viewInsets.bottom +
-                                        8),
-                                child: CustomButton(
-                                  width: size.width,
-                                  buttonName: "Search for ride",
-                                  buttonColor: !context
-                                          .read<HomeBloc>()
-                                          .addressList
-                                          .any((element) =>
-                                              element.address.isEmpty)
-                                      ? Theme.of(context).primaryColor
-                                      : Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.5),
-                                  onTap: () {
-                                    if (!context
+                              padding: EdgeInsets.fromLTRB(8, 8, 8,
+                                  MediaQuery.of(context).viewInsets.bottom + 8),
+                              child: CustomButton(
+                                width: size.width,
+                                buttonName: "Search for ride",
+                                buttonColor: !context
                                         .read<HomeBloc>()
                                         .addressList
                                         .any((element) =>
-                                            element.address.isEmpty)) {
-                                      //BlocProvider.value(
-                                      // value: context.read<HomeBloc>(),
-                                      // context
-                                      //     .read<HomeBloc>()
-                                      //     .add(GetAllCoShareTripEvent());
+                                            element.address.isEmpty)
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.5),
+                                onTap: () {
+                                  if (!context.read<HomeBloc>().addressList.any(
+                                      (element) => element.address.isEmpty)) {
+                                    //BlocProvider.value(
+                                    // value: context.read<HomeBloc>(),
+                                    // context
+                                    //     .read<HomeBloc>()
+                                    //     .add(GetAllCoShareTripEvent());
 
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => BlocProvider.value(
-                                            value: context.read<HomeBloc>(),
-                                            child: AvailableCoshareRidePage(
-                                              arg: BookingPageArguments(
-                                                  picklat: context
-                                                      .read<HomeBloc>()
-                                                      .pickupAddressList
-                                                      .first
-                                                      .lat
-                                                      .toString(),
-                                                  picklng: context
-                                                      .read<HomeBloc>()
-                                                      .pickupAddressList
-                                                      .first
-                                                      .lng
-                                                      .toString(),
-                                                  droplat: context
-                                                      .read<HomeBloc>()
-                                                      .stopAddressList
-                                                      .last
-                                                      .lat
-                                                      .toString(),
-                                                  droplng: context
-                                                      .read<HomeBloc>()
-                                                      .stopAddressList
-                                                      .last
-                                                      .lng
-                                                      .toString(),
-                                                  userData: widget.arg.userData,
-                                                  transportType:
-                                                      widget.arg.transportType,
-                                                  pickupAddressList: context
-                                                      .read<HomeBloc>()
-                                                      .pickupAddressList,
-                                                  stopAddressList: context
-                                                      .read<HomeBloc>()
-                                                      .stopAddressList,
-                                                  title: widget.arg.title,
-                                                  polyString: '',
-                                                  distance: '',
-                                                  duration: '',
-                                                  isOutstationRide: widget
-                                                      .arg.isOutstationRide,
-                                                  mapType: widget.arg.mapType),
-                                            ),
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: context.read<HomeBloc>(),
+                                          child: AvailableCoshareRidePage(
+                                            arg: BookingPageArguments(
+                                                picklat: context
+                                                    .read<HomeBloc>()
+                                                    .pickupAddressList
+                                                    .first
+                                                    .lat
+                                                    .toString(),
+                                                picklng: context
+                                                    .read<HomeBloc>()
+                                                    .pickupAddressList
+                                                    .first
+                                                    .lng
+                                                    .toString(),
+                                                droplat: context
+                                                    .read<HomeBloc>()
+                                                    .stopAddressList
+                                                    .last
+                                                    .lat
+                                                    .toString(),
+                                                droplng: context
+                                                    .read<HomeBloc>()
+                                                    .stopAddressList
+                                                    .last
+                                                    .lng
+                                                    .toString(),
+                                                userData: widget.arg.userData,
+                                                transportType:
+                                                    widget.arg.transportType,
+                                                pickupAddressList: context
+                                                    .read<HomeBloc>()
+                                                    .pickupAddressList,
+                                                stopAddressList: context
+                                                    .read<HomeBloc>()
+                                                    .stopAddressList,
+                                                title: widget.arg.title,
+                                                polyString: '',
+                                                distance: '',
+                                                duration: '',
+                                                isOutstationRide:
+                                                    widget.arg.isOutstationRide,
+                                                mapType: widget.arg.mapType),
                                           ),
                                         ),
-                                      );
+                                      ),
+                                    );
 
-                                      // Navigator.pushNamed(
-                                      //   context,
-                                      //   AvailableCoshareRidePage.routeName,
-                                      //   arguments: BookingPageArguments(
-                                      //       picklat: context
-                                      //           .read<HomeBloc>()
-                                      //           .pickupAddressList
-                                      //           .first
-                                      //           .lat
-                                      //           .toString(),
-                                      //       picklng: context
-                                      //           .read<HomeBloc>()
-                                      //           .pickupAddressList
-                                      //           .first
-                                      //           .lng
-                                      //           .toString(),
-                                      //       droplat: context
-                                      //           .read<HomeBloc>()
-                                      //           .stopAddressList
-                                      //           .last
-                                      //           .lat
-                                      //           .toString(),
-                                      //       droplng: context
-                                      //           .read<HomeBloc>()
-                                      //           .stopAddressList
-                                      //           .last
-                                      //           .lng
-                                      //           .toString(),
-                                      //       userData: widget.arg.userData,
-                                      //       transportType:
-                                      //           widget.arg.transportType,
-                                      //       pickupAddressList: context
-                                      //           .read<HomeBloc>()
-                                      //           .pickupAddressList,
-                                      //       stopAddressList: context
-                                      //           .read<HomeBloc>()
-                                      //           .stopAddressList,
-                                      //       title: widget.arg.title,
-                                      //       polyString: '',
-                                      //       distance: '',
-                                      //       duration: '',
-                                      //       isOutstationRide:
-                                      //           widget.arg.isOutstationRide,
-                                      //       mapType: widget.arg.mapType),
-                                      // );
-                                    }
-                                    // log("done clickkkk");
-                                    // if (!context
-                                    //     .read<HomeBloc>()
-                                    //     .addressList
-                                    //     .any((element) => element.address.isEmpty)) {
-                                    //   context.read<HomeBloc>().add(
-                                    //       ConfirmRideAddressEvent(
-                                    //           rideType: widget.arg.isOutstationRide
-                                    //               ? 'outstation'
-                                    //               : 'taxi',
-                                    //           addressList: context
-                                    //               .read<HomeBloc>()
-                                    //               .addressList)
-                                    //               );
-                                    // }
-                                  },
-                                ))
+                                    // Navigator.pushNamed(
+                                    //   context,
+                                    //   AvailableCoshareRidePage.routeName,
+                                    //   arguments: BookingPageArguments(
+                                    //       picklat: context
+                                    //           .read<HomeBloc>()
+                                    //           .pickupAddressList
+                                    //           .first
+                                    //           .lat
+                                    //           .toString(),
+                                    //       picklng: context
+                                    //           .read<HomeBloc>()
+                                    //           .pickupAddressList
+                                    //           .first
+                                    //           .lng
+                                    //           .toString(),
+                                    //       droplat: context
+                                    //           .read<HomeBloc>()
+                                    //           .stopAddressList
+                                    //           .last
+                                    //           .lat
+                                    //           .toString(),
+                                    //       droplng: context
+                                    //           .read<HomeBloc>()
+                                    //           .stopAddressList
+                                    //           .last
+                                    //           .lng
+                                    //           .toString(),
+                                    //       userData: widget.arg.userData,
+                                    //       transportType:
+                                    //           widget.arg.transportType,
+                                    //       pickupAddressList: context
+                                    //           .read<HomeBloc>()
+                                    //           .pickupAddressList,
+                                    //       stopAddressList: context
+                                    //           .read<HomeBloc>()
+                                    //           .stopAddressList,
+                                    //       title: widget.arg.title,
+                                    //       polyString: '',
+                                    //       distance: '',
+                                    //       duration: '',
+                                    //       isOutstationRide:
+                                    //           widget.arg.isOutstationRide,
+                                    //       mapType: widget.arg.mapType),
+                                    // );
+                                  }
+                                  // log("done clickkkk");
+                                  // if (!context
+                                  //     .read<HomeBloc>()
+                                  //     .addressList
+                                  //     .any((element) => element.address.isEmpty)) {
+                                  //   context.read<HomeBloc>().add(
+                                  //       ConfirmRideAddressEvent(
+                                  //           rideType: widget.arg.isOutstationRide
+                                  //               ? 'outstation'
+                                  //               : 'taxi',
+                                  //           addressList: context
+                                  //               .read<HomeBloc>()
+                                  //               .addressList)
+                                  //               );
+                                  // }
+                                },
+                              ),
+                            ),
+
+                            SizedBox(height: 30),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: MyText(
+                                text: 'Pending trips',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        fontSize: 15, color: Colors.black,),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ],
                         ],
                         if (context

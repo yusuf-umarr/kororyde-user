@@ -19,7 +19,6 @@ class JoinCoShareTripEvent extends HomeEvent {
   "proposed_amount": 100
   */
   final String tripRequestId;
-  final String userId;
   final String pickupAddress;
   final String destinationAddress;
   final dynamic proposedAmount;
@@ -29,16 +28,15 @@ class JoinCoShareTripEvent extends HomeEvent {
   final dynamic destinationLong;
 
   JoinCoShareTripEvent({
-   required this.tripRequestId,
-   required this.userId,
-   required this.pickupAddress,
-   required this.destinationAddress,
-   required this.proposedAmount,
+    required this.tripRequestId,
+    required this.pickupAddress,
+    required this.destinationAddress,
+    required this.proposedAmount,
     this.pickUpLat,
     this.pickUpLong,
     this.destinationLat,
     this.destinationLong,
- });
+  });
 }
 
 class StreamRequestEvent extends HomeEvent {}

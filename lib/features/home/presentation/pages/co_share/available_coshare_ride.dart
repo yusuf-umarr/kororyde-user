@@ -32,9 +32,8 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.watch<HomeBloc>();
+    // final bloc = context.watch<HomeBloc>();
 
-    log("--get available co-share:${bloc.allCoShareTripData}"); //this retuns null onpon opening the page but later return data
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -68,6 +67,7 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
               children: state.data
                   .map((rider) => AvailableRideCard(
                         rider: rider,
+                        arg:widget.arg,
                       ))
                   .toList(),
             ),
@@ -98,10 +98,12 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
 }
 
 class AvailableRideCard extends StatelessWidget {
+  final BookingPageArguments arg;
   final CoShareTripData rider;
   const AvailableRideCard({
     super.key,
     required this.rider,
+    required this.arg,
   });
 
   @override
@@ -117,7 +119,16 @@ class AvailableRideCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: context.read<HomeBloc>(),
-              child: RideDetailPage(isRequest: false),
+              child: RideDetailPage(isRequest: false, 
+              pickUpAddr: arg.pickupAddressList[0].address,
+              dropOffAddr: "",
+              pickUpLat: double.parse(arg.picklat),
+              pickUpLong:double.parse(arg.picklng) ,
+              dropOffLat:  double.parse(arg.droplat),
+              dropOffLong: double.parse(arg.droplng),
+              rider: rider,
+
+              ),
             ),
           ),
         );
