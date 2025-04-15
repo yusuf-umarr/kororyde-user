@@ -21,6 +21,9 @@ class HomeUsecase {
   Future<Either<Failure, dynamic>> allCoShareTrip() async {
     return _homeRepository.getAllCoShareTrip();
   }
+  Future<Either<Failure, dynamic>> getIncomingCoShare() async {
+    return _homeRepository.getIncomingCoShareRequest();
+  }
 
   Future<Either<Failure, dynamic>> joinCoShareTrip({
     required String tripRequestId,

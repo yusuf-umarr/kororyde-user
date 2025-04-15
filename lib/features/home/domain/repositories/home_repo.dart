@@ -9,10 +9,10 @@ import '../models/stop_address_model.dart';
 import '../models/user_details_model.dart';
 
 abstract class HomeRepository {
-  Future<Either<Failure, UserDetailResponseModel>> getUserDetails( 
+  Future<Either<Failure, UserDetailResponseModel>> getUserDetails(
       {String? requestId});
-  Future<Either<Failure, AllCoShareTripModel>> getAllCoShareTrip( 
-      );
+  Future<Either<Failure, AllCoShareTripModel>> getAllCoShareTrip();
+  Future<Either<Failure, AllCoShareTripModel>> getIncomingCoShareRequest();
 
   Future<Either<Failure, dynamic>> getAutoCompletePlaces({
     required String input,
@@ -22,16 +22,14 @@ abstract class HomeRepository {
     required LatLng currentLatLng,
   });
   Future<Either<Failure, dynamic>> joinACoShareTrip({
-     required String tripRequestId,
-  required String pickupAddress,
-  required String destinationAddress,
-  required dynamic proposedAmount,
-   dynamic pickUpLat,
-   dynamic pickUpLong,
-   dynamic destinationLat,
-   dynamic destinationLong,
-
-   
+    required String tripRequestId,
+    required String pickupAddress,
+    required String destinationAddress,
+    required dynamic proposedAmount,
+    dynamic pickUpLat,
+    dynamic pickUpLong,
+    dynamic destinationLat,
+    dynamic destinationLong,
   });
 
   Future<Either<Failure, dynamic>> getAutoCompletePlaceLatLng(

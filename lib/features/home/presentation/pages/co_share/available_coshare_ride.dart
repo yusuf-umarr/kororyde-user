@@ -10,7 +10,8 @@ import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
 class AvailableCoshareRidePage extends StatefulWidget {
   static const String routeName = '/availableCoShare';
@@ -33,7 +34,6 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
   @override
   Widget build(BuildContext context) {
     // final bloc = context.watch<HomeBloc>();
-
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -59,23 +59,36 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
               fontWeight: FontWeight.w500),
         ),
       ),
-      body: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        if (state is CoShareTripDataLoaded) {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: state.data
-                  .map((rider) => AvailableRideCard(
-                        rider: rider,
-                        arg:widget.arg,
-                      ))
-                  .toList(),
-            ),
-          );
-        } else {
-          return Center(child: Text("No Co-Share available at this moment"));
-        }
-      }),
+      body: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is CoShareTripDataLoaded) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: state.data
+                    .map((rider) => AvailableRideCard(
+                          rider: rider,
+                          arg: widget.arg,
+                        ))
+                    .toList(),
+              ),
+            );
+          } else {
+            return FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 2)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const Center(
+                    child: Text("No Co-Share available at this moment"),
+                  );
+                }
+              },
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -100,17 +113,51 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
 class AvailableRideCard extends StatelessWidget {
   final BookingPageArguments arg;
   final CoShareTripData rider;
-  const AvailableRideCard({
+  AvailableRideCard({
     super.key,
     required this.rider,
     required this.arg,
   });
 
+  double? distanceMeters;
+  static const double earthRadiusKm = 6371.0;
+
+  // Helper method to convert degrees to radians
+  static double _toRadians(double degree) {
+    return degree * pi / 180;
+  }
+
+  // Method to calculate the distance in meters
+  double calculateDistance({
+    required double sourceLat,
+    required double sourceLng,
+    required double destinationLat,
+    required double destinationLng,
+  }) {
+    // Convert latitude and longitude from degrees to radians
+    final double sourceLatRad = _toRadians(sourceLat);
+    final double sourceLngRad = _toRadians(sourceLng);
+    final double destinationLatRad = _toRadians(destinationLat);
+    final double destinationLngRad = _toRadians(destinationLng);
+
+    // Haversine formula
+    final double dLat = destinationLatRad - sourceLatRad;
+    final double dLng = destinationLngRad - sourceLngRad;
+
+    final double a = pow(sin(dLat / 2), 2) +
+        cos(sourceLatRad) * cos(destinationLatRad) * pow(sin(dLng / 2), 2);
+    final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    distanceMeters = (earthRadiusKm * c);
+
+    return distanceMeters!;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    log("image:${rider.user!.profilePicture!}");
+    // dev.log("image:${rider.user!.profilePicture!}");
 
     return GestureDetector(
       onTap: () {
@@ -119,16 +166,21 @@ class AvailableRideCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => BlocProvider.value(
               value: context.read<HomeBloc>(),
-              child: RideDetailPage(isRequest: false, 
-              pickUpAddr: arg.pickupAddressList[0].address,
-              dropOffAddr: "",
-              pickUpLat: double.parse(arg.picklat),
-              pickUpLong:double.parse(arg.picklng) ,
-              dropOffLat:  double.parse(arg.droplat),
-              dropOffLong: double.parse(arg.droplng),
-              rider: rider,
-
-              ),
+              child: RideDetailPage(
+                  isRequest: false,
+                  pickUpAddr: arg.pickupAddressList[0].address,
+                  dropOffAddr: arg.stopAddressList[0].address,
+                  pickUpLat: double.parse(arg.picklat),
+                  pickUpLong: double.parse(arg.picklng),
+                  dropOffLat: double.parse(arg.droplat),
+                  dropOffLong: double.parse(arg.droplng),
+                  rider: rider,
+                  distance: calculateDistance(
+                    sourceLat: double.parse(arg.picklat),
+                    sourceLng: double.parse(arg.picklng),
+                    destinationLat: rider.requestPlaces!.first.pickLat!,
+                    destinationLng: rider.requestPlaces!.first.pickLng!,
+                  ).toStringAsFixed(0)),
             ),
           ),
         );
@@ -220,7 +272,12 @@ class AvailableRideCard extends StatelessWidget {
                       children: [
                         // SvgPicture.asset("assets/svg/socialDistance.svg"),
                         MyText(
-                          text: "2km away",
+                          text: "${calculateDistance(
+                            sourceLat: arg.pickupAddressList.first.lat,
+                            sourceLng: arg.pickupAddressList.first.lng,
+                            destinationLat: rider.requestPlaces!.first.pickLat!,
+                            destinationLng: rider.requestPlaces!.first.pickLng!,
+                          ).toStringAsFixed(0)} km away",
                           textStyle: Theme.of(context)
                               .textTheme
                               .bodySmall!

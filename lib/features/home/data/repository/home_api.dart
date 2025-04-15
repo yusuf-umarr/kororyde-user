@@ -38,6 +38,20 @@ class HomeApi {
       rethrow;
     }
   }
+  Future getIncomingCoShareRequestApi() async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      Response response = await DioProviderImpl().get(
+        ApiEndpoints.incomingRequests,
+        // queryParams: (requestId != null) ? {"current_ride": requestId} : null,
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+      );
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
 
   Future joinACoShareTripApi({
     required String tripRequestId,
@@ -64,7 +78,7 @@ class HomeApi {
         "destination_address": destinationAddress,
         "proposed_amount": 0
       });
-      dev.log("-- 1-join coshare trip response${response.data}");
+      // dev.log("-- 1-join coshare trip response${response.data}");
       return response;
     } catch (e) {
       //debugPrint(e.toString());

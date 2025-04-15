@@ -138,7 +138,7 @@ class OurServiceCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
         decoration: BoxDecoration(
-          color: bg.withOpacity(0.5), 
+          color: bg.withOpacity(0.2),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(

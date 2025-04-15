@@ -662,20 +662,20 @@ class _CosharePageState extends State<CosharePage> {
                             ),
 
                             SizedBox(height: 30),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: MyText(
-                                text: 'Pending trips',
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        fontSize: 15, color: Colors.black,),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       horizontal: 20, vertical: 10),
+                            //   child: MyText(
+                            //     text: 'Pending trips',
+                            //     textStyle: Theme.of(context)
+                            //         .textTheme
+                            //         .bodyMedium!
+                            //         .copyWith(
+                            //             fontSize: 15, color: Colors.black,),
+                            //     maxLines: 3,
+                            //     overflow: TextOverflow.ellipsis,
+                            //   ),
+                            // ),
                           ],
                         ],
                         if (context

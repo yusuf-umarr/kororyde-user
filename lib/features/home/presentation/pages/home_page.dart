@@ -480,46 +480,6 @@ class _HomePageContentState extends State<HomePageContent>
                   ),
                 ),
               ),
-              // floatingActionButton: FloatingActionButton.extended(
-              //   backgroundColor: AppColors.primary,
-              //   onPressed: () {
-              //     Navigator.pushNamed(
-              //       context,
-              //       CosharePage.routeName,
-              //       arguments: DestinationPageArguments(
-              //           title: context.read<HomeBloc>().selectedServiceType == 0
-              //               ? 'Taxi'
-              //               : 'Delivery',
-              //           pickupAddress: context.read<HomeBloc>().currentLocation,
-              //           pickupLatLng: context.read<HomeBloc>().currentLatLng,
-              //           // dropAddress: 'state.dropAddress',
-              //           // dropLatLng: 'state.dropLatLng',
-              //           userData: context.read<HomeBloc>().userData!,
-              //           pickUpChange: false,
-              //           transportType:
-              //               context.read<HomeBloc>().selectedServiceType == 0
-              //                   ? 'taxi'
-              //                   : 'delivery',
-              //           isOutstationRide: false,
-              //           mapType: context.read<HomeBloc>().mapType),
-              //     );
-              //   },
-              //   label: const Text(
-              //     "Join CoShare",
-              //     style: TextStyle(
-              //       color: Colors.white,
-              //       fontWeight: FontWeight.w600,
-              //     ),
-              //   ),
-              //   icon: SvgPicture.asset(
-              //     "assets/svg/sendParcel.svg",
-              //     colorFilter: ColorFilter.mode(
-              //       Colors.white,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   tooltip: 'CoShare',
-              // ),
             ),
           ),
         );
@@ -527,231 +487,6 @@ class _HomePageContentState extends State<HomePageContent>
     );
   }
 
-//   void openDialog() async {
-  // setState(() {
-  //   isDialogOpen = true;
-  // });
-
-//     await showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         final Size size = MediaQuery.of(context).size;
-//         return Dialog(
-//           backgroundColor: Colors.transparent,
-//           child: BlocProvider.value(
-//             value: context.read<HomeBloc>(),
-//             child: InkWell(
-//               onTap: () {
-//                 // Navigator.of(context).pop();
-//               },
-//               child: Container(
-//                   padding: const EdgeInsets.only(bottom: 60),
-//                   height: size.height * 0.9,
-//                   width: size.width,
-//                   alignment: Alignment.bottomRight,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       FABButton(
-//                         iconColor: const Color(0xff1F867D),
-//                         iconBgColor: const Color(0xffB8F5F9),
-//                         icon: Icons.help,
-//                         containerText: 'Help',
-//                         containerWidth: 154,
-//                         onTapped: () {
-//                           Navigator.of(context).pop();
-
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (_) => BlocProvider.value(
-//                                 value: context.read<HomeBloc>(),
-//                                 child: HelpPage(),
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                       const SizedBox(
-//                         height: 10,
-//                       ),
-//                       FABButton(
-//                         iconColor: const Color(0xff1F867D),
-//                         iconBgColor: const Color(0xffB8F5F9),
-//                         icon: Icons.account_balance_wallet_rounded,
-//                         containerText: 'Co-share requests',
-//                         containerWidth: 154,
-//                         onTapped: () {
-//                           Navigator.of(context).pop();
-//                           showModalBottomSheet<void>(
-//                             isScrollControlled: true,
-//                             context: context,
-//                             shape: const RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.only(
-//                                 topLeft: Radius.circular(15),
-//                                 topRight: Radius.circular(
-//                                   15,
-//                                 ),
-//                               ),
-//                             ),
-//                             builder: (_) {
-//                               return BlocProvider.value(
-//                                 value: context.read<HomeBloc>(),
-//                                 child: StatefulBuilder(
-//                                     builder: (context, setState) {
-//                                   return Stack(
-//                                     children: [
-//                                       Container(
-//                                         padding:
-//                                             EdgeInsets.symmetric(horizontal: 10)
-//                                                 .copyWith(top: 20),
-//                                         height: size.height * 0.6,
-//                                         child: SingleChildScrollView(
-//                                           child: Column(
-//                                             children: [
-//                                               Row(
-//                                                 children: [
-//                                                   MyText(
-//                                                     text: "Incoming co-share",
-//                                                     textStyle: Theme.of(context)
-//                                                         .textTheme
-//                                                         .bodyLarge!
-//                                                         .copyWith(
-//                                                             fontWeight:
-//                                                                 FontWeight
-//                                                                     .bold),
-//                                                   ),
-//                                                 ],
-//                                               ),
-//                                               SizedBox(height: 10),
-//                                               Divider(),
-//                                               SizedBox(height: 20),
-//                                               IncomingRequestCard(),
-//                                               IncomingRequestCard(),
-//                                               IncomingRequestCard(),
-//                                             ],
-//                                           ),
-//                                         ),
-//                                       ),
-//                                       Positioned(
-//                                         right: 20,
-//                                         top: 20,
-//                                         child: InkWell(
-//                                           onTap: () {
-//                                             Navigator.of(context).pop();
-//                                           },
-//                                           child: Icon(
-//                                             Icons.cancel_outlined,
-//                                             color: Colors.red,
-//                                           ),
-//                                         ),
-//                                       )
-//                                     ],
-//                                   );
-//                                 }),
-//                               );
-//                               // );
-//                             },
-//                           );
-
-//                           // navigate(context, const WalletPage());
-//                         },
-//                       ),
-//                       const SizedBox(
-//                         height: 10,
-//                       ),
-//                       FABButton(
-//                         iconColor: const Color(0xff4D0A80),
-//                         iconBgColor: const Color(0xffF3EAFA),
-//                         icon: Icons.people,
-//                         containerText: 'Join Co-share',
-//                         containerWidth: 186,
-//                         onTapped: () {
-//                           dev.log(
-//                               "--user data:${context.read<HomeBloc>().userData!}");
-//                           // Navigator.push(
-//                           //   context,
-//                           //   MaterialPageRoute(
-//                           //     builder: (_) => BlocProvider.value(
-//                           //       value: context.read<HomeBloc>(),
-//                           //       child: CosharePage(
-//                           //         arg: DestinationPageArguments(
-//                           //             title: context
-//                           //                         .read<HomeBloc>()
-//                           //                         .selectedServiceType ==
-//                           //                     0
-//                           //                 ? 'Taxi'
-//                           //                 : 'Delivery',
-//                           //             pickupAddress: context
-//                           //                 .read<HomeBloc>()
-//                           //                 .currentLocation,
-//                           //             pickupLatLng:
-//                           //                 context.read<HomeBloc>().currentLatLng,
-//                           //             // dropAddress: state.dropAddress,
-//                           //             // dropLatLng: state.dropLatLng,
-//                           //             userData:
-//                           //                 context.read<HomeBloc>().userData!,
-//                           //             pickUpChange: false,
-//                           //             transportType: context
-//                           //                         .read<HomeBloc>()
-//                           //                         .selectedServiceType ==
-//                           //                     0
-//                           //                 ? 'taxi'
-//                           //                 : 'delivery',
-//                           //             isOutstationRide: false,
-//                           //             mapType: context.read<HomeBloc>().mapType),
-//                           //       ),
-//                           //     ),
-//                           //   ),
-//                           // );
-//                           // Navigator.pushNamed(
-//                           //   context,
-//                           //   CosharePage.routeName,
-//                           //   arguments: DestinationPageArguments(
-//                           //       title: context
-//                           //                   .read<HomeBloc>()
-//                           //                   .selectedServiceType ==
-//                           //               0
-//                           //           ? 'Taxi'
-//                           //           : 'Delivery',
-//                           //       pickupAddress:
-//                           //           context.read<HomeBloc>().currentLocation,
-//                           //       pickupLatLng:
-//                           //           context.read<HomeBloc>().currentLatLng,
-//                           //       // dropAddress: 'state.dropAddress',
-//                           //       // dropLatLng: 'state.dropLatLng',
-//                           //       userData: context.read<HomeBloc>().userData!,
-//                           //       pickUpChange: false,
-//                           //       transportType: context
-//                           //                   .read<HomeBloc>()
-//                           //                   .selectedServiceType ==
-//                           //               0
-//                           //           ? 'taxi'
-//                           //           : 'delivery',
-//                           //       isOutstationRide: false,
-//                           //       mapType: context.read<HomeBloc>().mapType),
-//                           // );
-//                           // Navigator.of(context).pop();
-//                           // navigate(context, const TherapistPage());
-//                         },
-//                       ),
-//                       SizedBox(
-//                         height: size.height * 0.1,
-//                       )
-//                     ],
-//                   )),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-
-//     setState(() {
-//       isDialogOpen = false;
-//     });
-//   }
-// //
   Widget bodyMapBuilder(BuildContext context, Size size) {
     final screenWidth = size.width;
     return BlocBuilder<HomeBloc, HomeState>(
@@ -1517,16 +1252,16 @@ class _HomePageContentState extends State<HomePageContent>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: size.width * 0.03),
+        SizedBox(height: size.width * 0.02),
         Row(
           children: [
             MyText(
               text: 'Our services',
-              textStyle: Theme.of(context).textTheme.bodyLarge,
+              textStyle: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),
-        SizedBox(height: size.width * 0.03),
+        SizedBox(height: size.width * 0.02),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -2006,7 +1741,7 @@ class _HomePageContentState extends State<HomePageContent>
                       .read<HomeBloc>()
                       .recentSearchPlaces
                       .isNotEmpty) ...[
-                    const SizedBox(height: 10),
+                    SizedBox(height: size.width * 0.08),
                     Row(
                       children: [
                         MyText(
@@ -2021,10 +1756,6 @@ class _HomePageContentState extends State<HomePageContent>
                         ),
                       ],
                     ),
-                    SizedBox(
-                        height: context.read<HomeBloc>().isSheetAtTop == false
-                            ? size.width * 0.01
-                            : size.width * 0.02),
                     ListView.builder(
                       itemCount:
                           context.read<HomeBloc>().recentSearchPlaces.length > 2
@@ -2044,36 +1775,36 @@ class _HomePageContentState extends State<HomePageContent>
                             .elementAt(index);
                         return InkWell(
                           onTap: () {
-                            if (context
-                                .read<HomeBloc>()
-                                .pickupAddressList
-                                .isNotEmpty) {
-                              if (context
-                                          .read<HomeBloc>()
-                                          .userData!
-                                          .enableModulesForApplications ==
-                                      'both' ||
-                                  context
-                                          .read<HomeBloc>()
-                                          .userData!
-                                          .enableModulesForApplications ==
-                                      'taxi') {
-                                context.read<HomeBloc>().add(
-                                    RecentSearchPlaceSelectEvent(
-                                        address: recentPlace,
-                                        isPickupSelect: false,
-                                        transportType: 'taxi'));
-                              } else {
-                                context.read<HomeBloc>().add(
-                                    ServiceTypeChangeEvent(
-                                        serviceTypeIndex: 1));
-                              }
-                            }
+                            // if (context
+                            //     .read<HomeBloc>()
+                            //     .pickupAddressList
+                            //     .isNotEmpty) {
+                            //   if (context
+                            //               .read<HomeBloc>()
+                            //               .userData!
+                            //               .enableModulesForApplications ==
+                            //           'both' ||
+                            //       context
+                            //               .read<HomeBloc>()
+                            //               .userData!
+                            //               .enableModulesForApplications ==
+                            //           'taxi') {
+                            //     context.read<HomeBloc>().add(
+                            //         RecentSearchPlaceSelectEvent(
+                            //             address: recentPlace,
+                            //             isPickupSelect: false,
+                            //             transportType: 'taxi'));
+                            //   } else {
+                            //     context.read<HomeBloc>().add(
+                            //         ServiceTypeChangeEvent(
+                            //             serviceTypeIndex: 1));
+                            //   }
+                            // }
                           },
                           child: Row(
                             children: [
                               Container(
-                                height: size.height * 0.075,
+                                height: size.height * 0.07,
                                 width: size.width * 0.075,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context)
@@ -2103,7 +1834,7 @@ class _HomePageContentState extends State<HomePageContent>
                                           .textTheme
                                           .bodyMedium!
                                           .copyWith(
-                                            fontSize: 12,
+                                            fontSize: 11,
                                             fontWeight: FontWeight.bold,
                                           ),
                                       maxLines: 1,
@@ -2116,6 +1847,7 @@ class _HomePageContentState extends State<HomePageContent>
                                           .copyWith(
                                             color:
                                                 Theme.of(context).disabledColor,
+                                            fontSize: 10,
                                           ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,

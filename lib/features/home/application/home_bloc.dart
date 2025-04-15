@@ -60,7 +60,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   UserDetail? userData;
   // AllCoShareTripModel? allCoShareTripData;
-  List<CoShareTripData> allCoShareTripData =[];
+  List<CoShareTripData> allCoShareTripData = [];
   UserDetail? user;
   List<String> serviceTypeImages = [
     AppImages.taxiSv,
@@ -139,6 +139,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     //co-share
     on<GetAllCoShareTripEvent>(getAllCoShareTrip);
+    on<GetIncomingCoShareEvent>(getIncomingCoShare);
+    on<JoinCoShareTripEvent>(joinCoShareTrip);
 
     on<GoogleControllAssignEvent>(assignController);
     on<GetLocationPermissionEvent>(getLocationPermission);
@@ -742,17 +744,38 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       },
       (success) async {
-       try {
-         allCoShareTripData = success.data;
+        try {
+          allCoShareTripData = success.data;
           emit(CoShareTripDataLoaded(success.data));
-         
-       } catch (e) {
+        } catch (e) {
           dev.log("--catch err allchose trip:$e");
-         
-       }
+        }
 
         dev.log("--allchose trip:${allCoShareTripData.first.requestNumber}");
+      },
+    );
+  }
+  FutureOr<void> getIncomingCoShare(
+      GetIncomingCoShareEvent event, Emitter<HomeState> emit) async {
+    final data = await serviceLocator<HomeUsecase>().getIncomingCoShare();
 
+    await data.fold(
+      (error) {
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) async {
+        try {
+          allCoShareTripData = success.data;
+          emit(CoShareTripDataLoaded(success.data));
+        } catch (e) {
+          dev.log("--catch err getIncomingCoShare trip:$e");
+        }
+
+        dev.log("--getIncomingCoShare :${allCoShareTripData.first.requestNumber}");
       },
     );
   }
@@ -779,11 +802,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           emit(HomeLoadingStopState());
         }
       },
-      (success) async {
-        allCoShareTripData = success.data;
-
-        // emit(HomeUpdateState());
-      },
+      (success) async {},
     );
   }
 
@@ -922,7 +941,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   emit(UpdateLocationState());
   // }
 
-    Future<void> updateLocation(
+  Future<void> updateLocation(
       UpdateLocationEvent event, Emitter<HomeState> emit) async {
     if (event.latLng.latitude != 0.0 && event.latLng.longitude != 0.0) {
       final data = await serviceLocator<HomeUsecase>().getAddressFromLatLng(
@@ -967,8 +986,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     isCameraMoveComplete = false;
     emit(UpdateLocationState());
   }
-
-
 
   Future<void> serviceTypeChage(
       ServiceTypeChangeEvent event, Emitter<HomeState> emit) async {
@@ -1244,8 +1261,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> recentSearchPlaceSelect(
       RecentSearchPlaceSelectEvent event, Emitter<HomeState> emit) async {
-
-        dev.log("--RecentSearchPlaceSelectEvent called");
+    dev.log("--RecentSearchPlaceSelectEvent called");
     emit(HomeLoadingStartState());
     autoSearchPlaces.clear();
     searchInfoMessage = '';
@@ -1416,7 +1432,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> confirmAddress(
       ConfirmAddressEvent event, Emitter<HomeState> emit) async {
-        dev.log("--confirmAddress called");
+    dev.log("--confirmAddress called");
     emit(ConfirmAddressState(
       isDelivery: event.isDelivery,
       isEditAddress: event.isEditAddress,
@@ -1440,7 +1456,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> confirmLocationSearchSelectPlace(
       ConfirmLocationSearchPlaceSelectEvent event,
       Emitter<HomeState> emit) async {
-        dev.log("--ConfirmLocationSearchPlaceSelectEvent called");
+    dev.log("--ConfirmLocationSearchPlaceSelectEvent called");
     dynamic latLng;
     if ((event.address.lat == 0 || event.address.lat == 0.0) &&
         (event.address.lng == 0 || event.address.lng == 0.0)) {

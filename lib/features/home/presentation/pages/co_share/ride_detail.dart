@@ -18,6 +18,7 @@ class RideDetailPage extends StatefulWidget {
   final double pickUpLong;
   final double dropOffLat;
   final double dropOffLong;
+  final String distance;
   final CoShareTripData rider;
   const RideDetailPage({
     super.key,
@@ -29,6 +30,7 @@ class RideDetailPage extends StatefulWidget {
     required this.dropOffLat,
     required this.dropOffLong,
     required this.rider,
+    required this.distance,
   });
 
   @override
@@ -105,7 +107,8 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                         fontSize: 12),
                               ),
                               MyText(
-                                text: "The rider is 10mins away from you",
+                                text:
+                                    "The rider is ${widget.distance} km away from you",
                                 textStyle: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -359,6 +362,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                     InkWell(
                       onTap: () {
                         final bloc = context.read<HomeBloc>();
+
                         bloc.add(JoinCoShareTripEvent(
                           destinationAddress: widget.dropOffAddr,
                           pickupAddress: widget.pickUpAddr,
@@ -367,6 +371,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                           tripRequestId: widget.rider.id!,
                           proposedAmount: 0,
                         ));
+
                         showModalBottomSheet<void>(
                           isScrollControlled: true,
                           context: context,

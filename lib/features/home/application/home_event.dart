@@ -9,6 +9,7 @@ class GetDirectionEvent extends HomeEvent {}
 class GetUserDetailsEvent extends HomeEvent {}
 
 class GetAllCoShareTripEvent extends HomeEvent {}
+class GetIncomingCoShareEvent extends HomeEvent {}
 
 class JoinCoShareTripEvent extends HomeEvent {
   /*

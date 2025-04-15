@@ -86,6 +86,37 @@ class HomeRepositoryImpl implements HomeRepository {
 
     return Right(userDetailsResponseModel);
   }
+  @override
+  Future<Either<Failure, AllCoShareTripModel>> getIncomingCoShareRequest(
+      {String? requestId}) async {
+    AllCoShareTripModel userDetailsResponseModel;
+    try {
+      Response response = await _homeApi.getIncomingCoShareRequestApi();
+
+      if (response.data == null || response.data == '') {
+        return Left(GetDataFailure(message: 'User bad request'));
+      } else if (response.data.toString().contains('error')) {
+        return Left(GetDataFailure(message: response.data['error']));
+      } else {
+        if (response.statusCode == 400) {
+          return Left(GetDataFailure(message: response.data["message"]));
+        } else if (response.statusCode == 401) {
+          return Left(GetDataFailure(message: 'logout'));
+        } else if (response.statusCode == 429) {
+          return Left(GetDataFailure(message: 'Too many attempts'));
+        } else {
+          userDetailsResponseModel =
+              AllCoShareTripModel.fromJson(response.data);
+        }
+      }
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(userDetailsResponseModel);
+  }
 
   @override
   Future<Either<Failure, dynamic>> getAutoCompletePlaces({
@@ -152,7 +183,7 @@ class HomeRepositoryImpl implements HomeRepository {
         destinationLat: destinationLat,
         destinationLong: destinationLong,
       );
-      log('--join co share  Response : $response');
+      // log('--join co share  Response : $response');
     } on FetchDataException catch (e) {
       return Left(GetDataFailure(message: e.message));
     } on BadRequestException catch (e) {
