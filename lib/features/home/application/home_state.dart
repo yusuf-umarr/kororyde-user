@@ -17,6 +17,7 @@ final class VechileStreamMarkerState extends HomeState {}
 final class HomeLoadingStartState extends HomeState {}
 
 final class HomeLoadingStopState extends HomeState {}
+final class SendOfferDoneState extends HomeState {}
 
 final class GetLocationPermissionState extends HomeState {}
 

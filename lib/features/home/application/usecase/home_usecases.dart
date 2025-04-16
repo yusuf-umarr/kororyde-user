@@ -21,6 +21,7 @@ class HomeUsecase {
   Future<Either<Failure, dynamic>> allCoShareTrip() async {
     return _homeRepository.getAllCoShareTrip();
   }
+
   Future<Either<Failure, dynamic>> getIncomingCoShare() async {
     return _homeRepository.getIncomingCoShareRequest();
   }
@@ -40,10 +41,30 @@ class HomeUsecase {
       pickupAddress: pickupAddress,
       destinationAddress: destinationAddress,
       proposedAmount: proposedAmount,
-      pickUpLat:pickUpLat,
-      pickUpLong:pickUpLong,
-      destinationLat:destinationLat,
-      destinationLong:destinationLong,
+      pickUpLat: pickUpLat,
+      pickUpLong: pickUpLong,
+      destinationLat: destinationLat,
+      destinationLong: destinationLong,
+    );
+  }
+
+  Future<Either<Failure, dynamic>> acceptRejectCoshareRequest({
+    required String coShareRequestId,
+    required String status,
+  }) async {
+    return _homeRepository.acceptRejectCoshareRequest(
+      coShareRequestId: coShareRequestId,
+      status: status,
+    );
+  }
+
+  Future<Either<Failure, dynamic>> sendCoShareOffer({
+    required String coShareRequestId,
+    required String amount,
+  }) async {
+    return _homeRepository.sendCoShareOffer(
+      coShareRequestId: coShareRequestId,
+      amount: amount,
     );
   }
 

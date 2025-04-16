@@ -32,6 +32,16 @@ abstract class HomeRepository {
     dynamic destinationLat,
     dynamic destinationLong,
   });
+  Future<Either<Failure, dynamic>> acceptRejectCoshareRequest({
+    required String coShareRequestId,
+    required String status,
+  
+  });
+  Future<Either<Failure, dynamic>> sendCoShareOffer({
+    required String coShareRequestId,
+    required String amount,
+  
+  });
 
   Future<Either<Failure, dynamic>> getAutoCompletePlaceLatLng(
       {required String placeId});

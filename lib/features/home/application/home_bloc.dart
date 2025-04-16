@@ -142,6 +142,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetAllCoShareTripEvent>(getAllCoShareTrip);
     on<GetIncomingCoShareEvent>(getIncomingCoShare);
     on<JoinCoShareTripEvent>(joinCoShareTrip);
+    on<AcceptRejectCoshareRequestEvent>(acceptRejectCoshareRequest);
+    on<SendCoShareOfferEvent>(sendCoShareOffer);
 
     on<GoogleControllAssignEvent>(assignController);
     on<GetLocationPermissionEvent>(getLocationPermission);
@@ -756,6 +758,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       },
     );
   }
+
   FutureOr<void> getIncomingCoShare(
       GetIncomingCoShareEvent event, Emitter<HomeState> emit) async {
     final data = await serviceLocator<HomeUsecase>().getIncomingCoShare();
@@ -770,17 +773,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       },
       (success) async {
         try {
-           
           emit(IncomingCoshareState(success.data));
         } catch (e) {
           dev.log("--catch err getIncomingCoShare trip:$e");
         }
-
-      
       },
     );
   }
-  
 
   FutureOr<void> joinCoShareTrip(
       JoinCoShareTripEvent event, Emitter<HomeState> emit) async {
@@ -805,6 +804,50 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       },
       (success) async {},
+    );
+  }
+
+  FutureOr<void> acceptRejectCoshareRequest(
+      AcceptRejectCoshareRequestEvent event, Emitter<HomeState> emit) async {
+    final data = await serviceLocator<HomeUsecase>().acceptRejectCoshareRequest(
+      coShareRequestId: event.coShareRequestId,
+      status: event.status,
+    );
+
+    await data.fold(
+      (error) {
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) async {
+        add(GetIncomingCoShareEvent());
+      },
+    );
+  }
+
+  FutureOr<void> sendCoShareOffer(
+      SendCoShareOfferEvent event, Emitter<HomeState> emit) async {
+    dev.log("--event.amount:${event.amount}");
+    final data = await serviceLocator<HomeUsecase>().sendCoShareOffer(
+      coShareRequestId: event.coShareRequestId,
+      amount: event.amount,
+    );
+
+    await data.fold(
+      (error) {
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) async {
+        add(GetIncomingCoShareEvent());
+        emit(SendOfferDoneState());
+      },
     );
   }
 

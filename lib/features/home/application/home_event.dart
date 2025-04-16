@@ -297,3 +297,15 @@ class UpdateUserDataEvent extends HomeEvent {
 
   UpdateUserDataEvent({required this.userData});
 }
+class AcceptRejectCoshareRequestEvent extends HomeEvent {
+  final String status;
+  final String coShareRequestId;
+
+  AcceptRejectCoshareRequestEvent({required this.status, required this.coShareRequestId});
+}
+class SendCoShareOfferEvent extends HomeEvent {
+  final String amount;
+  final String coShareRequestId;
+
+  SendCoShareOfferEvent({required this.amount, required this.coShareRequestId});
+}

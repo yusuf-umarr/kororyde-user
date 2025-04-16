@@ -85,6 +85,56 @@ class HomeApi {
       rethrow;
     }
   }
+  Future acceptRejectCoshareRequestApi({
+    required String coShareRequestId,
+    required String status,
+ 
+  }) async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      // final userId = await AppSharedPreference.getUserId();
+
+      Response response =
+          await DioProviderImpl().post(ApiEndpoints.acceptRejectCoShareRequest, headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }, body: {
+        'co_share_request_id': coShareRequestId,
+        "action": status,
+      
+      });
+      // dev.log("-- 1-join coshare trip response${response.data}");
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
+  Future sendCoShareOfferApi({
+    required String coShareRequestId,
+    required String amount,
+ 
+  }) async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      // final userId = await AppSharedPreference.getUserId();
+
+      Response response =
+          await DioProviderImpl().post(ApiEndpoints.sendCoShareOffer, headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }, body: {
+        'co_share_request_id': coShareRequestId,
+        "negotiation_amount": amount,
+      
+      });
+      // dev.log("-- 1-join coshare trip response${response.data}");
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
 
   Future getAutocompletePlaces({
     required String input,

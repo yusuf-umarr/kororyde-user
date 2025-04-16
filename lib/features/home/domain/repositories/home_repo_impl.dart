@@ -75,8 +75,7 @@ class HomeRepositoryImpl implements HomeRepository {
         } else if (response.statusCode == 429) {
           return Left(GetDataFailure(message: 'Too many attempts'));
         } else {
-          allCoshareTripModel =
-              AllCoShareTripModel.fromJson(response.data);
+          allCoshareTripModel = AllCoShareTripModel.fromJson(response.data);
         }
       }
     } on FetchDataException catch (e) {
@@ -87,6 +86,7 @@ class HomeRepositoryImpl implements HomeRepository {
 
     return Right(allCoshareTripModel);
   }
+
   @override
   Future<Either<Failure, IncomingCoShareModel>> getIncomingCoShareRequest(
       {String? requestId}) async {
@@ -108,8 +108,7 @@ class HomeRepositoryImpl implements HomeRepository {
         } else if (response.statusCode == 429) {
           return Left(GetDataFailure(message: 'Too many attempts'));
         } else {
-          icomingResponseModel =
-              IncomingCoShareModel.fromJson(response.data);
+          icomingResponseModel = IncomingCoShareModel.fromJson(response.data);
         }
       }
     } on FetchDataException catch (e) {
@@ -187,6 +186,47 @@ class HomeRepositoryImpl implements HomeRepository {
         destinationLong: destinationLong,
       );
       // log('--join co share  Response : $response');
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(response);
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> acceptRejectCoshareRequest({
+    required String coShareRequestId,
+    required String status,
+  }) async {
+    dynamic response;
+    try {
+      response = await _homeApi.acceptRejectCoshareRequestApi(
+        coShareRequestId: coShareRequestId,
+        status: status,
+      );
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(response);
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> sendCoShareOffer({
+    required String coShareRequestId,
+    required String amount,
+  }) async {
+    dynamic response;
+    try {
+      response = await _homeApi.sendCoShareOfferApi(
+        coShareRequestId: coShareRequestId,
+        amount: amount,
+      );
+      log('--sendCoShareOfferApi Response : $response');
     } on FetchDataException catch (e) {
       return Left(GetDataFailure(message: e.message));
     } on BadRequestException catch (e) {

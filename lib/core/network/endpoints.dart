@@ -27,6 +27,8 @@ class ApiEndpoints {
   static String getAllCoShareTrip =  'api/coshare/requests';
   static String joinCoShareTrip =  'api/coshare/join-trip';
   static String incomingRequests =  'api/coshare/incoming-requests';
+  static String acceptRejectCoShareRequest =  'api/coshare/respond';
+  static String sendCoShareOffer =  'api/coshare/negotiate';
 
   //notifications
   static String notification = 'api/v1/notifications/get-notification';
