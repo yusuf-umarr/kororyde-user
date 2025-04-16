@@ -6,9 +6,11 @@ import 'package:kororyde_user/common/app_colors.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
+import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
 
 class CosharerDetail extends StatefulWidget {
   final bool isRequest;
+ final IncomingCoShareData request;
   // final String pickUpAddr;
   // final String dropOffAddr;
   // final double pickUpLat;
@@ -18,7 +20,7 @@ class CosharerDetail extends StatefulWidget {
   // final CoShareTripData rider;
   const CosharerDetail({
     super.key,
-    required this.isRequest,
+    required this.isRequest, required this.request,
     // required this.pickUpAddr,
     // required this.dropOffAddr,
     // required this.pickUpLat,

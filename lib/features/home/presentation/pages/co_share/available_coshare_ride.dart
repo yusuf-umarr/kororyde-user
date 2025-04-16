@@ -61,7 +61,7 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          if (state is CoShareTripDataLoaded) {
+          if (state is CoShareTripDataLoadedState) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(

@@ -144,7 +144,11 @@ final class HomeUserDataState extends HomeState {
 
   HomeUserDataState({required this.userData});
 }
-class CoShareTripDataLoaded extends HomeState {
+class CoShareTripDataLoadedState extends HomeState {
   final List<CoShareTripData> data;
-  CoShareTripDataLoaded(this.data);
+  CoShareTripDataLoadedState(this.data);
+}
+class IncomingCoshareState extends HomeState {
+  final List<IncomingCoShareData> data;
+  IncomingCoshareState(this.data);
 }

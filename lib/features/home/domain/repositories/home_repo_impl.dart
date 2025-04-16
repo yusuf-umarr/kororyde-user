@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
+import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
 
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
@@ -58,7 +59,7 @@ class HomeRepositoryImpl implements HomeRepository {
   @override
   Future<Either<Failure, AllCoShareTripModel>> getAllCoShareTrip(
       {String? requestId}) async {
-    AllCoShareTripModel userDetailsResponseModel;
+    AllCoShareTripModel allCoshareTripModel;
     try {
       Response response = await _homeApi.getAllCoShareTripApi();
 
@@ -74,7 +75,7 @@ class HomeRepositoryImpl implements HomeRepository {
         } else if (response.statusCode == 429) {
           return Left(GetDataFailure(message: 'Too many attempts'));
         } else {
-          userDetailsResponseModel =
+          allCoshareTripModel =
               AllCoShareTripModel.fromJson(response.data);
         }
       }
@@ -84,14 +85,16 @@ class HomeRepositoryImpl implements HomeRepository {
       return Left(InPutDataFailure(message: e.message));
     }
 
-    return Right(userDetailsResponseModel);
+    return Right(allCoshareTripModel);
   }
   @override
-  Future<Either<Failure, AllCoShareTripModel>> getIncomingCoShareRequest(
+  Future<Either<Failure, IncomingCoShareModel>> getIncomingCoShareRequest(
       {String? requestId}) async {
-    AllCoShareTripModel userDetailsResponseModel;
+    IncomingCoShareModel icomingResponseModel;
     try {
       Response response = await _homeApi.getIncomingCoShareRequestApi();
+
+      // log("--icomin response:${response.data}");
 
       if (response.data == null || response.data == '') {
         return Left(GetDataFailure(message: 'User bad request'));
@@ -105,8 +108,8 @@ class HomeRepositoryImpl implements HomeRepository {
         } else if (response.statusCode == 429) {
           return Left(GetDataFailure(message: 'Too many attempts'));
         } else {
-          userDetailsResponseModel =
-              AllCoShareTripModel.fromJson(response.data);
+          icomingResponseModel =
+              IncomingCoShareModel.fromJson(response.data);
         }
       }
     } on FetchDataException catch (e) {
@@ -115,7 +118,7 @@ class HomeRepositoryImpl implements HomeRepository {
       return Left(InPutDataFailure(message: e.message));
     }
 
-    return Right(userDetailsResponseModel);
+    return Right(icomingResponseModel);
   }
 
   @override

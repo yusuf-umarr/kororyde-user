@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:kororyde_user/db/app_database.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
+import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
@@ -746,7 +747,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (success) async {
         try {
           allCoShareTripData = success.data;
-          emit(CoShareTripDataLoaded(success.data));
+          emit(CoShareTripDataLoadedState(success.data));
         } catch (e) {
           dev.log("--catch err allchose trip:$e");
         }
@@ -769,16 +770,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       },
       (success) async {
         try {
-          allCoShareTripData = success.data;
-          emit(CoShareTripDataLoaded(success.data));
+           
+          emit(IncomingCoshareState(success.data));
         } catch (e) {
           dev.log("--catch err getIncomingCoShare trip:$e");
         }
 
-        dev.log("--getIncomingCoShare :${allCoShareTripData.first.requestNumber}");
+      
       },
     );
   }
+  
 
   FutureOr<void> joinCoShareTrip(
       JoinCoShareTripEvent event, Emitter<HomeState> emit) async {
