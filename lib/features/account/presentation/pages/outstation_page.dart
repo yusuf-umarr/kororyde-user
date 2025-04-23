@@ -8,7 +8,6 @@ import '../../../../common/common.dart';
 import '../../../../common/pickup_icon.dart';
 import '../../../../core/utils/custom_loader.dart';
 import '../../../../core/utils/custom_text.dart';
-import '../../../home/presentation/pages/home_page.dart';
 import '../../application/acc_bloc.dart';
 import '../widgets/history_card_shimmer.dart';
 import '../widgets/top_bar.dart';

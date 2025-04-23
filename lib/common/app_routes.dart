@@ -35,7 +35,6 @@ import '../features/auth/presentation/pages/refferal_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
 import '../features/auth/presentation/pages/update_password_page.dart';
 import '../features/home/presentation/pages/destination_page.dart';
-import '../features/home/presentation/pages/home_page.dart';
 import '../features/auth/presentation/pages/verify_page.dart';
 import '../features/bookingpage/presentation/page/booking_page.dart';
 import '../features/home/presentation/pages/confirm_location_page.dart';

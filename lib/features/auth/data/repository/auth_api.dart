@@ -105,7 +105,7 @@ class AuthApi {
     try {
       final fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await DioProviderImpl().post(
-        ApiEndpoints.userLogin,
+        ApiEndpoints.userLogin, 
         body: !isOtpLogin
             ? FormData.fromMap({
                 if (!isLoginByEmail) "mobile": emailOrMobile,

@@ -394,22 +394,117 @@ typedef $$CachedPlacesTableUpdateCompanionBuilder = CachedPlacesCompanion
   Value<int> rowid,
 });
 
+class $$CachedPlacesTableFilterComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get orderId => $composableBuilder(
+      column: $table.orderId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lat => $composableBuilder(
+      column: $table.lat, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get lng => $composableBuilder(
+      column: $table.lng, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get pickup => $composableBuilder(
+      column: $table.pickup, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isAirportLocation => $composableBuilder(
+      column: $table.isAirportLocation,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$CachedPlacesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get orderId => $composableBuilder(
+      column: $table.orderId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lat => $composableBuilder(
+      column: $table.lat, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get lng => $composableBuilder(
+      column: $table.lng, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get pickup => $composableBuilder(
+      column: $table.pickup, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isAirportLocation => $composableBuilder(
+      column: $table.isAirportLocation,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$CachedPlacesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get orderId =>
+      $composableBuilder(column: $table.orderId, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<double> get lat =>
+      $composableBuilder(column: $table.lat, builder: (column) => column);
+
+  GeneratedColumn<double> get lng =>
+      $composableBuilder(column: $table.lng, builder: (column) => column);
+
+  GeneratedColumn<bool> get pickup =>
+      $composableBuilder(column: $table.pickup, builder: (column) => column);
+
+  GeneratedColumn<bool> get isAirportLocation => $composableBuilder(
+      column: $table.isAirportLocation, builder: (column) => column);
+}
+
 class $$CachedPlacesTableTableManager extends RootTableManager<
     _$AppDatabase,
     $CachedPlacesTable,
     CachedPlace,
     $$CachedPlacesTableFilterComposer,
     $$CachedPlacesTableOrderingComposer,
+    $$CachedPlacesTableAnnotationComposer,
     $$CachedPlacesTableCreateCompanionBuilder,
-    $$CachedPlacesTableUpdateCompanionBuilder> {
+    $$CachedPlacesTableUpdateCompanionBuilder,
+    (
+      CachedPlace,
+      BaseReferences<_$AppDatabase, $CachedPlacesTable, CachedPlace>
+    ),
+    CachedPlace,
+    PrefetchHooks Function()> {
   $$CachedPlacesTableTableManager(_$AppDatabase db, $CachedPlacesTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$CachedPlacesTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$CachedPlacesTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$CachedPlacesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CachedPlacesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CachedPlacesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<String> orderId = const Value.absent(),
             Value<String> address = const Value.absent(),
@@ -446,76 +541,28 @@ class $$CachedPlacesTableTableManager extends RootTableManager<
             isAirportLocation: isAirportLocation,
             rowid: rowid,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$CachedPlacesTableFilterComposer
-    extends FilterComposer<_$AppDatabase, $CachedPlacesTable> {
-  $$CachedPlacesTableFilterComposer(super.$state);
-  ColumnFilters<String> get orderId => $state.composableBuilder(
-      column: $state.table.orderId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<String> get address => $state.composableBuilder(
-      column: $state.table.address,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get lat => $state.composableBuilder(
-      column: $state.table.lat,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<double> get lng => $state.composableBuilder(
-      column: $state.table.lng,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get pickup => $state.composableBuilder(
-      column: $state.table.pickup,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnFilters<bool> get isAirportLocation => $state.composableBuilder(
-      column: $state.table.isAirportLocation,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-}
-
-class $$CachedPlacesTableOrderingComposer
-    extends OrderingComposer<_$AppDatabase, $CachedPlacesTable> {
-  $$CachedPlacesTableOrderingComposer(super.$state);
-  ColumnOrderings<String> get orderId => $state.composableBuilder(
-      column: $state.table.orderId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get address => $state.composableBuilder(
-      column: $state.table.address,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get lat => $state.composableBuilder(
-      column: $state.table.lat,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<double> get lng => $state.composableBuilder(
-      column: $state.table.lng,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get pickup => $state.composableBuilder(
-      column: $state.table.pickup,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<bool> get isAirportLocation => $state.composableBuilder(
-      column: $state.table.isAirportLocation,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
+typedef $$CachedPlacesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CachedPlacesTable,
+    CachedPlace,
+    $$CachedPlacesTableFilterComposer,
+    $$CachedPlacesTableOrderingComposer,
+    $$CachedPlacesTableAnnotationComposer,
+    $$CachedPlacesTableCreateCompanionBuilder,
+    $$CachedPlacesTableUpdateCompanionBuilder,
+    (
+      CachedPlace,
+      BaseReferences<_$AppDatabase, $CachedPlacesTable, CachedPlace>
+    ),
+    CachedPlace,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;

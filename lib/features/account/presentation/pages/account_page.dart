@@ -14,12 +14,10 @@ import 'admin_chat.dart';
 import 'complaint_list.dart';
 import 'edit_page.dart';
 import 'fav_location.dart';
-import 'history_page.dart';
 import 'notification_page.dart';
 import 'referral_page.dart';
 import 'settings_page.dart';
 import 'sos_page.dart';
-import 'wallet_page.dart';
 
 class AccountPage extends StatelessWidget {
   static const String routeName = '/accountPage';

@@ -10,7 +10,7 @@ import 'package:kororyde_user/features/home/domain/models/incoming_coshare_reque
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -1426,19 +1426,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await Permission.contacts.request();
     PermissionStatus status = await Permission.contacts.status;
     if (status.isGranted) {
-      emit(HomeLoadingStartState());
-      if (contactsList.isEmpty) {
-        Iterable<Contact> contacts = await ContactsService.getContacts();
-        for (var contact in contacts) {
-          contact.phones!.toSet().forEach((phone) {
-            contactsList.add(ContactsModel(
-                name: contact.displayName ?? contact.givenName!,
-                number: phone.value!));
-          });
-        }
-      }
-      emit(HomeLoadingStopState());
-      emit(SelectContactDetailsState());
+      // emit(HomeLoadingStartState());
+      // if (contactsList.isEmpty) {
+      //   Iterable<Contact> contacts = await ContactsService.getContacts();
+      //   for (var contact in contacts) {
+      //     contact.phones!.toSet().forEach((phone) {
+      //       contactsList.add(ContactsModel(
+      //           name: contact.displayName ?? contact.givenName!,
+      //           number: phone.value!));
+      //     });
+      //   }
+      // }
+      // emit(HomeLoadingStopState());
+      // emit(SelectContactDetailsState());
     } else {
       //debugPrint("Permission Denied");
       bool isOpened = await openAppSettings();

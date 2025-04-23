@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:developer' as dev;
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/network/exceptions.dart';

@@ -3,12 +3,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
-import 'package:contacts_service/contacts_service.dart';
+// import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -89,8 +89,8 @@ class AccBloc extends Bloc<AccEvent, AccState> {
   HistoryData? historyData;
   DriverData? driverData;
   PaymentAuthData? paymentAuthData;
-  CardFormEditController? cardFormEditController;
-  CardFieldInputDetails? cardDetails;
+  // CardFormEditController? cardFormEditController;
+  // CardFieldInputDetails? cardDetails;
 
   //fav address
   TextEditingController newAddressController = TextEditingController();
@@ -958,19 +958,20 @@ class AccBloc extends Bloc<AccEvent, AccState> {
     await Permission.contacts.request();
     PermissionStatus status = await Permission.contacts.status;
     if (status.isGranted) {
-      emit(AccDataLoadingStartState());
-      Iterable<Contact> contacts = await ContactsService.getContacts();
-      if (contactsList.isEmpty) {
-        for (var contact in contacts) {
-          contact.phones!.toSet().forEach((phone) {
-            contactsList.add(ContactsModel(
-                name: contact.displayName ?? contact.givenName!,
-                number: phone.value!));
-          });
-        }
-      }
-      emit(AccDataLoadingStopState());
-      emit(SelectContactDetailsState());
+      // emit(AccDataLoadingStartState());
+
+      // Iterable<Contact> contacts = await ContactsService.getContacts();
+      // if (contactsList.isEmpty) {
+      //   for (var contact in contacts) {
+      //     contact.phones!.toSet().forEach((phone) {
+      //       contactsList.add(ContactsModel(
+      //           name: contact.displayName ?? contact.givenName!,
+      //           number: phone.value!));
+      //     });
+      //   }
+      // }
+      // emit(AccDataLoadingStopState());
+      // emit(SelectContactDetailsState());
     } else {
       //debugPrint("Permission Denied");
       bool isOpened = await openAppSettings();
@@ -1296,30 +1297,30 @@ class AccBloc extends Bloc<AccEvent, AccState> {
     try {
       isLoading = true;
       emit(UpdateState());
-      final paymentMethod = await Stripe.instance.createPaymentMethod(
-          params: PaymentMethodParams.card(
-              paymentMethodData: PaymentMethodData(
-                  billingDetails: BillingDetails(
-                      name: userData!.username, phone: userData!.mobile))));
-      //debugPrint('Payment 0$paymentMethod');
+      // final paymentMethod = await Stripe.instance.createPaymentMethod(
+      //     params: PaymentMethodParams.card(
+      //         paymentMethodData: PaymentMethodData(
+      //             billingDetails: BillingDetails(
+      //                 name: userData!.username, phone: userData!.mobile))));
+      // //debugPrint('Payment 0$paymentMethod');
 
-      final data = await serviceLocator<AccUsecase>().stripSaveCardDetails(
-          paymentMethodId: paymentMethod.id,
-          last4Number: paymentMethod.card.last4!,
-          cardType: paymentMethod.card.brand!,
-          validThrough:
-              '${paymentMethod.card.expMonth}/${paymentMethod.card.expYear}');
-      data.fold((error) {
-        //debugPrint(error.toString());
-      }, (success) {
-        if (success['success']) {
-          isLoading = false;
-          emit(SaveCardSuccessState());
-        } else {
-          isLoading = false;
-          emit(UpdateState());
-        }
-      });
+      // final data = await serviceLocator<AccUsecase>().stripSaveCardDetails(
+      //     paymentMethodId: paymentMethod.id,
+      //     last4Number: paymentMethod.card.last4!,
+      //     cardType: paymentMethod.card.brand!,
+      //     validThrough:
+      //         '${paymentMethod.card.expMonth}/${paymentMethod.card.expYear}');
+      // data.fold((error) {
+      //   //debugPrint(error.toString());
+      // }, (success) {
+      //   if (success['success']) {
+      //     isLoading = false;
+      //     emit(SaveCardSuccessState());
+      //   } else {
+      //     isLoading = false;
+      //     emit(UpdateState());
+      //   }
+      // });
     } catch (e) {
       //debugPrint(e.toString());
       showToast(message: 'Please enter the valid data');

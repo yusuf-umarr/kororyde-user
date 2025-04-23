@@ -1,0 +1,2 @@
+/Volumes/Win8/soft/zeal/Main-File-jan-31/flutter_user/android/app/.cxx/RelWithDebInfo/3b411d4d/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Volumes/Win8/soft/zeal/Main-File-jan-31/flutter_user/android/app/.cxx/RelWithDebInfo/3b411d4d/armeabi-v7a/CMakeFiles/edit_cache.dir

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kororyde_user/common/app_provider.dart';
-import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/presentation/pages/home_page.dart';
-// import 'package:provider/provider.dart';
 import '../../../../common/common.dart';
 import '../core/utils/connectivity_check.dart';
 import '../core/utils/custom_loader.dart';

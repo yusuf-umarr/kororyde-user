@@ -14,8 +14,21 @@
 <!-- <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>  -->
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
+
     <application android:label="KoroRYDE" android:name="${applicationName}" android:icon="@mipmap/launcher_icon" android:enableOnBackInvokedCallback="true">
-        <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:taskAffinity="" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:showWhenLocked="true" android:turnScreenOn="true" android:usesCleartextTraffic="true">
+        <activity 
+            android:name=".MainActivity" 
+            android:exported="true" 
+            android:launchMode="singleTop" 
+            android:taskAffinity="" 
+            android:theme="@style/LaunchTheme" 
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" 
+            android:hardwareAccelerated="true" 
+            android:windowSoftInputMode="adjustResize" 
+            android:showWhenLocked="true" 
+            android:turnScreenOn="true" 
+            android:usesCleartextTraffic="true">
+
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
@@ -23,6 +36,7 @@
             <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme"/>
             <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="ride_channel_1"/>
             <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/logo"/>
+            
             <meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="false"/>  
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

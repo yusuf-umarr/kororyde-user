@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:kororyde_user/core/utils/custom_button.dart';
-import 'package:kororyde_user/core/utils/custom_snack_bar.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
 
 import '../../../../core/utils/custom_text.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../application/acc_bloc.dart';
 
 Widget addCardDetails(BuildContext context, Size size) {
@@ -47,41 +44,41 @@ Widget addCardDetails(BuildContext context, Size size) {
                 ],
               ),
               SizedBox(height: size.width * 0.05),
-              CardFormField(
-                  controller: context.read<AccBloc>().cardFormEditController,
-                  enablePostalCode: true,
-                  onCardChanged: (card) {
-                    if (card != null && card.complete) {
-                      context.read<AccBloc>().cardDetails = card;
-                    }
-                  },
-                  style: CardFormStyle(
-                    borderRadius: 5,
-                    borderWidth: 4,
-                    fontSize: 16,
-                    backgroundColor:
-                        Theme.of(context).primaryColorLight.withOpacity(0.2),
-                    placeholderColor: Theme.of(context).primaryColor,
-                    borderColor: Theme.of(context).primaryColor,
-                    cursorColor: Theme.of(context).primaryColor,
-                  )),
-              CustomButton(
-                width: size.width,
-                buttonName: 'Save Card',
-                isLoader: context.read<AccBloc>().isLoading,
-                onTap: () {
-                  if (context.read<AccBloc>().cardDetails != null &&
-                      context.read<AccBloc>().cardDetails!.complete == true) {
-                    context
-                        .read<AccBloc>()
-                        .add(AddCardDetailsEvent(context: context));
-                  } else {
-                    showToast(
-                        message:
-                            AppLocalizations.of(context)!.enterTheCredentials);
-                  }
-                },
-              ),
+              // CardFormField(
+              //     controller: context.read<AccBloc>().cardFormEditController,
+              //     enablePostalCode: true,
+              //     onCardChanged: (card) {
+              //       if (card != null && card.complete) {
+              //         context.read<AccBloc>().cardDetails = card;
+              //       }
+              //     },
+              //     style: CardFormStyle(
+              //       borderRadius: 5,
+              //       borderWidth: 4,
+              //       fontSize: 16,
+              //       backgroundColor:
+              //           Theme.of(context).primaryColorLight.withOpacity(0.2),
+              //       placeholderColor: Theme.of(context).primaryColor,
+              //       borderColor: Theme.of(context).primaryColor,
+              //       cursorColor: Theme.of(context).primaryColor,
+              //     )),
+              // CustomButton(
+              //   width: size.width,
+              //   buttonName: 'Save Card',
+              //   isLoader: context.read<AccBloc>().isLoading,
+              //   onTap: () {
+              //     if (context.read<AccBloc>().cardDetails != null &&
+              //         context.read<AccBloc>().cardDetails!.complete == true) {
+              //       context
+              //           .read<AccBloc>()
+              //           .add(AddCardDetailsEvent(context: context));
+              //     } else {
+              //       showToast(
+              //           message:
+              //               AppLocalizations.of(context)!.enterTheCredentials);
+              //     }
+              //   },
+              // ),
               SizedBox(height: size.width * 0.1),
             ],
           ),
