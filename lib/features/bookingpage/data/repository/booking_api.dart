@@ -148,8 +148,8 @@ class BookingApi {
     required bool isCoShare,
   }) async {
     try {
-      dev.log("--isCoShare:${isCoShare}");
-      dev.log("--coShareMaxSeats:${coShareMaxSeats}");
+      dev.log("--============isCoShare:${isCoShare}");
+      dev.log("--============coShareMaxSeats:${coShareMaxSeats}");
       final token = await AppSharedPreference.getToken();
       Response response = await DioProviderImpl().post(
         (selectedTransportType == 'taxi')
@@ -224,8 +224,8 @@ class BookingApi {
           if (isOutstationRide && isRoundTrip) 'is_round_trip': '1',
           if (isOutstationRide && isRoundTrip)
             'return_time': scheduleDateTimeForReturn,
-          if(isCoShare) 'is_co_share': isCoShare,
-         
+          if (isCoShare) 'is_co_share': 1,
+
           if (isCoShare && coShareMaxSeats > 0)
             'co_share_max_seats': coShareMaxSeats
         }),

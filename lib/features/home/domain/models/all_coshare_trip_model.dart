@@ -18,7 +18,7 @@ class CoShareTripData {
   final String? id;
   final String? requestNumber;
   final int? isCoShare;
-  final int? coShareMaxSeats;
+  final dynamic coShareMaxSeats;
   final String? transportType;
   final ZoneType? zoneType;
   final ServiceLocation? serviceLocation;

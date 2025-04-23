@@ -2108,6 +2108,9 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
   Future<void> biddingCreateRequest(
       BiddingCreateRequestEvent event, Emitter<BookingState> emit) async {
     dev.log("---BiddingCreateRequestEvent======");
+    dev.log("---BiddingCreateRequestEvent==is coshare====:$isCoShare");
+    dev.log(
+        "---BiddingCreateRequestEvent==is coShareMaxSeats====:$coShareMaxSeats");
     isLoading = true;
     final data = await serviceLocator<BookingUsecase>().createRequest(
       userData: event.userData,
@@ -2346,7 +2349,10 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
             driverStreamRide(driverId: event.driver["driver_id"]);
             biddingDriverList.removeWhere(
                 (element) => element["driver_id"] == event.driver["driver_id"]);
-            add(BookingGetUserDetailsEvent(requestId: requestData!.id));
+            if (!isClosed) {
+              add(BookingGetUserDetailsEvent(requestId: requestData!.id));
+            }
+            // add(BookingGetUserDetailsEvent(requestId: requestData!.id));
           }
           add(UpdateEvent());
         },

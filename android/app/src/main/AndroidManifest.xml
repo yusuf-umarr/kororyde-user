@@ -16,6 +16,7 @@
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
 
     <application android:label="KoroRYDE" android:name="${applicationName}" android:icon="@mipmap/launcher_icon" android:enableOnBackInvokedCallback="true">
+        <meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="false"/>  
         <activity 
             android:name=".MainActivity" 
             android:exported="true" 
@@ -37,7 +38,7 @@
             <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="ride_channel_1"/>
             <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/logo"/>
             
-            <meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="false"/>  
+            <!-- <meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="false"/>   -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

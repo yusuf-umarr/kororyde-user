@@ -509,7 +509,8 @@ class _BookingPageState extends State<BookingPage>
                                               children: [
                                                 Container(
                                                   width: size.width,
-                                                  padding: EdgeInsets.symmetric(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
                                                           horizontal: 20)
                                                       .copyWith(top: 40),
                                                   height: size.height * 0.5,
@@ -517,7 +518,8 @@ class _BookingPageState extends State<BookingPage>
                                                     children: [
                                                       SvgPicture.asset(
                                                           "assets/svg/tryCosharesvg.svg"),
-                                                      SizedBox(height: 10),
+                                                      const SizedBox(
+                                                          height: 10),
                                                       MyText(
                                                         text: "Try Co-Share",
                                                         textStyle: Theme.of(
@@ -529,7 +531,8 @@ class _BookingPageState extends State<BookingPage>
                                                                     FontWeight
                                                                         .bold),
                                                       ),
-                                                      SizedBox(height: 20),
+                                                      const SizedBox(
+                                                          height: 20),
                                                       Column(
                                                         children: [
                                                           MyText(
@@ -552,7 +555,8 @@ class _BookingPageState extends State<BookingPage>
                                                         height:
                                                             size.height * 0.03,
                                                       ),
-                                                      SizedBox(height: 20),
+                                                      const SizedBox(
+                                                          height: 20),
                                                       Row(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -569,8 +573,18 @@ class _BookingPageState extends State<BookingPage>
                                                               onPressed: () {
                                                                 //try co-share modal
                                                                 //second popup modal
+                                                                context
+                                                                    .read<
+                                                                        BookingBloc>()
+                                                                    .add(
+                                                                      EnableCoShareEvent(
+                                                                        isCoShare:
+                                                                            true,
+                                                                      ),
+                                                                    );
 
-                                                                log("---is_co_share:true");
+                                                                log("---try co-share clicked:true");
+                                                                //EnableCoShareEvent
                                                                 Navigator.of(
                                                                         context)
                                                                     .pop();
@@ -609,7 +623,7 @@ class _BookingPageState extends State<BookingPage>
                                                                         return Stack(
                                                                           children: [
                                                                             Container(
-                                                                              padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+                                                                              padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
                                                                               height: MediaQuery.of(context).viewInsets.bottom == 0 ? size.height * 0.4 : size.height * 0.4,
                                                                               child: Column(
                                                                                 children: [
@@ -621,16 +635,16 @@ class _BookingPageState extends State<BookingPage>
                                                                                       ),
                                                                                     ],
                                                                                   ),
-                                                                                  SizedBox(height: 10),
-                                                                                  Divider(),
-                                                                                  SizedBox(height: 20),
+                                                                                  const SizedBox(height: 10),
+                                                                                  const Divider(),
+                                                                                  const SizedBox(height: 20),
                                                                                   MyText(
                                                                                     text: "How many co-sharer(s) do you want on this trip?",
                                                                                     textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                                                                                           fontWeight: FontWeight.w400,
                                                                                         ),
                                                                                   ),
-                                                                                  SizedBox(height: 20),
+                                                                                  const SizedBox(height: 20),
 
                                                                                   Row(
                                                                                     mainAxisSize: MainAxisSize.min,
@@ -647,26 +661,30 @@ class _BookingPageState extends State<BookingPage>
                                                                                           //     );
                                                                                         },
                                                                                         child: Container(
-                                                                                          padding: EdgeInsets.all(2),
+                                                                                          padding: const EdgeInsets.all(2),
                                                                                           decoration: BoxDecoration(
                                                                                             borderRadius: BorderRadius.circular(2),
-                                                                                            border: Border.all(color:coShareMaxSeats ==1? Colors.red.withOpacity(
-                                                                                              0.1,
-                                                                                            ): Colors.red),
-
-                                                                                            color:coShareMaxSeats ==1? Colors.red.withOpacity(
-                                                                                              0.1,
-                                                                                            ):Colors.red.withOpacity(
-                                                                                              0.4,
-                                                                                            ),
+                                                                                            border: Border.all(
+                                                                                                color: coShareMaxSeats == 1
+                                                                                                    ? Colors.red.withOpacity(
+                                                                                                        0.1,
+                                                                                                      )
+                                                                                                    : Colors.red),
+                                                                                            color: coShareMaxSeats == 1
+                                                                                                ? Colors.red.withOpacity(
+                                                                                                    0.1,
+                                                                                                  )
+                                                                                                : Colors.red.withOpacity(
+                                                                                                    0.4,
+                                                                                                  ),
                                                                                           ),
                                                                                           child: Icon(
                                                                                             Icons.remove,
-                                                                                            color:coShareMaxSeats ==1? Colors.red.withOpacity(0.1):Colors.red,
+                                                                                            color: coShareMaxSeats == 1 ? Colors.red.withOpacity(0.1) : Colors.red,
                                                                                           ),
                                                                                         ),
                                                                                       ),
-                                                                                      SizedBox(width: 10),
+                                                                                      const SizedBox(width: 10),
                                                                                       MyText(
                                                                                         text: "${coShareMaxSeats}", //this is not updating
                                                                                         textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -674,7 +692,7 @@ class _BookingPageState extends State<BookingPage>
                                                                                               fontSize: 20,
                                                                                             ),
                                                                                       ),
-                                                                                      SizedBox(width: 10),
+                                                                                      const SizedBox(width: 10),
                                                                                       InkWell(
                                                                                         onTap: () {
                                                                                           // context.read<BookingBloc>().add(
@@ -688,21 +706,25 @@ class _BookingPageState extends State<BookingPage>
                                                                                           });
                                                                                         },
                                                                                         child: Container(
-                                                                                          padding: EdgeInsets.all(2),
+                                                                                          padding: const EdgeInsets.all(2),
                                                                                           decoration: BoxDecoration(
                                                                                             borderRadius: BorderRadius.circular(2),
-                                                                                            border: Border.all(color:coShareMaxSeats==3? Colors.green.withOpacity(0.1):Colors.green),
-                                                                                            color:coShareMaxSeats==3? Colors.green.withOpacity(
-                                                                                              0.1,
-                                                                                            ):Colors.green.withOpacity(
-                                                                                              0.4,
-                                                                                            ),
+                                                                                            border: Border.all(color: coShareMaxSeats == 3 ? Colors.green.withOpacity(0.1) : Colors.green),
+                                                                                            color: coShareMaxSeats == 3
+                                                                                                ? Colors.green.withOpacity(
+                                                                                                    0.1,
+                                                                                                  )
+                                                                                                : Colors.green.withOpacity(
+                                                                                                    0.4,
+                                                                                                  ),
                                                                                           ),
                                                                                           child: Icon(
                                                                                             Icons.add,
-                                                                                            color:coShareMaxSeats==3? Colors.green.withOpacity(
-                                                                                              0.1,
-                                                                                            ): Colors.green,
+                                                                                            color: coShareMaxSeats == 3
+                                                                                                ? Colors.green.withOpacity(
+                                                                                                    0.1,
+                                                                                                  )
+                                                                                                : Colors.green,
                                                                                           ),
                                                                                         ),
                                                                                       ),
@@ -756,7 +778,7 @@ class _BookingPageState extends State<BookingPage>
                                                                                             Navigator.of(context).pop();
                                                                                             // context.read<BookingBloc>().add(BiddingCreateRequestEvent(userData: widget.arg.userData, vehicleData: context.read<BookingBloc>().isMultiTypeVechiles ? context.read<BookingBloc>().sortedEtaDetailsList[context.read<BookingBloc>().selectedVehicleIndex] : context.read<BookingBloc>().etaDetailsList[context.read<BookingBloc>().selectedVehicleIndex], pickupAddressList: widget.arg.pickupAddressList, dropAddressList: widget.arg.stopAddressList, selectedTransportType: widget.arg.transportType, paidAt: context.read<BookingBloc>().payAtDrop ? 'Receiver' : 'Sender', selectedPaymentType: context.read<BookingBloc>().selectedPaymentType, scheduleDateTime: context.read<BookingBloc>().scheduleDateTime, goodsTypeId: context.read<BookingBloc>().selectedGoodsTypeId.toString(), goodsQuantity: context.read<BookingBloc>().goodsQtyController.text, offeredRideFare: context.read<BookingBloc>().farePriceController.text, polyLine: context.read<BookingBloc>().polyLine, isPetAvailable: context.read<BookingBloc>().petPreference, isLuggageAvailable: context.read<BookingBloc>().luggagePreference, isOutstationRide: widget.arg.isOutstationRide, isRoundTrip: context.read<BookingBloc>().isRoundTrip, scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
                                                                                           },
-                                                                                          child: Text(
+                                                                                          child: const Text(
                                                                                             "Proceed",
                                                                                             style: TextStyle(color: Colors.white),
                                                                                           ),
@@ -774,7 +796,7 @@ class _BookingPageState extends State<BookingPage>
                                                                                 onTap: () {
                                                                                   Navigator.of(context).pop();
                                                                                 },
-                                                                                child: Icon(
+                                                                                child: const Icon(
                                                                                   Icons.cancel_outlined,
                                                                                   color: Colors.red,
                                                                                 ),
@@ -788,7 +810,7 @@ class _BookingPageState extends State<BookingPage>
                                                                   },
                                                                 );
                                                               },
-                                                              child: Text(
+                                                              child: const Text(
                                                                 "Try co share",
                                                                 style:
                                                                     TextStyle(
@@ -921,7 +943,7 @@ class _BookingPageState extends State<BookingPage>
                                                                 //     isRoundTrip: context.read<BookingBloc>().isRoundTrip,
                                                                 //     scheduleDateTimeForReturn: context.read<BookingBloc>().scheduleDateTimeForReturn));
                                                               },
-                                                              child: Text(
+                                                              child: const Text(
                                                                 "Skip",
                                                                 style:
                                                                     TextStyle(
@@ -947,7 +969,7 @@ class _BookingPageState extends State<BookingPage>
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.cancel_outlined,
                                                       color: Colors.red,
                                                     ),
@@ -2144,10 +2166,9 @@ class _BookingPageState extends State<BookingPage>
                                                         context
                                                             .read<BookingBloc>()
                                                             .currentSizeThree,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius:
-                                              const BorderRadius.vertical(
+                                          borderRadius: BorderRadius.vertical(
                                             top: Radius.circular(20.0),
                                           ),
                                           // boxShadow: [
@@ -2506,9 +2527,9 @@ class _BookingPageState extends State<BookingPage>
       Size size, BuildContext context, dynamic eta) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         // color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
@@ -2522,9 +2543,9 @@ class _BookingPageState extends State<BookingPage>
       ),
       child: Container(
         width: size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           // color: Colors.grey,
-          borderRadius: const BorderRadius.only(
+          borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
           ),

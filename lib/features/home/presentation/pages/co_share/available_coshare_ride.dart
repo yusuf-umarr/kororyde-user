@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/common/app_arguments.dart';
 import 'package:kororyde_user/common/app_colors.dart';
+import 'package:kororyde_user/common/local_data.dart';
 import 'package:kororyde_user/core/utils/custom_navigation_icon.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
@@ -25,15 +26,26 @@ class AvailableCoshareRidePage extends StatefulWidget {
 }
 
 class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
+  dynamic userId;
   @override
   void initState() {
+    getUserId();
     context.read<HomeBloc>().add(GetAllCoShareTripEvent());
+
     super.initState();
+  }
+
+  getUserId() async {
+    // final token = await AppSharedPreference.getToken();
+    userId = await AppSharedPreference.getUserId();
+
+    dev.log("--userId:$userId");
   }
 
   @override
   Widget build(BuildContext context) {
     // final bloc = context.watch<HomeBloc>();
+    // getUserId();
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -62,15 +74,38 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (state is CoShareTripDataLoadedState) {
+            final sortedTrips = state.data
+                .where((trip) => trip.user?.id != int.parse(userId))
+                .toList();
+
+            sortedTrips.sort((a, b) {
+              DateTime? aCreatedAt = a.requestPlaces?.isNotEmpty == true
+                  ? DateTime.tryParse(a.requestPlaces!.first.createdAt ?? '')
+                  : null;
+              DateTime? bCreatedAt = b.requestPlaces?.isNotEmpty == true
+                  ? DateTime.tryParse(b.requestPlaces!.first.createdAt ?? '')
+                  : null;
+
+              if (aCreatedAt == null && bCreatedAt == null) return 0;
+              if (aCreatedAt == null) return 1;
+              if (bCreatedAt == null) return -1;
+
+              return bCreatedAt.compareTo(aCreatedAt); // Descending order
+
+              // return aCreatedAt.compareTo(
+              //     bCreatedAt); // Change to b.compareTo(a) for descending
+            });
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: state.data
-                    .map((rider) => AvailableRideCard(
-                          rider: rider,
-                          arg: widget.arg,
-                        ))
-                    .toList(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: sortedTrips
+                      .map((trip) => AvailableRideCard(
+                            rider: trip,
+                            arg: widget.arg,
+                          ))
+                      .toList(),
+                ),
               ),
             );
           } else {
@@ -91,23 +126,6 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
       ),
     );
   }
-
-  /*
-  Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                 
-                  SizedBox(height: size.height * 0.05),
-                  AvailableRideCard(),
-                  AvailableRideCard(),
-                  AvailableRideCard(),
-                ],
-              ),
-            ),
-          );
-  */
 }
 
 class AvailableRideCard extends StatelessWidget {
