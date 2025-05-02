@@ -47,10 +47,11 @@ class _CosharePageState extends State<CosharePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeBloc>().add(GetMyCoShareRequestEvent(
         onSuccess: (data) {
-          log("--coshare data her:${data}");
+          // log("--coshare data here:${data}");
           setState(() {
             _coShareList = data;
           });
+          log("--coshare data here:${_coShareList}");
         },
       ));
     });
@@ -563,47 +564,7 @@ class _CosharePageState extends State<CosharePage> {
                             ),
 
                             const SizedBox(height: 20),
-                            //////////////my co share///////////////////
-                            ///
-                            Builder(builder: (context) {
-                              final pendingRequests = _coShareList
-                                  .where((request) =>
-                                      request.coShareRequest?.status ==
-                                      'pending')
-                                  .toList();
-                              return Column(
-                                children: [
-                                  if (pendingRequests.isNotEmpty) ...[
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Text(
-                                        "Pending CoShare request:",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium,
-                                      ),
-                                    ),
-                                    ListView.builder(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: pendingRequests.length,
-                                      itemBuilder: (context, index) {
-                                        final request = pendingRequests[index];
-                                        if (request.coShareRequest!.status ==
-                                            "pending") {
-                                          return MyCoShareRequestCard(
-                                              request: request);
-                                        }
-                                        return SizedBox.fromSize();
-                                      },
-                                    ),
-                                  ]
-                                ],
-                              );
-                            }),
+
                             // if (_coShareList.isNotEmpty) ...[
                             //   Padding(
                             //     padding: const EdgeInsets.all(16.0),
@@ -626,6 +587,51 @@ class _CosharePageState extends State<CosharePage> {
                             // ]
                           ],
                         ],
+
+                        //////////////my co share///////////////////
+                        ///
+                        Builder(builder: (context) {
+                          final pendingRequests = _coShareList
+                              .where((request) =>
+                                  (request.coShareRequest?.status ==
+                                      'pending') ||
+                                  (request.coShareRequest?.status ==
+                                      'accepted'))
+                              .toList();
+
+                          log("--pendingRequests:${pendingRequests.length}");
+                          log("--_coShareList:${_coShareList.length}");
+
+                          return Column(
+                            children: [
+                              if (pendingRequests.isNotEmpty) ...[
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    "Pending CoShare request:",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                ListView.builder(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: pendingRequests.length,
+                                  itemBuilder: (context, index) {
+                                    log("--co-share length:${pendingRequests.length}");
+                                    final request = pendingRequests[index];
+                                    return MyCoShareRequestCard(
+                                        request: request);
+
+                                    // return SizedBox.fromSize();
+                                  },
+                                ),
+                              ]
+                            ],
+                          );
+                        }),
                         if (context
                             .read<HomeBloc>()
                             .searchInfoMessage
@@ -1608,228 +1614,280 @@ class _MyCoShareRequestCardState extends State<MyCoShareRequestCard> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        final homeBloc = context.read<HomeBloc>();
-                        showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(
-                                15,
-                              ),
-                            ),
+                  if (widget.request.coShareRequest!.status == "accepted") ...[
+                    Expanded(
+                        child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 9),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AppColors.primary.withOpacity(0.1)),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 2.0),
+                                child: Text(
+                                  "Offer Accepted",
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                          builder: (_) {
-                            return BlocProvider.value(
-                              value: context.read<HomeBloc>(),
-                              child:
-                                  StatefulBuilder(builder: (context, setState) {
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                              horizontal: 20)
-                                          .copyWith(top: 40),
-                                      height: MediaQuery.of(context)
-                                                  .viewInsets
-                                                  .bottom ==
-                                              0
-                                          ? size.height * 0.4
-                                          : size.height * 0.8,
-                                      child: Column(
-                                        // crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              MyText(
-                                                text: "Offer request",
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          // SizedBox(height: 10),
-                                          const Row(
-                                            children: [
-                                              // MyText(
-                                              //   text:
-                                              //       "Francis has offered you £500",
-                                              //   textStyle: Theme.of(context)
-                                              //       .textTheme
-                                              //       .bodySmall!
-                                              //       .copyWith(
-                                              //         fontWeight:
-                                              //             FontWeight.w400,
-                                              //       ),
-                                              // ),
-                                            ],
-                                          ),
-                                          const Divider(),
-                                          const SizedBox(height: 30),
-                                          if (widget.request.coShareRequest!
-                                                  .negotiationAmount !=
-                                              null) ...[
-                                            Column(
-                                              children: [
-                                                MyText(
-                                                  text: "You have has offered",
-                                                  textStyle: GoogleFonts.roboto(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                    // fontStyle: style,
-                                                  ),
-                                                ),
-                                                MyText(
-                                                  text:
-                                                      "₦ ${widget.request.coShareRequest!.negotiationAmount != null ? widget.request.coShareRequest!.negotiationAmount! : "0"}",
-                                                  textStyle: GoogleFonts.roboto(
-                                                      fontSize: 22,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: AppColors.primary
-                                                      // fontStyle: style,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 15),
-                                            SizedBox(
-                                              height: size.height * 0.025,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            backgroundColor:
-                                                                AppColors.red),
-                                                    onPressed: () {
-                                                      final bloc = context
-                                                          .read<HomeBloc>();
-
-                                                      bloc.add(AcceptRejectCoshareRequestEvent(
-                                                          status: "reject",
-                                                          coShareRequestId: widget
-                                                              .request
-                                                              .coShareRequest!
-                                                              .id
-                                                              .toString()));
-                                                    },
-                                                    child: const Text(
-                                                      "Decline offer",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Expanded(
-                                                  child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            backgroundColor:
-                                                                AppColors
-                                                                    .primary),
-                                                    onPressed: () {
-                                                      final bloc = context
-                                                          .read<HomeBloc>();
-
-                                                      bloc.add(AcceptRejectCoshareRequestEvent(
-                                                          status: "accept",
-                                                          coShareRequestId: widget
-                                                              .request
-                                                              .coShareRequest!
-                                                              .id
-                                                              .toString()));
-                                                    },
-                                                    child: const Text(
-                                                      "Accept offer",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ] else ...[
-                                            MyText(
-                                              text:
-                                                  "The rider is yet to send his offer",
-                                              textStyle: GoogleFonts.roboto(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                // fontStyle: style,
-                                              ),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 20,
-                                      top: 20,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Icon(
-                                          Icons.cancel_outlined,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }),
-                            );
-                            // );
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: AppColors.primary.withOpacity(0.1)),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.currency_exchange,
-                              color: AppColors.primary,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 2.0),
-                              child: Text(
-                                "View Offer",
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 11,
+                        ),
+                      ],
+                    ))
+                  ] else ...[
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          final homeBloc = context.read<HomeBloc>();
+                          showModalBottomSheet<void>(
+                            isScrollControlled: true,
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(
+                                  15,
                                 ),
                               ),
-                            )
-                          ],
+                            ),
+                            builder: (_) {
+                              return BlocProvider.value(
+                                value: context.read<HomeBloc>(),
+                                child: StatefulBuilder(
+                                    builder: (context, setState) {
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                                horizontal: 20)
+                                            .copyWith(top: 40),
+                                        height: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom ==
+                                                0
+                                            ? size.height * 0.4
+                                            : size.height * 0.8,
+                                        child: Column(
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                MyText(
+                                                  text: "Offer request",
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            // SizedBox(height: 10),
+                                            const Row(
+                                              children: [
+                                                // MyText(
+                                                //   text:
+                                                //       "Francis has offered you £500",
+                                                //   textStyle: Theme.of(context)
+                                                //       .textTheme
+                                                //       .bodySmall!
+                                                //       .copyWith(
+                                                //         fontWeight:
+                                                //             FontWeight.w400,
+                                                //       ),
+                                                // ),
+                                              ],
+                                            ),
+                                            const Divider(),
+                                            const SizedBox(height: 30),
+                                            if (widget.request.coShareRequest!
+                                                    .negotiationAmount !=
+                                                null) ...[
+                                              Column(
+                                                children: [
+                                                  MyText(
+                                                    text:
+                                                        "You have has offered",
+                                                    textStyle:
+                                                        GoogleFonts.roboto(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      // fontStyle: style,
+                                                    ),
+                                                  ),
+                                                  MyText(
+                                                    text:
+                                                        "₦ ${widget.request.coShareRequest!.negotiationAmount != null ? widget.request.coShareRequest!.negotiationAmount! : "0"}",
+                                                    textStyle:
+                                                        GoogleFonts.roboto(
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: AppColors
+                                                                .primary
+                                                            // fontStyle: style,
+                                                            ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 15),
+                                              SizedBox(
+                                                height: size.height * 0.025,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  AppColors
+                                                                      .red),
+                                                      onPressed: () {
+                                                        final bloc = context
+                                                            .read<HomeBloc>();
+
+                                                        bloc.add(AcceptRejectCoshareRequestEvent(
+                                                            status: "reject",
+                                                            coShareRequestId: widget
+                                                                .request
+                                                                .coShareRequest!
+                                                                .id
+                                                                .toString()));
+                                                      },
+                                                      child: const Text(
+                                                        "Decline offer",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Expanded(
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  AppColors
+                                                                      .primary),
+                                                      onPressed: () {
+                                                        final bloc = context
+                                                            .read<HomeBloc>();
+
+                                                        bloc.add(AcceptRejectCoshareRequestEvent(
+                                                            status: "accept",
+                                                            coShareRequestId: widget
+                                                                .request
+                                                                .coShareRequest!
+                                                                .id
+                                                                .toString()));
+                                                      },
+                                                      child: const Text(
+                                                        "Accept offer",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ] else ...[
+                                              MyText(
+                                                text:
+                                                    "The rider is yet to send his offer",
+                                                textStyle: GoogleFonts.roboto(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500,
+                                                  // fontStyle: style,
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 20,
+                                        top: 20,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Icon(
+                                            Icons.cancel_outlined,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                }),
+                              );
+                              // );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AppColors.primary.withOpacity(0.1)),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.currency_exchange,
+                                color: AppColors.primary,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 2.0),
+                                child: Text(
+                                  "View Offer",
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ]
                 ],
               )
               //////
             ],
           ),
         ),
+        if (widget.request.coShareRequest!.status == "accepted") ...[
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              decoration: const BoxDecoration(color: AppColors.darkGreen),
+              child: const Text(
+                "Accepted",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        ],
       ],
     );
   }

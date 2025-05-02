@@ -12,8 +12,10 @@ import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model
 import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
 import 'dart:developer' as dev;
 
+import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
+
 class CosharerDetail extends StatefulWidget {
-  final IncomingCoShareData request;
+  final  request; //MyCoShareRequestCard
 
   const CosharerDetail({
     super.key,
@@ -41,7 +43,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
     bloc.add(PolylineEvent(
       isInitCall: true,
       // arg: event.arg,
-      pickLat: widget.request.pickupLat!,
+      pickLat: widget.request.request!,
       pickLng: widget.request.pickupLng!,
       dropLat: widget.request.destinationLat!,
       dropLng: widget.request.destinationLng!,

@@ -21,7 +21,7 @@ class ChatWithDriverWidget extends StatelessWidget {
     return BlocBuilder<BookingBloc, BookingState>(builder: (context, state) {
       return Scaffold(
         body: Stack(
-          children: [
+          children: [ 
             Container(
               width: size.width,
               decoration: BoxDecoration(
