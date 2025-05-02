@@ -71,7 +71,7 @@ class _ServicesPageState extends State<ServicesPage> {
                             .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
                       },
                       bg: AppColors.serviceYellow,
-                      title: "Delievry",
+                      title: "Delivery",
                       icon: 'assets/png/deliveryIcon.png',
                     ),
                     OurServiceCard(

@@ -1,33 +1,23 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/common/app_colors.dart';
+import 'package:kororyde_user/common/app_constants.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
+import 'dart:developer' as dev;
 
 class CosharerDetail extends StatefulWidget {
-  final bool isRequest;
- final IncomingCoShareData request;
-  // final String pickUpAddr;
-  // final String dropOffAddr;
-  // final double pickUpLat;
-  // final double pickUpLong;
-  // final double dropOffLat;
-  // final double dropOffLong;
-  // final CoShareTripData rider;
+  final IncomingCoShareData request;
+
   const CosharerDetail({
     super.key,
-    required this.isRequest, required this.request,
-    // required this.pickUpAddr,
-    // required this.dropOffAddr,
-    // required this.pickUpLat,
-    // required this.pickUpLong,
-    // required this.dropOffLat,
-    // required this.dropOffLong,
-    // required this.rider,
+    required this.request,
   });
 
   @override
@@ -38,17 +28,74 @@ class _CosharerDetailState extends State<CosharerDetail> {
   final TextEditingController _offerController =
       TextEditingController(text: '100');
   int coShareMaxSeats = 100;
+
+  @override
+  void initState() {
+    addPoly();
+    super.initState();
+  }
+
+  addPoly() {
+    final bloc = context.read<BookingBloc>();
+
+    bloc.add(PolylineEvent(
+      isInitCall: true,
+      // arg: event.arg,
+      pickLat: widget.request.pickupLat!,
+      pickLng: widget.request.pickupLng!,
+      dropLat: widget.request.destinationLat!,
+      dropLng: widget.request.destinationLng!,
+      stops: [],
+      pickAddress: widget.request.pickupAddress!,
+      dropAddress: widget.request.destinationAddress!,
+    ));
+  }
+
+  double? distanceMeters;
+  static const double earthRadiusKm = 6371.0;
+
+  // Helper method to convert degrees to radians
+  static double _toRadians(double degree) {
+    return degree * pi / 180;
+  }
+
+  // Method to calculate the distance in meters
+  double calculateDistance({
+    required double sourceLat,
+    required double sourceLng,
+    required double destinationLat,
+    required double destinationLng,
+  }) {
+    // Convert latitude and longitude from degrees to radians
+    final double sourceLatRad = _toRadians(sourceLat);
+    final double sourceLngRad = _toRadians(sourceLng);
+    final double destinationLatRad = _toRadians(destinationLat);
+    final double destinationLngRad = _toRadians(destinationLng);
+
+    // Haversine formula
+    final double dLat = destinationLatRad - sourceLatRad;
+    final double dLng = destinationLngRad - sourceLngRad;
+
+    final double a = pow(sin(dLat / 2), 2) +
+        cos(sourceLatRad) * cos(destinationLatRad) * pow(sin(dLng / 2), 2);
+    final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    distanceMeters = (earthRadiusKm * c);
+
+    return distanceMeters!;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
                 )),
@@ -69,9 +116,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               MyText(
-                                text: widget.isRequest
-                                    ? "Rider's detail"
-                                    : "Selected ride",
+                                text: "Detail",
                                 textStyle: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -81,7 +126,16 @@ class _CosharerDetailState extends State<CosharerDetail> {
                                         fontSize: 12),
                               ),
                               MyText(
-                                text: "The rider is 10mins away from you",
+                                text: "The passender is ${calculateDistance(
+                                  sourceLat:
+                                      AppConstants.currentLocations.latitude,
+                                  sourceLng:
+                                      AppConstants.currentLocations.longitude,
+                                  destinationLat: widget.request.pickupLat!,
+                                  destinationLng: widget.request.pickupLng!,
+                                ).toStringAsFixed(
+                                  0,
+                                )} m away from you",
                                 textStyle: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -92,16 +146,16 @@ class _CosharerDetailState extends State<CosharerDetail> {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
                             },
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   // color:
                                   ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.cancel_outlined,
                                 color: Colors.red,
                               ),
@@ -110,7 +164,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Divider(),
+                      const Divider(),
                       const SizedBox(height: 10),
                       Row(
                         children: [
@@ -118,7 +172,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               MyText(
-                                text: widget.isRequest ? "" : "Main rider",
+                                text: "",
                                 textStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
@@ -139,7 +193,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: MyText(
-                                      text: "Francis Adeoti",
+                                      text: widget.request.user!.name!,
                                       textStyle: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
@@ -163,9 +217,8 @@ class _CosharerDetailState extends State<CosharerDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyText(
-                            text: widget.isRequest
-                                ? "Rider's current location"
-                                : "Your current location",
+                            text:
+                                "${widget.request.user!.name}'s current location",
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -180,16 +233,20 @@ class _CosharerDetailState extends State<CosharerDetail> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              MyText(
-                                text: "42 adebola st, surulere, lagos",
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12),
+                              SizedBox(
+                                width: size.width * 0.8,
+                                child: MyText(
+                                  text: "${widget.request.pickupAddress}",
+                                  maxLines: 4,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12),
+                                ),
                               ),
                             ],
                           ),
@@ -202,7 +259,7 @@ class _CosharerDetailState extends State<CosharerDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyText(
-                            text: "Rider's destination",
+                            text: "${widget.request.user!.name}'s destination",
                             textStyle: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -218,24 +275,28 @@ class _CosharerDetailState extends State<CosharerDetail> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              MyText(
-                                text: "Elegushi Royal, lekki,",
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12),
+                              SizedBox(
+                                width: size.width * 0.8,
+                                child: MyText(
+                                  text: "${widget.request.destinationAddress}",
+                                  maxLines: 4,
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12),
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       MyText(
-                        text: "francis's location",
+                        text: "${widget.request.user!.name}'s location",
                         textStyle: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -249,455 +310,69 @@ class _CosharerDetailState extends State<CosharerDetail> {
                 ),
 
                 ////google map///
-                Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.40),
-                  child: SizedBox(
-                    height: size.height * 0.5,
-                    width: size.width,
-                    child: GoogleMap(
-                      // gestureRecognizers: {
-                      //   Factory<OneSequenceGestureRecognizer>(
-                      //     () => EagerGestureRecognizer(),
-                      //   ),
-                      // },
-                      onMapCreated: (GoogleMapController controller) {
-                        context.read<BookingBloc>().googleMapController =
-                            controller;
-                      },
-                      compassEnabled: false,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                          8.5373, //   AppConstants.currentLocations.latitude,
-                          4.5444,
-                        ), //    AppConstants.currentLocations.longitude),
-                        zoom: 15.0,
+                /////
+                BlocBuilder<BookingBloc, BookingState>(
+                    builder: (context, state) {
+                  dev.log(
+                      "--marker list:${context.read<BookingBloc>().markerList}");
+                  dev.log(
+                      "--polylines:${context.read<BookingBloc>().polylines}");
+
+                  if (state is BookingUpdateState) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: size.height * 0.42),
+                      child: SizedBox(
+                        height: size.height * 0.5,
+                        width: size.width,
+                        child: GoogleMap(
+                          // gestureRecognizers: {
+                          //   Factory<OneSequenceGestureRecognizer>(
+                          //     () => EagerGestureRecognizer(),
+                          //   ),
+                          // },
+                          onMapCreated: (GoogleMapController controller) {
+                            context.read<BookingBloc>().googleMapController =
+                                controller;
+                          },
+                          compassEnabled: false,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
+                                AppConstants.currentLocations.latitude,
+                                AppConstants.currentLocations.longitude),
+                            zoom: 15.0,
+                          ),
+                          onCameraMove: (CameraPosition position) async {},
+                          onCameraIdle: () async {},
+                          minMaxZoomPreference:
+                              const MinMaxZoomPreference(0, 20),
+                          buildingsEnabled: false,
+                          zoomControlsEnabled: false,
+                          myLocationEnabled: (context
+                                      .read<BookingBloc>()
+                                      .isNormalRideSearching ||
+                                  context
+                                      .read<BookingBloc>()
+                                      .isBiddingRideSearching ||
+                                  (context.read<BookingBloc>().requestData !=
+                                      null))
+                              ? false
+                              : true,
+                          myLocationButtonEnabled: false,
+
+                          markers:
+                              Set.from(context.read<BookingBloc>().markerList),
+                          polylines: context.read<BookingBloc>().polylines,
+                        ),
                       ),
-                      onCameraMove: (CameraPosition position) async {},
-                      onCameraIdle: () async {},
-                      minMaxZoomPreference: const MinMaxZoomPreference(0, 20),
-                      buildingsEnabled: false,
-                      zoomControlsEnabled: false,
-                      myLocationEnabled: (context
-                                  .read<BookingBloc>()
-                                  .isNormalRideSearching ||
-                              context
-                                  .read<BookingBloc>()
-                                  .isBiddingRideSearching ||
-                              (context.read<BookingBloc>().requestData != null))
-                          ? false
-                          : true,
-                      myLocationButtonEnabled: false,
-                    ),
-                  ),
-                ),
-                ////google map///
-                // Align(
-                //   alignment: Alignment.bottomCenter,
-                //   child:
-                // )
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }),
               ],
             ),
           ),
         ),
       ),
-      bottomSheet: !widget.isRequest
-          ? Container(
-              width: size.width,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(
-                                15,
-                              ),
-                            ),
-                          ),
-                          builder: (_) {
-                            return BlocProvider.value(
-                              value: context.read<BookingBloc>(),
-                              child:
-                                  StatefulBuilder(builder: (context, setState) {
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 20)
-                                              .copyWith(top: 40),
-                                      height: size.height * 0.38,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              MyText(
-                                                text: "Contact passenger",
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10),
-                                          Divider(),
-                                          SizedBox(height: 20),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 5),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.23)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1)),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                        "assets/svg/inMasseage.svg"),
-                                                    SizedBox(width: 5),
-                                                    Text("Message"),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(width: 20),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 5),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.23)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1)),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                        "assets/svg/inCall.svg"),
-                                                    SizedBox(width: 5),
-                                                    Text("In-app call"),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 20),
-                                          MyText(
-                                            text: "Or copy main rider's number",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          MyText(
-                                            text: "08123456789",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: AppColors.primary),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 20,
-                                      top: 20,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Icon(
-                                          Icons.cancel_outlined,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }),
-                            );
-                            // );
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: AppColors.primary,
-                        ),
-                        child: Text(
-                          "Contact passenger",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-
-          //
-          : SizedBox.shrink(),
-      ////
     );
   }
 }
-
-
-/*
-
-  showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(
-                                15,
-                              ),
-                            ),
-                          ),
-                          builder: (_) {
-                            final Size size = MediaQuery.of(context).size;
-                            return BlocProvider.value(
-                              value: context.read<HomeBloc>(),
-                              child:
-                                  StatefulBuilder(builder: (context, setState) {
-                                return Stack(
-                                  children: [
-                                    Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10)
-                                              .copyWith(top: 20),
-                                      height: size.height * 0.45,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                MyText(
-                                                  text: "Adam's offer",
-                                                  textStyle: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyLarge!
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 10),
-                                            Divider(),
-                                            SizedBox(height: 20),
-                                            MyText(
-                                              text: "Adam Thomas offers to pay",
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 10),
-                                            MyText(
-                                              text: "#5,000",
-                                              textStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge!
-                                                  .copyWith(
-                                                      fontSize: 22,
-                                                      color: AppColors.primary,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 30),
-                                            Container(
-                                              width: size.width,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 12.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        //decline
-                                                      },
-                                                      child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 20,
-                                                                vertical: 10),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          color: AppColors.grey
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        child: Text(
-                                                            "Decline offer"),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 20),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        showModalBottomSheet<
-                                                            void>(
-                                                          isScrollControlled:
-                                                              true,
-                                                          context: context,
-                                                          shape:
-                                                              const RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(15),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                15,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          builder: (_) {
-                                                            return BlocProvider
-                                                                .value(
-                                                              value: context.read<
-                                                                  HomeBloc>(),
-                                                              child:
-                                                                  renegociateMethod(
-                                                                      size),
-                                                            );
-                                                            // );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 20,
-                                                                vertical: 10),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          color: AppColors.grey
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        child: Text(
-                                                          "Re-negotiate",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 10),
-                                            InkWell(
-                                              onTap: () {
-                                                showModalBottomSheet<void>(
-                                                  isScrollControlled: true,
-                                                  context: context,
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(15),
-                                                      topRight: Radius.circular(
-                                                        15,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  builder: (_) {
-                                                    return BlocProvider.value(
-                                                      value: context
-                                                          .read<HomeBloc>(),
-                                                      child: acceptOfferMethod(
-                                                          size),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Container(
-                                                width: size.width,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 10),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    color: AppColors.primary),
-                                                child: Text(
-                                                  "Accpet offer",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 20,
-                                      top: 20,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Icon(
-                                          Icons.cancel_outlined,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }),
-                            );
-                            // );
-                          },
-                        );
-*/

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
+import 'package:kororyde_user/features/home/domain/models/my_coshare_request.dart';
 
 import '../../../../core/network/network.dart';
 import '../../../account/domain/models/history_model.dart';
@@ -14,6 +15,7 @@ abstract class HomeRepository {
       {String? requestId});
   Future<Either<Failure, AllCoShareTripModel>> getAllCoShareTrip();
   Future<Either<Failure, IncomingCoShareModel>> getIncomingCoShareRequest(); 
+  Future<Either<Failure, MyCoshareRequestModel>> getMyCoCoShareRequest(); 
 
   Future<Either<Failure, dynamic>> getAutoCompletePlaces({
     required String input,

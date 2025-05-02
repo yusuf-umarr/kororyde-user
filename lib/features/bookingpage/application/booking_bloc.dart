@@ -348,7 +348,7 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
 
   Future<void> bookingInitEvent(
       BookingInitEvent event, Emitter<BookingState> emit) async {
-    log("bookingInitEvent ==calling");
+    log("--bookingInitEvent ==calling");
     vsync = event.vsync;
     mapType = event.arg.mapType;
     // if (mapType != 'google_map') {

@@ -8,13 +8,9 @@ import 'package:flutter_map/flutter_map.dart' as fm;
 import 'package:flutter_svg/svg.dart';
 import 'package:kororyde_user/features/account/presentation/pages/account_page.dart';
 import 'package:kororyde_user/features/bill_payment/presentation/customer_wallet.dart';
-import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/user_details_model.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
-import 'package:kororyde_user/features/home/presentation/pages/co_share/cosharer_detail.dart';
-import 'package:kororyde_user/features/home/presentation/pages/co_share/ride_detail.dart';
-import 'package:kororyde_user/features/home/presentation/pages/destination_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/help_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/manage_co_share.dart';
 import 'package:kororyde_user/features/home/presentation/pages/services_page.dart';
@@ -27,7 +23,6 @@ import 'package:kororyde_user/core/utils/custom_button.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import '../../../../core/utils/custom_divider.dart';
 import '../../../../core/utils/custom_navigation_icon.dart';
-import 'dart:developer' as dev;
 
 import '../../../../common/common.dart';
 import '../../../../core/utils/custom_text.dart';
@@ -951,7 +946,7 @@ class _HomePageContentState extends State<HomePageContent>
                         .add(ServiceTypeChangeEvent(serviceTypeIndex: 1));
                   },
                   bg: AppColors.serviceYellow,
-                  title: "Delievry",
+                  title: "Delivery",
                   icon: 'assets/png/deliveryIcon.png',
                 ),
               const SizedBox(width: 10),

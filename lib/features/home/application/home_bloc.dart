@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:kororyde_user/db/app_database.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
+import 'package:kororyde_user/features/home/domain/models/my_coshare_request.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 import 'package:vector_math/vector_math.dart' as vector;
 
@@ -141,6 +142,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //co-share
     on<GetAllCoShareTripEvent>(getAllCoShareTrip);
     on<GetIncomingCoShareEvent>(getIncomingCoShare);
+    on<GetMyCoShareRequestEvent>(getMyCoCoShareRequest);
     on<JoinCoShareTripEvent>(joinCoShareTrip);
     on<AcceptRejectCoshareRequestEvent>(acceptRejectCoshareRequest);
     on<SendCoShareOfferEvent>(sendCoShareOffer);
@@ -781,6 +783,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
+  FutureOr<void> getMyCoCoShareRequest(
+    GetMyCoShareRequestEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    dev.log("--getMyCoCoShareRequest called");
+    final data = await serviceLocator<HomeUsecase>().getMyCoCoShareRequest();
+
+    await data.fold(
+      (error) {
+        if (error.message == 'logout') {
+          emit(LogoutState());
+        } else {
+          emit(HomeLoadingStopState());
+        }
+      },
+      (success) {
+        event.onSuccess?.call(success.data);
+      },
+    );
+  }
+
   FutureOr<void> joinCoShareTrip(
       JoinCoShareTripEvent event, Emitter<HomeState> emit) async {
     final data = await serviceLocator<HomeUsecase>().joinCoShareTrip(
@@ -823,7 +846,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       },
       (success) async {
-        add(GetIncomingCoShareEvent());
+        if (event.status == "accept") {
+          emit(AcceptOfferState());
+        } else {
+          emit(RejectOfferState());
+        }
+        add(GetMyCoShareRequestEvent());
       },
     );
   }

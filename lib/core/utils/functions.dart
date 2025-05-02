@@ -24,3 +24,13 @@ openUrl(String url) async {
     throw 'Could not launch $url';
   }
 }
+
+Future<void> launchPhoneDialer(String phoneNumber) async {
+  final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+
+  if (await canLaunchUrl(phoneUri)) {
+    await launchUrl(phoneUri);
+  } else {
+    throw 'Could not launch $phoneNumber';
+  }
+}

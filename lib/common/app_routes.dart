@@ -4,6 +4,7 @@ import 'package:kororyde_user/features/bottom_nav/presentation/bottom_nav.dart';
 import 'package:kororyde_user/features/home/presentation/pages/advert_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/bill_payment_page.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/available_coshare_ride.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/chat_with_co_sharer.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/coshare_page.dart';
 import '../core/error/error_page.dart';
 import '../features/account/presentation/pages/confirm_fav_location.dart';
@@ -289,6 +290,13 @@ class AppRoutes {
         pageRoute = MaterialPageRoute(
           builder: (context) => AdminChat(arg: arg as AdminChatPageArguments),
         );
+        break;
+      case ChatWithCoSharer.routeName:
+        pageRoute =
+            MaterialPageRoute(builder: (context) => const ChatWithCoSharer());
+        // pageRoute = MaterialPageRoute(
+        //   builder: (context) => AdminChat(arg: arg as AdminChatPageArguments),
+        // );
         break;
       case ConfirmFavLocation.routeName:
         pageRoute = MaterialPageRoute(

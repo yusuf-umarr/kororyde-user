@@ -103,15 +103,17 @@ class AuthApi {
       required bool isOtpLogin,
       required bool isLoginByEmail}) async {
     try {
+      dev.log("--isOtpLogin:$isOtpLogin");
+      dev.log("--isLoginByEmail:$isLoginByEmail");
       final fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await DioProviderImpl().post(
-        ApiEndpoints.userLogin, 
+        ApiEndpoints.userLogin,
         body: !isOtpLogin
             ? FormData.fromMap({
                 if (!isLoginByEmail) "mobile": emailOrMobile,
                 if (isLoginByEmail) "email": emailOrMobile,
                 'password': password,
-                'device_token': fcmToken,
+                  'device_token': fcmToken,
                 "login_by": (Platform.isAndroid) ? 'android' : 'ios',
               })
             : (!isLoginByEmail)
@@ -127,7 +129,9 @@ class AuthApi {
                     "login_by": (Platform.isAndroid) ? 'android' : 'ios',
                   }),
       );
-      dev.log("--userlogin res----:${response}");
+      dev.log("--isOtpLogin:$isOtpLogin");
+      dev.log("--isLoginByEmail:$isLoginByEmail");
+      dev.log("--userlogin res--1--:${response}");
       return response;
     } catch (e) {
       rethrow;

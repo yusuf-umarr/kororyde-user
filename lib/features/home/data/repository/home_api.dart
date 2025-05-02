@@ -38,11 +38,28 @@ class HomeApi {
       rethrow;
     }
   }
+
   Future getIncomingCoShareRequestApi() async {
     try {
       final token = await AppSharedPreference.getToken();
       Response response = await DioProviderImpl().get(
         ApiEndpoints.incomingRequests,
+        // queryParams: (requestId != null) ? {"current_ride": requestId} : null,
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+      );
+      return response;
+    } catch (e) {
+      //debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future getMyCoShareRequestApi() async {
+    try {
+      final token = await AppSharedPreference.getToken();
+      dev.log("--token here:$token");
+      Response response = await DioProviderImpl().get(
+        ApiEndpoints.myCoshareRequests,
         // queryParams: (requestId != null) ? {"current_ride": requestId} : null,
         headers: {'Content-Type': 'application/json', 'Authorization': token},
       );
@@ -85,23 +102,22 @@ class HomeApi {
       rethrow;
     }
   }
+
   Future acceptRejectCoshareRequestApi({
     required String coShareRequestId,
     required String status,
- 
   }) async {
     try {
       final token = await AppSharedPreference.getToken();
       // final userId = await AppSharedPreference.getUserId();
 
-      Response response =
-          await DioProviderImpl().post(ApiEndpoints.acceptRejectCoShareRequest, headers: {
+      Response response = await DioProviderImpl()
+          .post(ApiEndpoints.acceptRejectCoShareRequest, headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }, body: {
         'co_share_request_id': coShareRequestId,
         "action": status,
-      
       });
       // dev.log("-- 1-join coshare trip response${response.data}");
       return response;
@@ -110,10 +126,10 @@ class HomeApi {
       rethrow;
     }
   }
+
   Future sendCoShareOfferApi({
     required String coShareRequestId,
     required String amount,
- 
   }) async {
     try {
       final token = await AppSharedPreference.getToken();
@@ -126,8 +142,9 @@ class HomeApi {
       }, body: {
         'co_share_request_id': coShareRequestId,
         "negotiation_amount": amount,
-      
       });
+
+      
       // dev.log("-- 1-join coshare trip response${response.data}");
       return response;
     } catch (e) {
@@ -285,10 +302,10 @@ class HomeApi {
     try {
       final token = await AppSharedPreference.getToken();
 
-      dev.log("token:$token");
-      dev.log("rideType:$rideType");
-      dev.log("address-lat:${address[0].lat}");
-      dev.log("address-lng:${address[0].lng}");
+      dev.log("-- sevice verify token:$token");
+      // dev.log("rideType:$rideType");
+      // dev.log("address-lat:${address[0].lat}");
+      // dev.log("address-lng:${address[0].lng}");
       Response response =
           await DioProviderImpl().post(ApiEndpoints.serviceVerify, headers: {
         'Content-Type': 'application/json',
@@ -297,8 +314,8 @@ class HomeApi {
         'ride_type': rideType,
         'address': [
           {
-            "latitude": 6.57890379, //address[0].lat
-            "longitude": 3.24495855, // address[0].lng
+            "latitude": address[0].lat, //6.57890379, //
+            "longitude": address[0].lng // 3.24495855, //
           }
         ],
       });

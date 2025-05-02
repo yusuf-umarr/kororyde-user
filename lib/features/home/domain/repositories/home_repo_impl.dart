@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
 import 'package:kororyde_user/features/home/domain/models/incoming_coshare_request_model.dart';
+import 'package:kororyde_user/features/home/domain/models/my_coshare_request.dart';
 
 import '../../../../core/network/exceptions.dart';
 import '../../../../core/network/network.dart';
@@ -118,6 +119,40 @@ class HomeRepositoryImpl implements HomeRepository {
     }
 
     return Right(icomingResponseModel);
+  }
+
+  @override
+  Future<Either<Failure, MyCoshareRequestModel>> getMyCoCoShareRequest(
+      {String? requestId}) async {
+    MyCoshareRequestModel myCoshareResponseModel;
+    try {
+      Response response = await _homeApi.getMyCoShareRequestApi();
+
+      // log("--getMyCoShareRequestApi response:${response.statusCode}");
+
+      if (response.data == null || response.data == '') {
+        return Left(GetDataFailure(message: 'User bad request'));
+      } else if (response.data.toString().contains('error')) {
+        return Left(GetDataFailure(message: response.data['error']));
+      } else {
+        if (response.statusCode == 400) {
+          return Left(GetDataFailure(message: response.data["message"]));
+        } else if (response.statusCode == 401) {
+          return Left(GetDataFailure(message: 'logout'));
+        } else if (response.statusCode == 429) {
+          return Left(GetDataFailure(message: 'Too many attempts'));
+        } else {
+          myCoshareResponseModel =
+              MyCoshareRequestModel.fromJson(response.data);
+        }
+      }
+    } on FetchDataException catch (e) {
+      return Left(GetDataFailure(message: e.message));
+    } on BadRequestException catch (e) {
+      return Left(InPutDataFailure(message: e.message));
+    }
+
+    return Right(myCoshareResponseModel);
   }
 
   @override

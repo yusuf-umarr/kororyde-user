@@ -18,6 +18,8 @@ final class HomeLoadingStartState extends HomeState {}
 
 final class HomeLoadingStopState extends HomeState {}
 final class SendOfferDoneState extends HomeState {}
+final class AcceptOfferState extends HomeState {}
+final class RejectOfferState extends HomeState {}
 
 final class GetLocationPermissionState extends HomeState {}
 
@@ -152,4 +154,8 @@ class CoShareTripDataLoadedState extends HomeState {
 class IncomingCoshareState extends HomeState {
   final List<IncomingCoShareData> data;
   IncomingCoshareState(this.data);
+}
+class MyCoshareRequestState extends HomeState {
+  final List<MyCoshareRequestData> data;
+  MyCoshareRequestState(this.data);
 }

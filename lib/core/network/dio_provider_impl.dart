@@ -1,13 +1,16 @@
 import 'package:dio/dio.dart';
 import '../../../../core/network/network.dart';
 import '../../../../env/flavor_config.dart';
-
+import 'dart:developer';
 class DioProviderImpl implements ApiManager {
   static final String baseUrl = FlavorConfig.instance.values.baseUrl;
+
+  
 
   static Dio dioClient = _addInterceptors(_createDio());
 
   static Dio _createDio() {
+    log("--baseUrl:$baseUrl");
     BaseOptions opts = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(milliseconds: 30000),
@@ -17,6 +20,7 @@ class DioProviderImpl implements ApiManager {
   }
 
   static Dio _addInterceptors(Dio dio) {
+
     dio.interceptors.add(InterceptorsWrapper(onRequest: (
       RequestOptions options,
       RequestInterceptorHandler handler,

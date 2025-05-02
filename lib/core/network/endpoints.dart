@@ -8,7 +8,7 @@ class ApiEndpoints {
   static String updateLocation = 'api/v1/user/update-location';
 
   // Authentication
-  static String verifyUser = 'api/v1/user/validate-mobile-for-login'; 
+  static String verifyUser = 'api/v1/user/validate-mobile-for-login';
   static String userLogin = 'api/v1/user/login';
   static String commonModule = 'api/v1/common/modules';
   static String sendMobileOtp = 'api/v1/mobile-otp';
@@ -24,11 +24,12 @@ class ApiEndpoints {
   static String recentRoutes = 'api/v1/request/list-recent-searches';
 
   //co-share
-  static String getAllCoShareTrip =  'api/coshare/requests';
-  static String joinCoShareTrip =  'api/coshare/join-trip';
-  static String incomingRequests =  'api/coshare/incoming-requests';
-  static String acceptRejectCoShareRequest =  'api/coshare/respond';
-  static String sendCoShareOffer =  'api/coshare/negotiate';
+  static String getAllCoShareTrip = 'api/coshare/requests'; 
+  static String joinCoShareTrip = 'api/coshare/join-trip';
+  static String incomingRequests = 'api/coshare/incoming-requests';
+  static String myCoshareRequests = 'api/coshare/mycoshare-requests';//https://koro.gee.ng/api/coshare/mycoshare-requests
+  static String acceptRejectCoShareRequest = 'api/coshare/respond';
+  static String sendCoShareOffer = 'api/coshare/negotiate';
 
   //notifications
   static String notification = 'api/v1/notifications/get-notification';

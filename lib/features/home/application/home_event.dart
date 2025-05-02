@@ -10,6 +10,12 @@ class GetUserDetailsEvent extends HomeEvent {}
 
 class GetAllCoShareTripEvent extends HomeEvent {}
 class GetIncomingCoShareEvent extends HomeEvent {}
+class GetMyCoShareRequestEvent extends HomeEvent {
+
+  final void Function(List<MyCoshareRequestData>)? onSuccess;
+
+  GetMyCoShareRequestEvent({this.onSuccess});
+}
 
 class JoinCoShareTripEvent extends HomeEvent {
   /*

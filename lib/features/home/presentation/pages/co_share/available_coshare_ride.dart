@@ -36,10 +36,7 @@ class _AvailableCoshareRidePageState extends State<AvailableCoshareRidePage> {
   }
 
   getUserId() async {
-    // final token = await AppSharedPreference.getToken();
     userId = await AppSharedPreference.getUserId();
-
-    dev.log("--userId:$userId");
   }
 
   @override
@@ -198,16 +195,16 @@ class AvailableRideCard extends StatelessWidget {
                     sourceLng: double.parse(arg.picklng),
                     destinationLat: rider.requestPlaces!.first.pickLat!,
                     destinationLng: rider.requestPlaces!.first.pickLng!,
-                  ).toStringAsFixed(0)),
+                  ).toStringAsFixed(0,),),
             ),
           ),
         );
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 20),
+        margin: const EdgeInsets.only(bottom: 20),
         width: size.width,
         // height: size.height * 0.125,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             color: AppColors.primary.withOpacity(0.1)),
@@ -320,13 +317,13 @@ class AvailableRideCard extends StatelessWidget {
                 title: 'Destination address',
                 icon: "assets/svg/destinationAddr.svg",
                 adrr: "${rider.requestPlaces![0].dropAddress}"),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: AppColors.primary),
-              child: Text(
+              child: const Text(
                 "View detail",
                 style: TextStyle(color: Colors.white),
               ),
@@ -346,7 +343,7 @@ class AvailableRideCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         MyText(
           text: title,
           textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(

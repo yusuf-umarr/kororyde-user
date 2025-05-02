@@ -3,10 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/common/pickup_icon.dart';
 import 'package:kororyde_user/core/utils/custom_divider.dart';
+import 'package:kororyde_user/core/utils/custom_snack_bar.dart';
+import 'package:kororyde_user/features/home/domain/models/my_coshare_request.dart';
 import 'package:kororyde_user/features/home/presentation/pages/co_share/available_coshare_ride.dart';
+import 'package:kororyde_user/features/home/presentation/pages/co_share/cosharer_detail.dart';
 import 'package:kororyde_user/l10n/app_localizations.dart';
 
 import '../../../../../common/common.dart';
@@ -15,9 +19,7 @@ import '../../../../../core/utils/custom_loader.dart';
 import '../../../../../core/utils/custom_navigation_icon.dart';
 import '../../../../../core/utils/custom_text.dart';
 import '../../../../../core/utils/custom_textfield.dart';
-import '../../../../account/presentation/pages/fav_location.dart';
 import '../../../../auth/presentation/pages/auth_page.dart';
-import '../../../../bookingpage/presentation/page/booking_page.dart';
 import '../../../application/home_bloc.dart';
 import '../../../domain/models/stop_address_model.dart';
 import '../../../domain/models/user_details_model.dart';
@@ -36,6 +38,24 @@ class CosharePage extends StatefulWidget {
 }
 
 class _CosharePageState extends State<CosharePage> {
+  List<MyCoshareRequestData> _coShareList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Wait until the first frame is rendered before accessing context
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<HomeBloc>().add(GetMyCoShareRequestEvent(
+        onSuccess: (data) {
+          log("--coshare data her:${data}");
+          setState(() {
+            _coShareList = data;
+          });
+        },
+      ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -255,45 +275,6 @@ class _CosharePageState extends State<CosharePage> {
               ),
             );
 
-            // Navigator.pushNamed(
-            //   context,
-            //   AvailableCoshareRidePage.routeName,
-            //   arguments: BookingPageArguments(
-            //       picklat: context
-            //           .read<HomeBloc>()
-            //           .pickupAddressList
-            //           .first
-            //           .lat
-            //           .toString(),
-            //       picklng: context
-            //           .read<HomeBloc>()
-            //           .pickupAddressList
-            //           .first
-            //           .lng
-            //           .toString(),
-            //       droplat: context
-            //           .read<HomeBloc>()
-            //           .stopAddressList
-            //           .last
-            //           .lat
-            //           .toString(),
-            //       droplng: context
-            //           .read<HomeBloc>()
-            //           .stopAddressList
-            //           .last
-            //           .lng
-            //           .toString(),
-            //       userData: widget.arg.userData,
-            //       transportType: widget.arg.transportType,
-            //       pickupAddressList: context.read<HomeBloc>().pickupAddressList,
-            //       stopAddressList: context.read<HomeBloc>().stopAddressList,
-            //       title: widget.arg.title,
-            //       polyString: '',
-            //       distance: '',
-            //       duration: '',
-            //       isOutstationRide: widget.arg.isOutstationRide,
-            //       mapType: widget.arg.mapType),
-            // );
             log("ConfirmRideAddressState ---11111-in destination");
           } else if (state is RecentRouteSelectState) {
             if (context.read<HomeBloc>().nearByVechileSubscription != null) {
@@ -349,46 +330,6 @@ class _CosharePageState extends State<CosharePage> {
                 ),
               ),
             );
-
-            // Navigator.pushNamed(
-            //   context,
-            //   AvailableCoshareRidePage.routeName,
-            //   arguments: BookingPageArguments(
-            //       picklat: context
-            //           .read<HomeBloc>()
-            //           .pickupAddressList
-            //           .first
-            //           .lat
-            //           .toString(),
-            //       picklng: context
-            //           .read<HomeBloc>()
-            //           .pickupAddressList
-            //           .first
-            //           .lng
-            //           .toString(),
-            //       droplat: context
-            //           .read<HomeBloc>()
-            //           .stopAddressList
-            //           .last
-            //           .lat
-            //           .toString(),
-            //       droplng: context
-            //           .read<HomeBloc>()
-            //           .stopAddressList
-            //           .last
-            //           .lng
-            //           .toString(),
-            //       userData: widget.arg.userData,
-            //       transportType: widget.arg.transportType,
-            //       pickupAddressList: context.read<HomeBloc>().pickupAddressList,
-            //       stopAddressList: context.read<HomeBloc>().stopAddressList,
-            //       title: widget.arg.title,
-            //       polyString: '',
-            //       distance: '',
-            //       duration: '',
-            //       isOutstationRide: widget.arg.isOutstationRide,
-            //       mapType: widget.arg.mapType),
-            // );
           } else if (state is ServiceNotAvailableState) {
             showDialog(
               context: context,
@@ -431,6 +372,30 @@ class _CosharePageState extends State<CosharePage> {
                 );
               },
             );
+          } else if (state is AcceptOfferState) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<HomeBloc>().add(GetMyCoShareRequestEvent(
+                onSuccess: (data) {
+                  setState(() {
+                    _coShareList = data;
+                  });
+                },
+              ));
+              showToast(message: "You have successfuly accepted the offer");
+              Navigator.pop(context);
+            });
+          } else if (state is RejectOfferState) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<HomeBloc>().add(GetMyCoShareRequestEvent(
+                onSuccess: (data) {
+                  setState(() {
+                    _coShareList = data;
+                  });
+                },
+              ));
+              showToast(message: "Offer Declined");
+              Navigator.pop(context);
+            });
           }
         },
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -445,7 +410,7 @@ class _CosharePageState extends State<CosharePage> {
                 },
                 child: Scaffold(
                   appBar: AppBar(
-                    title: Text(
+                    title: const Text(
                       "Join Co share",
                       style: TextStyle(
                         color: Colors.black,
@@ -538,12 +503,6 @@ class _CosharePageState extends State<CosharePage> {
                                 onTap: () {
                                   if (!context.read<HomeBloc>().addressList.any(
                                       (element) => element.address.isEmpty)) {
-                                    //BlocProvider.value(
-                                    // value: context.read<HomeBloc>(),
-                                    // context
-                                    //     .read<HomeBloc>()
-                                    //     .add(GetAllCoShareTripEvent());
-
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -595,87 +554,76 @@ class _CosharePageState extends State<CosharePage> {
                                         ),
                                       ),
                                     );
-
-                                    // Navigator.pushNamed(
-                                    //   context,
-                                    //   AvailableCoshareRidePage.routeName,
-                                    //   arguments: BookingPageArguments(
-                                    //       picklat: context
-                                    //           .read<HomeBloc>()
-                                    //           .pickupAddressList
-                                    //           .first
-                                    //           .lat
-                                    //           .toString(),
-                                    //       picklng: context
-                                    //           .read<HomeBloc>()
-                                    //           .pickupAddressList
-                                    //           .first
-                                    //           .lng
-                                    //           .toString(),
-                                    //       droplat: context
-                                    //           .read<HomeBloc>()
-                                    //           .stopAddressList
-                                    //           .last
-                                    //           .lat
-                                    //           .toString(),
-                                    //       droplng: context
-                                    //           .read<HomeBloc>()
-                                    //           .stopAddressList
-                                    //           .last
-                                    //           .lng
-                                    //           .toString(),
-                                    //       userData: widget.arg.userData,
-                                    //       transportType:
-                                    //           widget.arg.transportType,
-                                    //       pickupAddressList: context
-                                    //           .read<HomeBloc>()
-                                    //           .pickupAddressList,
-                                    //       stopAddressList: context
-                                    //           .read<HomeBloc>()
-                                    //           .stopAddressList,
-                                    //       title: widget.arg.title,
-                                    //       polyString: '',
-                                    //       distance: '',
-                                    //       duration: '',
-                                    //       isOutstationRide:
-                                    //           widget.arg.isOutstationRide,
-                                    //       mapType: widget.arg.mapType),
-                                    // );
                                   }
                                   // log("done clickkkk");
                                   // if (!context
                                   //     .read<HomeBloc>()
-                                  //     .addressList
-                                  //     .any((element) => element.address.isEmpty)) {
-                                  //   context.read<HomeBloc>().add(
-                                  //       ConfirmRideAddressEvent(
-                                  //           rideType: widget.arg.isOutstationRide
-                                  //               ? 'outstation'
-                                  //               : 'taxi',
-                                  //           addressList: context
-                                  //               .read<HomeBloc>()
-                                  //               .addressList)
-                                  //               );
-                                  // }
                                 },
                               ),
                             ),
 
-                            SizedBox(height: 30),
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(
-                            //       horizontal: 20, vertical: 10),
-                            //   child: MyText(
-                            //     text: 'Pending trips',
-                            //     textStyle: Theme.of(context)
-                            //         .textTheme
-                            //         .bodyMedium!
-                            //         .copyWith(
-                            //             fontSize: 15, color: Colors.black,),
-                            //     maxLines: 3,
-                            //     overflow: TextOverflow.ellipsis,
+                            const SizedBox(height: 20),
+                            //////////////my co share///////////////////
+                            ///
+                            Builder(builder: (context) {
+                              final pendingRequests = _coShareList
+                                  .where((request) =>
+                                      request.coShareRequest?.status ==
+                                      'pending')
+                                  .toList();
+                              return Column(
+                                children: [
+                                  if (pendingRequests.isNotEmpty) ...[
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Text(
+                                        "Pending CoShare request:",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: pendingRequests.length,
+                                      itemBuilder: (context, index) {
+                                        final request = pendingRequests[index];
+                                        if (request.coShareRequest!.status ==
+                                            "pending") {
+                                          return MyCoShareRequestCard(
+                                              request: request);
+                                        }
+                                        return SizedBox.fromSize();
+                                      },
+                                    ),
+                                  ]
+                                ],
+                              );
+                            }),
+                            // if (_coShareList.isNotEmpty) ...[
+                            //   Padding(
+                            //     padding: const EdgeInsets.all(16.0),
+                            //     child: Text("Pending CoShare request:",
+                            //         style: Theme.of(context)
+                            //             .textTheme
+                            //             .titleMedium),
                             //   ),
-                            // ),
+                            //   ListView.builder(
+                            //     padding:
+                            //         const EdgeInsets.symmetric(horizontal: 10),
+                            //     shrinkWrap: true,
+                            //     physics: const NeverScrollableScrollPhysics(),
+                            //     itemCount: _coShareList.length,
+                            //     itemBuilder: (context, index) {
+                            //       final request = _coShareList[index];
+                            //       return MyCoShareRequestCard(request: request);
+                            //     },
+                            //   ),
+                            // ]
                           ],
                         ],
                         if (context
@@ -868,8 +816,8 @@ class _CosharePageState extends State<CosharePage> {
                             ],
                             Expanded(
                               child: Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(),
+                                margin: const EdgeInsets.only(bottom: 10),
+                                decoration: const BoxDecoration(),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -892,9 +840,9 @@ class _CosharePageState extends State<CosharePage> {
                                             : false,
                                         keyboardType: TextInputType.text,
                                         fillColor: Colors.grey.withOpacity(0.2),
-                                        enabledBorder: OutlineInputBorder(
+                                        enabledBorder: const OutlineInputBorder(
                                             borderSide: BorderSide.none),
-                                        focusedBorder: OutlineInputBorder(
+                                        focusedBorder: const OutlineInputBorder(
                                             borderSide: BorderSide.none),
                                         hintText: (index ==
                                                 context
@@ -1037,42 +985,10 @@ class _CosharePageState extends State<CosharePage> {
                                         },
                                       ),
                                     ),
-                                    // SizedBox(width: size.width * 0.01),
-                                    // Icon(Icons.drag_indicator_rounded,
-                                    //     color:
-                                    //         Theme.of(context).primaryColorDark,
-                                    //     size: 20),
-                                    // SizedBox(width: size.width * 0.01),
                                   ],
                                 ),
                               ),
                             ),
-                            // (context.read<HomeBloc>().addressList.length > 2)
-                            //     ? InkWell(
-                            //         onTap: () {
-                            //           context
-                            //               .read<HomeBloc>()
-                            //               .addressList
-                            //               .removeAt(index);
-                            //           context
-                            //               .read<HomeBloc>()
-                            //               .addressTextControllerList
-                            //               .removeAt(index);
-                            //           context
-                            //               .read<HomeBloc>()
-                            //               .add(UpdateEvent());
-                            //         },
-                            //         child: Padding(
-                            //           padding: EdgeInsets.only(
-                            //               left: size.width * 0.015),
-                            //           child: Icon(
-                            //             Icons.close,
-                            //             size: 20,
-                            //             color: Theme.of(context).disabledColor,
-                            //           ),
-                            //         ),
-                            //       )
-                            //     : const SizedBox()
                           ],
                         ),
                       );
@@ -1087,321 +1003,8 @@ class _CosharePageState extends State<CosharePage> {
     );
   }
 
-//
-//   Widget buildLocationSelect(BuildContext context, Size size) {
-//     return Container(
-//       decoration: BoxDecoration(
-//           color: Theme.of(context).scaffoldBackgroundColor,
-//           boxShadow: [
-//             BoxShadow(
-//                 color: Theme.of(context).shadowColor,
-//                 offset: const Offset(0, 5),
-//                 blurRadius: 5,
-//                 spreadRadius: 1)
-//           ]),
-//       child: Padding(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             if (context.read<HomeBloc>().addressList.isNotEmpty) ...[
-//               Theme(
-//                 data: Theme.of(context).copyWith(
-//                   canvasColor: Colors.white,
-//                   shadowColor: Colors.transparent,
-//                 ),
-//                 child: ReorderableListView(
-//                   shrinkWrap: true,
-//                   padding: EdgeInsets.zero,
-//                   clipBehavior: Clip.antiAlias,
-//                   onReorder: (oldIndex, newIndex) {
-//                     context.read<HomeBloc>().add(
-//                         ReorderEvent(oldIndex: oldIndex, newIndex: newIndex));
-//                   },
-//                   children: List.generate(
-//                     context.read<HomeBloc>().addressList.length,
-//                     (index) {
-//                       TextEditingController controller = context
-//                           .read<HomeBloc>()
-//                           .addressTextControllerList
-//                           .elementAt(index);
-//                       return Padding(
-//                         key: Key('$index'),
-//                         padding: EdgeInsets.only(bottom: size.width * 0.02),
-//                         child: Row(
-//                           children: [
-//                             if (index != 0 &&
-//                                 index !=
-//                                     context
-//                                             .read<HomeBloc>()
-//                                             .addressList
-//                                             .length -
-//                                         1) ...[
-//                               Container(
-//                                 height: size.width * 0.05,
-//                                 width: size.width * 0.05,
-//                                 decoration: BoxDecoration(
-//                                     shape: BoxShape.circle,
-//                                     border: Border.all(
-//                                         width: 0.3,
-//                                         color:
-//                                             Theme.of(context).disabledColor)),
-//                                 child: Center(
-//                                   child: MyText(
-//                                       text: '$index',
-//                                       textStyle: Theme.of(context)
-//                                           .textTheme
-//                                           .bodySmall),
-//                                 ),
-//                               ),
-//                               SizedBox(width: size.width * 0.02),
-//                             ],
-//                             Expanded(
-//                               child: Container(
-//                                 decoration: BoxDecoration(
-//                                     borderRadius: BorderRadius.circular(5),
-//                                     border: Border.all(
-//                                         width: 0.3,
-//                                         color:
-//                                             Theme.of(context).disabledColor)),
-//                                 child: Row(
-//                                   children: [
-//                                     Expanded(
-//                                       child: CustomTextField(
-//                                         borderRadius: 20,
-//                                         controller: controller,
-//                                         enabled: true,
-//                                         filled: true,
-//                                         autofocus: context
-//                                                 .read<HomeBloc>()
-//                                                 .recentSearchPlaces
-//                                                 .isEmpty
-//                                             ? (!widget.arg.pickUpChange &&
-//                                                     index == 1)
-//                                                 ? true
-//                                                 : (widget.arg.pickUpChange &&
-//                                                         index == 0)
-//                                                     ? true
-//                                                     : false
-//                                             : false,
-//                                         keyboardType: TextInputType.text,
-//                                         fillColor: Colors.white,
-//                                         enabledBorder: OutlineInputBorder(
-//                                             borderSide: BorderSide(
-//                                                 width: 0.5,
-//                                                 color: Theme.of(context)
-//                                                     .primaryColor
-//                                                     .withOpacity(0.3))),
-//                                         focusedBorder: OutlineInputBorder(
-//                                             borderSide: BorderSide(
-//                                                 width: 0.8,
-//                                                 color: Theme.of(context)
-//                                                     .primaryColor)),
-//                                         hintText: (index ==
-//                                                 context
-//                                                         .read<HomeBloc>()
-//                                                         .addressList
-//                                                         .length -
-//                                                     1)
-//                                             ? AppLocalizations.of(context)!
-//                                                 .destinationAddress
-//                                             : (index == 0)
-//                                                 ? AppLocalizations.of(context)!
-//                                                     .pickupAddress
-//                                                 : AppLocalizations.of(context)!
-//                                                     .addStopAddress,
-//                                         hintTextStyle: Theme.of(context)
-//                                             .textTheme
-//                                             .bodyMedium,
-//                                         prefixConstraints: BoxConstraints(
-//                                             maxWidth: size.width * 0.065),
-//                                         prefixIcon: (index == 0 ||
-//                                                 index ==
-//                                                     context
-//                                                             .read<HomeBloc>()
-//                                                             .addressList
-//                                                             .length -
-//                                                         1)
-//                                             ? Center(
-//                                                 child: (index == 0)
-//                                                     ? SvgPicture.asset(
-//                                                         'assets/svg/sourceAddr.svg')
-//                                                     : SvgPicture.asset(
-//                                                         'assets/svg/destinationAddr.svg',
-//                                                       ),
-//                                               )
-//                                             : null,
-//                                         suffixConstraints: BoxConstraints(
-//                                             maxWidth: size.width * 0.2),
-//                                         suffixIcon: controller.text.isNotEmpty
-//                                             ? Padding(
-//                                                 padding: const EdgeInsets.only(
-//                                                     right: 10, left: 10),
-//                                                 child: InkWell(
-//                                                   onTap: () {
-//                                                     context
-//                                                             .read<HomeBloc>()
-//                                                             .addressList[index] =
-//                                                         AddressModel(
-//                                                             orderId: '',
-//                                                             address: '',
-//                                                             lat: 0,
-//                                                             lng: 0,
-//                                                             name: '',
-//                                                             number: '',
-//                                                             pickup: false);
-//                                                     context
-//                                                         .read<HomeBloc>()
-//                                                         .addressTextControllerList[
-//                                                             index]
-//                                                         .text = '';
-//                                                     if (context
-//                                                         .read<HomeBloc>()
-//                                                         .autoSearchPlaces
-//                                                         .isNotEmpty) {
-//                                                       context
-//                                                           .read<HomeBloc>()
-//                                                           .searchInfoMessage = '';
-//                                                       context
-//                                                           .read<HomeBloc>()
-//                                                           .autoSearchPlaces
-//                                                           .clear();
-//                                                     }
-//                                                     context
-//                                                         .read<HomeBloc>()
-//                                                         .add(UpdateEvent());
-//                                                   },
-//                                                   child: Icon(
-//                                                     Icons.cancel,
-//                                                     size: 20,
-//                                                     color: Theme.of(context)
-//                                                         .disabledColor
-//                                                         .withOpacity(0.4),
-//                                                   ),
-//                                                 ),
-//                                               )
-//                                             : null,
-//                                         onTap: () {
-//                                           context
-//                                                   .read<HomeBloc>()
-//                                                   .isPickupSelect =
-//                                               (index == 0) ? true : false;
-//                                           context
-//                                               .read<HomeBloc>()
-//                                               .choosenAddressIndex = index;
-//                                           context
-//                                               .read<HomeBloc>()
-//                                               .add(UpdateEvent());
-//                                         },
-//                                         onChange: (value) {
-//                                           context
-//                                               .read<HomeBloc>()
-//                                               .debouncer
-//                                               .run(() {
-//                                             if (value.isEmpty) {
-//                                               context
-//                                                       .read<HomeBloc>()
-//                                                       .addressList[index] =
-//                                                   AddressModel(
-//                                                       orderId: '',
-//                                                       address: '',
-//                                                       lat: 0,
-//                                                       lng: 0,
-//                                                       name: '',
-//                                                       number: '',
-//                                                       pickup: false);
-//                                             }
-//                                             context.read<HomeBloc>().add(
-//                                                 SearchPlacesEvent(
-//                                                     context: context,
-//                                                     mapType: widget.arg.mapType,
-//                                                     countryCode: widget.arg
-//                                                         .userData.countryCode,
-//                                                     latLng: (widget.arg
-//                                                                 .pickupLatLng !=
-//                                                             null)
-//                                                         ? widget
-//                                                             .arg.pickupLatLng!
-//                                                         : (widget.arg
-//                                                                     .dropLatLng !=
-//                                                                 null)
-//                                                             ? widget
-//                                                                 .arg.dropLatLng!
-//                                                             : const LatLng(
-//                                                                 0, 0),
-//                                                     enbleContryRestrictMap: widget
-//                                                         .arg
-//                                                         .userData
-//                                                         .enableCountryRestrictOnMap,
-//                                                     searchText: value));
-//                                           });
-//                                         },
-//                                       ),
-//                                     ),
-//                                     SizedBox(width: size.width * 0.01),
-//                                     Icon(Icons.drag_indicator_rounded,
-//                                         color:
-//                                             Theme.of(context).primaryColorDark,
-//                                         size: 20),
-//                                     SizedBox(width: size.width * 0.01),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ),
-//                             (context.read<HomeBloc>().addressList.length > 2)
-//                                 ? InkWell(
-//                                     onTap: () {
-//                                       context
-//                                           .read<HomeBloc>()
-//                                           .addressList
-//                                           .removeAt(index);
-//                                       context
-//                                           .read<HomeBloc>()
-//                                           .addressTextControllerList
-//                                           .removeAt(index);
-//                                       context
-//                                           .read<HomeBloc>()
-//                                           .add(UpdateEvent());
-//                                     },
-//                                     child: Padding(
-//                                       padding: EdgeInsets.only(
-//                                           left: size.width * 0.015),
-//                                       child: Icon(
-//                                         Icons.close,
-//                                         size: 20,
-//                                         color: Theme.of(context).disabledColor,
-//                                       ),
-//                                     ),
-//                                   )
-//                                 : const SizedBox()
-//                           ],
-//                         ),
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// //
   Widget buildFavoriteLocations(BuildContext context,
       List<FavoriteLocationData> favLocations, Size size) {
-    // bool isHomeAvailable = false;
-    // bool isWorkAvailable = false;
-    // bool isOthersAvailable = false;
-    // for (var element in favLocations) {
-    //   if (element.addressName == 'Home') {
-    //     isHomeAvailable = true;
-    //   } else if (element.addressName == 'Work') {
-    //     isWorkAvailable = true;
-    //   } else {
-    //     isOthersAvailable = true;
-    //   }
-    // }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
@@ -1461,167 +1064,6 @@ class _CosharePageState extends State<CosharePage> {
                 },
               ),
             ),
-            //       Row(
-            //         children: [
-            //           if (!isHomeAvailable)
-            //             Padding(
-            //               padding: EdgeInsets.only(right: size.width * 0.02),
-            //               child: InkWell(
-            //                 onTap: () {
-            //                   // Navigator.pushNamed(
-            //                   //         context, FavoriteLocationPage.routeName,
-            //                   //         arguments: FavouriteLocationPageArguments(
-            //                   //             userData: widget.arg.userData))
-            //                   //     .then(
-            //                   //   (value) {
-            //                   //     if (!context.mounted) return;
-            //                   //     if (value != null) {
-            //                   //       context.read<HomeBloc>().userData =
-            //                   //           value as UserDetail;
-            //                   //       context.read<HomeBloc>().add(UpdateEvent());
-            //                   //     }
-            //                   //   },
-            //                   // );
-            //                 },
-            //                 child: Container(
-            //                   decoration: BoxDecoration(
-            //                     borderRadius: BorderRadius.circular(20),
-            //                     color:
-            //                         Theme.of(context).disabledColor.withOpacity(0.1),
-            //                   ),
-            //                   child: Padding(
-            //                     padding: const EdgeInsets.symmetric(
-            //                         horizontal: 8, vertical: 5),
-            //                     child: Row(
-            //                       children: [
-            //                         Icon(
-            //                           Icons.add_circle_outline,
-            //                           size: 18,
-            //                           color: Theme.of(context)
-            //                               .disabledColor
-            //                               .withOpacity(0.5),
-            //                         ),
-            //                         const SizedBox(width: 5),
-            //                         MyText(
-            //                           text: AppLocalizations.of(context)!.home,
-            //                           textStyle: Theme.of(context)
-            //                               .textTheme
-            //                               .labelMedium!
-            //                               .copyWith(fontWeight: FontWeight.bold),
-            //                         )
-            //                       ],
-            //                     ),
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           if (!isWorkAvailable)
-            //             Padding(
-            //               padding: EdgeInsets.only(right: size.width * 0.02),
-            //               child: InkWell(
-            //                 onTap: () {
-            //                   // Navigator.pushNamed(
-            //                   //         context, FavoriteLocationPage.routeName,
-            //                   //         arguments: FavouriteLocationPageArguments(
-            //                   //             userData: widget.arg.userData))
-            //                   //     .then(
-            //                   //   (value) {
-            //                   //     if (!context.mounted) return;
-            //                   //     if (value != null) {
-            //                   //       context.read<HomeBloc>().userData =
-            //                   //           value as UserDetail;
-            //                   //       context.read<HomeBloc>().add(UpdateEvent());
-            //                   //     }
-            //                   //   },
-            //                   // );
-            //                 },
-            //                 child: Container(
-            //                   decoration: BoxDecoration(
-            //                     borderRadius: BorderRadius.circular(20),
-            //                     color:
-            //                         Theme.of(context).disabledColor.withOpacity(0.1),
-            //                   ),
-            //                   child: Padding(
-            //                     padding: const EdgeInsets.symmetric(
-            //                         horizontal: 8, vertical: 5),
-            //                     child: Row(
-            //                       children: [
-            //                         Icon(
-            //                           Icons.add_circle_outline,
-            //                           size: 18,
-            //                           color: Theme.of(context)
-            //                               .disabledColor
-            //                               .withOpacity(0.5),
-            //                         ),
-            //                         const SizedBox(width: 5),
-            //                         MyText(
-            //                           text: AppLocalizations.of(context)!.work,
-            //                           textStyle: Theme.of(context)
-            //                               .textTheme
-            //                               .labelMedium!
-            //                               .copyWith(fontWeight: FontWeight.bold),
-            //                         )
-            //                       ],
-            //                     ),
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           if (!isOthersAvailable)
-            //             Padding(
-            //               padding: EdgeInsets.only(right: size.width * 0.02),
-            //               child: InkWell(
-            //                 onTap: () {
-            //                   // Navigator.pushNamed(
-            //                   //         context, FavoriteLocationPage.routeName,
-            //                   //         arguments: FavouriteLocationPageArguments(
-            //                   //             userData: widget.arg.userData))
-            //                   //     .then(
-            //                   //   (value) {
-            //                   //     if (!context.mounted) return;
-            //                   //     if (value != null) {
-            //                   //       context.read<HomeBloc>().userData =
-            //                   //           value as UserDetail;
-            //                   //       context.read<HomeBloc>().add(UpdateEvent());
-            //                   //     }
-            //                   //   },
-            //                   // );
-            //                 },
-            //                 child: Container(
-            //                   decoration: BoxDecoration(
-            //                     borderRadius: BorderRadius.circular(20),
-            //                     color:
-            //                         Theme.of(context).disabledColor.withOpacity(0.1),
-            //                   ),
-            //                   child: Padding(
-            //                     padding: const EdgeInsets.symmetric(
-            //                         horizontal: 8, vertical: 5),
-            //                     child: Row(
-            //                       children: [
-            //                         Icon(
-            //                           Icons.add_circle_outline,
-            //                           size: 18,
-            //                           color: Theme.of(context)
-            //                               .disabledColor
-            //                               .withOpacity(0.5),
-            //                         ),
-            //                         const SizedBox(width: 5),
-            //                         MyText(
-            //                           text: AppLocalizations.of(context)!.others,
-            //                           textStyle: Theme.of(context)
-            //                               .textTheme
-            //                               .labelMedium!
-            //                               .copyWith(fontWeight: FontWeight.bold),
-            //                         )
-            //                       ],
-            //                     ),
-            //                   ),
-            //                 ),
-            //               ),
-            //             )
-            //         ],
-            //       )
-            // //
           ],
         ),
       ),
@@ -1982,13 +1424,13 @@ class _CosharePageState extends State<CosharePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.pin_drop_outlined,
               color: AppColors.white,
             ),
             MyText(
               text: AppLocalizations.of(context)!.selectFromMap,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 color: Colors.white,
               ),
             ),
@@ -1996,5 +1438,435 @@ class _CosharePageState extends State<CosharePage> {
         ),
       ),
     );
+  }
+}
+
+class MyCoShareRequestCard extends StatefulWidget {
+  final MyCoshareRequestData request;
+  const MyCoShareRequestCard({
+    super.key,
+    required this.request,
+  });
+
+  @override
+  State<MyCoShareRequestCard> createState() => _MyCoShareRequestCardState();
+}
+
+class _MyCoShareRequestCardState extends State<MyCoShareRequestCard> {
+  final TextEditingController _offerController =
+      TextEditingController(text: '100');
+  int coShareMaxSeats = 100;
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.grey.withOpacity(
+              0.1,
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.asset(
+                      "assets/images/default_profile.png",
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyText(
+                        text: widget.request.requestUser != null
+                            ? widget.request.requestUser!.name!
+                            : "user",
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 3),
+                            child:
+                                SvgPicture.asset("assets/svg/sourceAddr.svg"),
+                          ),
+                          SizedBox(
+                            width: size.width * 0.6,
+                            child: MyText(
+                              text: "ikeja lagos nigeria",
+                              maxLines: 4,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 3),
+                            child: SvgPicture.asset(
+                                "assets/svg/destinationAddr.svg"),
+                          ),
+                          SizedBox(
+                            width: size.width * 0.6,
+                            child: MyText(
+                                text: "20 adeniran surulere lagos",
+                                maxLines: 4,
+                                textStyle:
+                                    Theme.of(context).textTheme.bodySmall!),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (_) => BlocProvider.value(
+                        //       value: context.read<HomeBloc>(),
+                        //       child: CosharerDetail(
+                        //         request: widget.request,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppColors.primary.withOpacity(0.1)),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: AppColors.primary,
+                            ),
+                            Text(
+                              "View profile",
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 11,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppColors.primary.withOpacity(0.1)),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.chat,
+                              color: AppColors.primary,
+                            ),
+                            Text(
+                              "Message",
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 11,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        final homeBloc = context.read<HomeBloc>();
+                        showModalBottomSheet<void>(
+                          isScrollControlled: true,
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(
+                                15,
+                              ),
+                            ),
+                          ),
+                          builder: (_) {
+                            return BlocProvider.value(
+                              value: context.read<HomeBloc>(),
+                              child:
+                                  StatefulBuilder(builder: (context, setState) {
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                              horizontal: 20)
+                                          .copyWith(top: 40),
+                                      height: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom ==
+                                              0
+                                          ? size.height * 0.4
+                                          : size.height * 0.8,
+                                      child: Column(
+                                        // crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              MyText(
+                                                text: "Offer request",
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          // SizedBox(height: 10),
+                                          const Row(
+                                            children: [
+                                              // MyText(
+                                              //   text:
+                                              //       "Francis has offered you £500",
+                                              //   textStyle: Theme.of(context)
+                                              //       .textTheme
+                                              //       .bodySmall!
+                                              //       .copyWith(
+                                              //         fontWeight:
+                                              //             FontWeight.w400,
+                                              //       ),
+                                              // ),
+                                            ],
+                                          ),
+                                          const Divider(),
+                                          const SizedBox(height: 30),
+                                          if (widget.request.coShareRequest!
+                                                  .negotiationAmount !=
+                                              null) ...[
+                                            Column(
+                                              children: [
+                                                MyText(
+                                                  text: "You have has offered",
+                                                  textStyle: GoogleFonts.roboto(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                    // fontStyle: style,
+                                                  ),
+                                                ),
+                                                MyText(
+                                                  text:
+                                                      "₦ ${widget.request.coShareRequest!.negotiationAmount != null ? widget.request.coShareRequest!.negotiationAmount! : "0"}",
+                                                  textStyle: GoogleFonts.roboto(
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: AppColors.primary
+                                                      // fontStyle: style,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 15),
+                                            SizedBox(
+                                              height: size.height * 0.025,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                AppColors.red),
+                                                    onPressed: () {
+                                                      final bloc = context
+                                                          .read<HomeBloc>();
+
+                                                      bloc.add(AcceptRejectCoshareRequestEvent(
+                                                          status: "reject",
+                                                          coShareRequestId: widget
+                                                              .request
+                                                              .coShareRequest!
+                                                              .id
+                                                              .toString()));
+                                                    },
+                                                    child: const Text(
+                                                      "Decline offer",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Expanded(
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .primary),
+                                                    onPressed: () {
+                                                      final bloc = context
+                                                          .read<HomeBloc>();
+
+                                                      bloc.add(AcceptRejectCoshareRequestEvent(
+                                                          status: "accept",
+                                                          coShareRequestId: widget
+                                                              .request
+                                                              .coShareRequest!
+                                                              .id
+                                                              .toString()));
+                                                    },
+                                                    child: const Text(
+                                                      "Accept offer",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ] else ...[
+                                            MyText(
+                                              text:
+                                                  "The rider is yet to send his offer",
+                                              textStyle: GoogleFonts.roboto(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500,
+                                                // fontStyle: style,
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 20,
+                                      top: 20,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Icon(
+                                          Icons.cancel_outlined,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              }),
+                            );
+                            // );
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: AppColors.primary.withOpacity(0.1)),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.currency_exchange,
+                              color: AppColors.primary,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 2.0),
+                              child: Text(
+                                "View Offer",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+              //////
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  StatefulBuilder acceptOfferPOp(Size size) {
+    return StatefulBuilder(builder: (context, setState) {
+      return Stack(
+        children: [
+          Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 40),
+            height: size.height * 0.38,
+            child: Column(
+              children: [
+                Image.asset("assets/png/accept.png"),
+                const SizedBox(height: 20),
+                MyText(
+                  text: "You've Accepted Adam's offer and he has been notified",
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                      ),
+                ),
+                const SizedBox(height: 20),
+                CustomButton(
+                  buttonName: "Done",
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

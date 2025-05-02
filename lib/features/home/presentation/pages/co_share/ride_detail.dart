@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kororyde_user/common/app_colors.dart';
 import 'package:kororyde_user/common/app_constants.dart';
 import 'package:kororyde_user/core/utils/custom_text.dart';
+import 'package:kororyde_user/core/utils/functions.dart';
 import 'package:kororyde_user/features/bookingpage/application/booking_bloc.dart';
 import 'package:kororyde_user/features/home/application/home_bloc.dart';
 import 'package:kororyde_user/features/home/domain/models/all_coshare_trip_model.dart';
@@ -70,11 +71,11 @@ class _RideDetailPageState extends State<RideDetailPage> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 40),
+          padding: const EdgeInsets.only(top: 40),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(40),
                   topRight: Radius.circular(40),
                 )),
@@ -119,16 +120,16 @@ class _RideDetailPageState extends State<RideDetailPage> {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
                             },
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   // color:
                                   ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.cancel_outlined,
                                 color: Colors.red,
                               ),
@@ -137,7 +138,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Divider(),
+                      const Divider(),
                       const SizedBox(height: 10),
                       Row(
                         children: [
@@ -267,7 +268,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       MyText(
                         text: "${widget.rider.user!.name}'s location",
                         textStyle: Theme.of(context)
@@ -337,7 +338,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                       ),
                     );
                   }
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }),
                 ////google map///
                 // Align(
@@ -352,7 +353,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
       bottomSheet: !widget.isRequest
           ? Container(
               width: size.width,
-              decoration: BoxDecoration(color: Colors.white),
+              decoration: const BoxDecoration(color: Colors.white),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: Row(
@@ -391,9 +392,9 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                 return Stack(
                                   children: [
                                     Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 20)
-                                              .copyWith(top: 40),
+                                      padding: const EdgeInsets.symmetric(
+                                              horizontal: 20)
+                                          .copyWith(top: 40),
                                       height: size.height * 0.38,
                                       child: Column(
                                         children: [
@@ -410,16 +411,41 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                               ),
                                             ],
                                           ),
-                                          SizedBox(height: 10),
-                                          Divider(),
-                                          SizedBox(height: 20),
+                                          const SizedBox(height: 10),
+                                          const Divider(),
+                                          const SizedBox(height: 10),
+                                          MyText(
+                                            text:
+                                                "Your request has been sent to the passenger, please wait for the reponse",
+                                            maxLines: 4,
+                                            textAlign: TextAlign.center,
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          MyText(
+                                            text: "You can also reach out via ",
+                                            textStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: AppColors.primary,
+                                                    fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 10),
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 5),
                                                 decoration: BoxDecoration(
                                                     border: Border.all(
                                                         color: Colors.grey
@@ -433,55 +459,56 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                                   children: [
                                                     SvgPicture.asset(
                                                         "assets/svg/inMasseage.svg"),
-                                                    SizedBox(width: 5),
-                                                    Text("Message"),
+                                                    const SizedBox(width: 5),
+                                                    const Text("Message"),
                                                   ],
                                                 ),
                                               ),
-                                              SizedBox(width: 20),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 5),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.23)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1)),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                        "assets/svg/inCall.svg"),
-                                                    SizedBox(width: 5),
-                                                    Text("In-app call"),
-                                                  ],
+                                              const SizedBox(width: 10),
+                                              MyText(
+                                                text: "Or",
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            AppColors.primary),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              InkWell(
+                                                onTap: () async {
+                                                  // log("${widget.rider.user!.email}")
+                                                  await launchPhoneDialer(widget
+                                                      .rider.user!.mobile!);
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.grey
+                                                              .withOpacity(
+                                                                  0.23)),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1)),
+                                                  child: Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                          "assets/svg/inCall.svg"),
+                                                      const SizedBox(width: 5),
+                                                      const Text("Call"),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ],
-                                          ),
-                                          SizedBox(height: 20),
-                                          MyText(
-                                            text: "Or copy main rider's number",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          MyText(
-                                            text: "08123456789",
-                                            textStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: AppColors.primary),
                                           ),
                                         ],
                                       ),
@@ -493,7 +520,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
                                         onTap: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.cancel_outlined,
                                           color: Colors.red,
                                         ),
@@ -508,13 +535,13 @@ class _RideDetailPageState extends State<RideDetailPage> {
                         );
                       },
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: AppColors.primary,
                         ),
-                        child: Text(
+                        child: const Text(
                           "Contact passenger",
                           style: TextStyle(color: Colors.white),
                         ),
@@ -526,7 +553,7 @@ class _RideDetailPageState extends State<RideDetailPage> {
             )
 
           //
-          : SizedBox.shrink(),
+          : const SizedBox.shrink(),
       ////
     );
   }
